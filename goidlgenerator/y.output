@@ -1,0 +1,2487 @@
+
+state 0
+	$accept: .specification $end 
+
+	Rwconst  shift 8
+	Rwenum  shift 21
+	Rwmodule  shift 7
+	Rwnative  shift 15
+	Rwstruct  shift 22
+	Rwtypedef  shift 16
+	Rwunion  shift 23
+	.  error
+
+	native_dcl  goto 10
+	specification  goto 1
+	definition  goto 3
+	definitions  goto 2
+	module_dcl  goto 4
+	type_dcl  goto 6
+	const_dcl  goto 5
+	struct_dcl  goto 12
+	struct_forward_dcl  goto 18
+	struct_def  goto 17
+	constr_type_dcl  goto 9
+	enum_dcl  goto 14
+	typedef_dcl  goto 11
+	union_dcl  goto 13
+	union_def  goto 19
+	union_foRward_dcl  goto 20
+
+state 1
+	$accept:  specification.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	specification:  definitions.    (1)
+	definitions:  definitions.definition 
+
+	Rwconst  shift 8
+	Rwenum  shift 21
+	Rwmodule  shift 7
+	Rwnative  shift 15
+	Rwstruct  shift 22
+	Rwtypedef  shift 16
+	Rwunion  shift 23
+	.  reduce 1 (src line 141)
+
+	native_dcl  goto 10
+	definition  goto 24
+	module_dcl  goto 4
+	type_dcl  goto 6
+	const_dcl  goto 5
+	struct_dcl  goto 12
+	struct_forward_dcl  goto 18
+	struct_def  goto 17
+	constr_type_dcl  goto 9
+	enum_dcl  goto 14
+	typedef_dcl  goto 11
+	union_dcl  goto 13
+	union_def  goto 19
+	union_foRward_dcl  goto 20
+
+state 3
+	definitions:  definition.    (2)
+
+	.  reduce 2 (src line 148)
+
+
+state 4
+	definition:  module_dcl.';' 
+
+	';'  shift 25
+	.  error
+
+
+state 5
+	definition:  const_dcl.';' 
+
+	';'  shift 26
+	.  error
+
+
+state 6
+	definition:  type_dcl.';' 
+
+	';'  shift 27
+	.  error
+
+
+state 7
+	module_dcl:  Rwmodule.Identifier '{' definitions '}' 
+
+	Identifier  shift 28
+	.  error
+
+
+state 8
+	const_dcl:  Rwconst.const_type Identifier '=' const_expr 
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwdouble  shift 43
+	Rwfixed  shift 45
+	Rwfloat  shift 42
+	Rwlong  shift 44
+	Rwoctet  shift 49
+	Rwshort  shift 60
+	Rwstring  shift 50
+	Rwunsigned  shift 61
+	Rwwchar  shift 47
+	Rwwstring  shift 51
+	.  error
+
+	signed_long_int  goto 55
+	floating_pt_type  goto 31
+	signed_short_int  goto 54
+	char_type  goto 33
+	wide_char_type  goto 34
+	integer_type  goto 30
+	boolean_type  goto 35
+	octet_type  goto 36
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 39
+	const_type  goto 29
+	fixed_pt_const_type  goto 32
+	string_type  goto 37
+	wide_string_type  goto 38
+
+state 9
+	type_dcl:  constr_type_dcl.    (58)
+
+	.  reduce 58 (src line 388)
+
+
+state 10
+	type_dcl:  native_dcl.    (59)
+
+	.  reduce 59 (src line 392)
+
+
+state 11
+	type_dcl:  typedef_dcl.    (60)
+
+	.  reduce 60 (src line 396)
+
+
+state 12
+	constr_type_dcl:  struct_dcl.    (103)
+
+	.  reduce 103 (src line 573)
+
+
+state 13
+	constr_type_dcl:  union_dcl.    (104)
+
+	.  reduce 104 (src line 577)
+
+
+state 14
+	constr_type_dcl:  enum_dcl.    (105)
+
+	.  reduce 105 (src line 580)
+
+
+state 15
+	native_dcl:  Rwnative.simple_declarator 
+
+	Identifier  shift 63
+	.  error
+
+	simple_declarator  goto 62
+
+state 16
+	typedef_dcl:  Rwtypedef.type_declarator 
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwdouble  shift 43
+	Rwenum  shift 21
+	Rwfixed  shift 81
+	Rwfloat  shift 42
+	Rwlong  shift 44
+	Rwoctet  shift 49
+	Rwsequence  shift 80
+	Rwshort  shift 60
+	Rwstring  shift 50
+	Rwstruct  shift 22
+	Rwunsigned  shift 61
+	Rwunion  shift 23
+	Rwwchar  shift 47
+	Rwwstring  shift 51
+	.  error
+
+	signed_long_int  goto 55
+	simple_type_spec  goto 65
+	floating_pt_type  goto 75
+	base_type_spec  goto 68
+	signed_short_int  goto 54
+	char_type  goto 76
+	wide_char_type  goto 77
+	integer_type  goto 74
+	boolean_type  goto 78
+	octet_type  goto 79
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 69
+	sequence_type  goto 70
+	template_type_spec  goto 66
+	string_type  goto 71
+	wide_string_type  goto 72
+	fixed_pt_type  goto 73
+	struct_dcl  goto 12
+	struct_forward_dcl  goto 18
+	struct_def  goto 17
+	constr_type_dcl  goto 67
+	enum_dcl  goto 14
+	type_declarator  goto 64
+	union_dcl  goto 13
+	union_def  goto 19
+	union_foRward_dcl  goto 20
+
+state 17
+	struct_dcl:  struct_def.    (106)
+
+	.  reduce 106 (src line 587)
+
+
+state 18
+	struct_dcl:  struct_forward_dcl.    (107)
+
+	.  reduce 107 (src line 592)
+
+
+state 19
+	union_dcl:  union_def.    (113)
+
+	.  reduce 113 (src line 631)
+
+
+state 20
+	union_dcl:  union_foRward_dcl.    (114)
+
+	.  reduce 114 (src line 631)
+
+
+state 21
+	enum_dcl:  Rwenum.Identifier '{' enumerator '}' 
+
+	Identifier  shift 82
+	.  error
+
+
+state 22
+	struct_def:  Rwstruct.Identifier '{' member '}' 
+	struct_def:  Rwstruct.Identifier '{' '}' 
+	struct_forward_dcl:  Rwstruct.Identifier 
+
+	Identifier  shift 83
+	.  error
+
+
+state 23
+	union_def:  Rwunion.Identifier Rwswitch '(' switch_type_spec ')' '{' switch_body '}' 
+	union_foRward_dcl:  Rwunion.Identifier 
+
+	Identifier  shift 84
+	.  error
+
+
+state 24
+	definitions:  definitions definition.    (3)
+
+	.  reduce 3 (src line 152)
+
+
+state 25
+	definition:  module_dcl ';'.    (4)
+
+	.  reduce 4 (src line 157)
+
+
+state 26
+	definition:  const_dcl ';'.    (5)
+
+	.  reduce 5 (src line 161)
+
+
+state 27
+	definition:  type_dcl ';'.    (6)
+
+	.  reduce 6 (src line 164)
+
+
+state 28
+	module_dcl:  Rwmodule Identifier.'{' definitions '}' 
+
+	'{'  shift 85
+	.  error
+
+
+state 29
+	const_dcl:  Rwconst const_type.Identifier '=' const_expr 
+
+	Identifier  shift 86
+	.  error
+
+
+state 30
+	const_type:  integer_type.    (12)
+
+	.  reduce 12 (src line 215)
+
+
+state 31
+	const_type:  floating_pt_type.    (13)
+
+	.  reduce 13 (src line 219)
+
+
+state 32
+	const_type:  fixed_pt_const_type.    (14)
+
+	.  reduce 14 (src line 222)
+
+
+state 33
+	const_type:  char_type.    (15)
+
+	.  reduce 15 (src line 225)
+
+
+state 34
+	const_type:  wide_char_type.    (16)
+
+	.  reduce 16 (src line 228)
+
+
+state 35
+	const_type:  boolean_type.    (17)
+
+	.  reduce 17 (src line 231)
+
+
+state 36
+	const_type:  octet_type.    (18)
+
+	.  reduce 18 (src line 234)
+
+
+state 37
+	const_type:  string_type.    (19)
+
+	.  reduce 19 (src line 237)
+
+
+state 38
+	const_type:  wide_string_type.    (20)
+
+	.  reduce 20 (src line 240)
+
+
+state 39
+	scoped_name:  scoped_name.Scope Identifier 
+	const_type:  scoped_name.    (21)
+
+	Scope  shift 87
+	.  reduce 21 (src line 243)
+
+
+state 40
+	integer_type:  signed_int.    (73)
+
+	.  reduce 73 (src line 450)
+
+
+state 41
+	integer_type:  unsigned_int.    (74)
+
+	.  reduce 74 (src line 454)
+
+
+state 42
+	floating_pt_type:  Rwfloat.    (70)
+
+	.  reduce 70 (src line 440)
+
+
+state 43
+	floating_pt_type:  Rwdouble.    (71)
+
+	.  reduce 71 (src line 444)
+
+
+state 44
+	floating_pt_type:  Rwlong.Rwdouble 
+	signed_long_int:  Rwlong.    (79)
+	signed_longlong_int:  Rwlong.Rwlong 
+
+	Rwdouble  shift 88
+	Rwlong  shift 89
+	.  reduce 79 (src line 471)
+
+
+state 45
+	fixed_pt_const_type:  Rwfixed.    (102)
+
+	.  reduce 102 (src line 568)
+
+
+state 46
+	char_type:  Rwchar.    (87)
+
+	.  reduce 87 (src line 504)
+
+
+state 47
+	wide_char_type:  Rwwchar.    (88)
+
+	.  reduce 88 (src line 509)
+
+
+state 48
+	boolean_type:  Rwboolean.    (89)
+
+	.  reduce 89 (src line 513)
+
+
+state 49
+	octet_type:  Rwoctet.    (90)
+
+	.  reduce 90 (src line 518)
+
+
+state 50
+	string_type:  Rwstring.'<' positive_int_const '>' 
+	string_type:  Rwstring.    (98)
+
+	'<'  shift 90
+	.  reduce 98 (src line 549)
+
+
+state 51
+	wide_string_type:  Rwwstring.'<' positive_int_const '>' 
+	wide_string_type:  Rwwstring.    (100)
+
+	'<'  shift 91
+	.  reduce 100 (src line 558)
+
+
+state 52
+	scoped_name:  Identifier.    (8)
+
+	.  reduce 8 (src line 177)
+
+
+state 53
+	scoped_name:  Scope.Identifier 
+
+	Identifier  shift 92
+	.  error
+
+
+state 54
+	signed_int:  signed_short_int.    (75)
+
+	.  reduce 75 (src line 457)
+
+
+state 55
+	signed_int:  signed_long_int.    (76)
+
+	.  reduce 76 (src line 461)
+
+
+state 56
+	signed_int:  signed_longlong_int.    (77)
+
+	.  reduce 77 (src line 464)
+
+
+state 57
+	unsigned_int:  unsigned_short_int.    (81)
+
+	.  reduce 81 (src line 480)
+
+
+state 58
+	unsigned_int:  unsigned_long_int.    (82)
+
+	.  reduce 82 (src line 484)
+
+
+state 59
+	unsigned_int:  unsigned_longlong_int.    (83)
+
+	.  reduce 83 (src line 487)
+
+
+state 60
+	signed_short_int:  Rwshort.    (78)
+
+	.  reduce 78 (src line 467)
+
+
+state 61
+	unsigned_short_int:  Rwunsigned.Rwshort 
+	unsigned_long_int:  Rwunsigned.Rwlong 
+	unsigned_longlong_int:  Rwunsigned.Rwlong Rwlong 
+
+	Rwlong  shift 94
+	Rwshort  shift 93
+	.  error
+
+
+state 62
+	native_dcl:  Rwnative simple_declarator.    (137)
+
+	.  reduce 137 (src line 662)
+
+
+state 63
+	simple_declarator:  Identifier.    (138)
+
+	.  reduce 138 (src line 666)
+
+
+state 64
+	typedef_dcl:  Rwtypedef type_declarator.    (139)
+
+	.  reduce 139 (src line 671)
+
+
+state 65
+	type_declarator:  simple_type_spec.any_declarators 
+
+	Identifier  shift 98
+	.  error
+
+	simple_declarator  goto 96
+	any_declarators  goto 95
+	array_declarator  goto 97
+
+state 66
+	type_declarator:  template_type_spec.any_declarators 
+
+	Identifier  shift 98
+	.  error
+
+	simple_declarator  goto 96
+	any_declarators  goto 99
+	array_declarator  goto 97
+
+state 67
+	type_declarator:  constr_type_dcl.any_declarators 
+
+	Identifier  shift 98
+	.  error
+
+	simple_declarator  goto 96
+	any_declarators  goto 100
+	array_declarator  goto 97
+
+state 68
+	simple_type_spec:  base_type_spec.    (62)
+
+	.  reduce 62 (src line 414)
+
+
+state 69
+	scoped_name:  scoped_name.Scope Identifier 
+	simple_type_spec:  scoped_name.    (63)
+
+	Scope  shift 87
+	.  reduce 63 (src line 418)
+
+
+state 70
+	template_type_spec:  sequence_type.    (91)
+
+	.  reduce 91 (src line 523)
+
+
+state 71
+	template_type_spec:  string_type.    (92)
+
+	.  reduce 92 (src line 527)
+
+
+state 72
+	template_type_spec:  wide_string_type.    (93)
+
+	.  reduce 93 (src line 530)
+
+
+state 73
+	template_type_spec:  fixed_pt_type.    (94)
+
+	.  reduce 94 (src line 533)
+
+
+state 74
+	base_type_spec:  integer_type.    (64)
+
+	.  reduce 64 (src line 421)
+
+
+state 75
+	base_type_spec:  floating_pt_type.    (65)
+
+	.  reduce 65 (src line 425)
+
+
+state 76
+	base_type_spec:  char_type.    (66)
+
+	.  reduce 66 (src line 428)
+
+
+state 77
+	base_type_spec:  wide_char_type.    (67)
+
+	.  reduce 67 (src line 431)
+
+
+state 78
+	base_type_spec:  boolean_type.    (68)
+
+	.  reduce 68 (src line 434)
+
+
+state 79
+	base_type_spec:  octet_type.    (69)
+
+	.  reduce 69 (src line 437)
+
+
+state 80
+	sequence_type:  Rwsequence.'<' type_spec ',' positive_int_const '>' 
+	sequence_type:  Rwsequence.'<' type_spec '>' 
+
+	'<'  shift 101
+	.  error
+
+
+state 81
+	fixed_pt_type:  Rwfixed.'<' positive_int_const ',' positive_int_const '>' 
+
+	'<'  shift 102
+	.  error
+
+
+state 82
+	enum_dcl:  Rwenum Identifier.'{' enumerator '}' 
+
+	'{'  shift 103
+	.  error
+
+
+state 83
+	struct_def:  Rwstruct Identifier.'{' member '}' 
+	struct_def:  Rwstruct Identifier.'{' '}' 
+	struct_forward_dcl:  Rwstruct Identifier.    (112)
+
+	'{'  shift 104
+	.  reduce 112 (src line 627)
+
+
+state 84
+	union_def:  Rwunion Identifier.Rwswitch '(' switch_type_spec ')' '{' switch_body '}' 
+	union_foRward_dcl:  Rwunion Identifier.    (129)
+
+	Rwswitch  shift 105
+	.  reduce 129 (src line 641)
+
+
+state 85
+	module_dcl:  Rwmodule Identifier '{'.definitions '}' 
+
+	Rwconst  shift 8
+	Rwenum  shift 21
+	Rwmodule  shift 7
+	Rwnative  shift 15
+	Rwstruct  shift 22
+	Rwtypedef  shift 16
+	Rwunion  shift 23
+	.  error
+
+	native_dcl  goto 10
+	definition  goto 3
+	definitions  goto 106
+	module_dcl  goto 4
+	type_dcl  goto 6
+	const_dcl  goto 5
+	struct_dcl  goto 12
+	struct_forward_dcl  goto 18
+	struct_def  goto 17
+	constr_type_dcl  goto 9
+	enum_dcl  goto 14
+	typedef_dcl  goto 11
+	union_dcl  goto 13
+	union_def  goto 19
+	union_foRward_dcl  goto 20
+
+state 86
+	const_dcl:  Rwconst const_type Identifier.'=' const_expr 
+
+	'='  shift 107
+	.  error
+
+
+state 87
+	scoped_name:  scoped_name Scope.Identifier 
+
+	Identifier  shift 108
+	.  error
+
+
+state 88
+	floating_pt_type:  Rwlong Rwdouble.    (72)
+
+	.  reduce 72 (src line 447)
+
+
+state 89
+	signed_longlong_int:  Rwlong Rwlong.    (80)
+
+	.  reduce 80 (src line 475)
+
+
+state 90
+	string_type:  Rwstring '<'.positive_int_const '>' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	positive_int_const  goto 109
+	const_expr  goto 110
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 91
+	wide_string_type:  Rwwstring '<'.positive_int_const '>' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	positive_int_const  goto 136
+	const_expr  goto 110
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 92
+	scoped_name:  Scope Identifier.    (9)
+
+	.  reduce 9 (src line 193)
+
+
+state 93
+	unsigned_short_int:  Rwunsigned Rwshort.    (84)
+
+	.  reduce 84 (src line 491)
+
+
+state 94
+	unsigned_long_int:  Rwunsigned Rwlong.    (85)
+	unsigned_longlong_int:  Rwunsigned Rwlong.Rwlong 
+
+	Rwlong  shift 137
+	.  reduce 85 (src line 495)
+
+
+state 95
+	type_declarator:  simple_type_spec any_declarators.    (140)
+	any_declarators:  any_declarators.',' any_declarators 
+
+	','  shift 138
+	.  reduce 140 (src line 680)
+
+
+state 96
+	any_declarators:  simple_declarator.    (143)
+
+	.  reduce 143 (src line 695)
+
+
+state 97
+	any_declarators:  array_declarator.    (144)
+
+	.  reduce 144 (src line 699)
+
+
+state 98
+	array_declarator:  Identifier.fixed_array_sizes 
+	simple_declarator:  Identifier.    (138)
+
+	'['  shift 141
+	.  reduce 138 (src line 666)
+
+	fixed_array_sizes  goto 139
+	fixed_array_size  goto 140
+
+state 99
+	type_declarator:  template_type_spec any_declarators.    (141)
+	any_declarators:  any_declarators.',' any_declarators 
+
+	','  shift 138
+	.  reduce 141 (src line 684)
+
+
+state 100
+	type_declarator:  constr_type_dcl any_declarators.    (142)
+	any_declarators:  any_declarators.',' any_declarators 
+
+	','  shift 138
+	.  reduce 142 (src line 687)
+
+
+state 101
+	sequence_type:  Rwsequence '<'.type_spec ',' positive_int_const '>' 
+	sequence_type:  Rwsequence '<'.type_spec '>' 
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwdouble  shift 43
+	Rwfloat  shift 42
+	Rwlong  shift 44
+	Rwoctet  shift 49
+	Rwshort  shift 60
+	Rwunsigned  shift 61
+	Rwwchar  shift 47
+	.  error
+
+	type_spec  goto 142
+	signed_long_int  goto 55
+	simple_type_spec  goto 143
+	floating_pt_type  goto 75
+	base_type_spec  goto 68
+	signed_short_int  goto 54
+	char_type  goto 76
+	wide_char_type  goto 77
+	integer_type  goto 74
+	boolean_type  goto 78
+	octet_type  goto 79
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 69
+
+state 102
+	fixed_pt_type:  Rwfixed '<'.positive_int_const ',' positive_int_const '>' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	positive_int_const  goto 144
+	const_expr  goto 110
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 103
+	enum_dcl:  Rwenum Identifier '{'.enumerator '}' 
+
+	Identifier  shift 63
+	.  error
+
+	simple_declarator  goto 147
+	declarator  goto 146
+	enumerator  goto 145
+
+state 104
+	struct_def:  Rwstruct Identifier '{'.member '}' 
+	struct_def:  Rwstruct Identifier '{'.'}' 
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwdouble  shift 43
+	Rwfloat  shift 42
+	Rwlong  shift 44
+	Rwoctet  shift 49
+	Rwshort  shift 60
+	Rwunsigned  shift 61
+	Rwwchar  shift 47
+	'}'  shift 149
+	.  error
+
+	member  goto 148
+	type_spec  goto 150
+	signed_long_int  goto 55
+	simple_type_spec  goto 143
+	floating_pt_type  goto 75
+	base_type_spec  goto 68
+	signed_short_int  goto 54
+	char_type  goto 76
+	wide_char_type  goto 77
+	integer_type  goto 74
+	boolean_type  goto 78
+	octet_type  goto 79
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 69
+
+state 105
+	union_def:  Rwunion Identifier Rwswitch.'(' switch_type_spec ')' '{' switch_body '}' 
+
+	'('  shift 151
+	.  error
+
+
+state 106
+	definitions:  definitions.definition 
+	module_dcl:  Rwmodule Identifier '{' definitions.'}' 
+
+	Rwconst  shift 8
+	Rwenum  shift 21
+	Rwmodule  shift 7
+	Rwnative  shift 15
+	Rwstruct  shift 22
+	Rwtypedef  shift 16
+	Rwunion  shift 23
+	'}'  shift 152
+	.  error
+
+	native_dcl  goto 10
+	definition  goto 24
+	module_dcl  goto 4
+	type_dcl  goto 6
+	const_dcl  goto 5
+	struct_dcl  goto 12
+	struct_forward_dcl  goto 18
+	struct_def  goto 17
+	constr_type_dcl  goto 9
+	enum_dcl  goto 14
+	typedef_dcl  goto 11
+	union_dcl  goto 13
+	union_def  goto 19
+	union_foRward_dcl  goto 20
+
+state 107
+	const_dcl:  Rwconst const_type Identifier '='.const_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	const_expr  goto 153
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 108
+	scoped_name:  scoped_name Scope Identifier.    (10)
+
+	.  reduce 10 (src line 202)
+
+
+state 109
+	string_type:  Rwstring '<' positive_int_const.'>' 
+
+	'>'  shift 154
+	.  error
+
+
+state 110
+	positive_int_const:  const_expr.    (57)
+
+	.  reduce 57 (src line 386)
+
+
+state 111
+	const_expr:  or_expr.    (22)
+	or_expr:  or_expr.'|' xor_expr 
+
+	'|'  shift 155
+	.  reduce 22 (src line 248)
+
+
+state 112
+	or_expr:  xor_expr.    (23)
+	xor_expr:  xor_expr.'^' and_expr 
+
+	'^'  shift 156
+	.  reduce 23 (src line 253)
+
+
+state 113
+	xor_expr:  and_expr.    (25)
+	and_expr:  and_expr.'&' shift_expr 
+
+	'&'  shift 157
+	.  reduce 25 (src line 262)
+
+
+state 114
+	and_expr:  shift_expr.    (27)
+	shift_expr:  shift_expr.Shr add_expr 
+	shift_expr:  shift_expr.Shl add_expr 
+
+	Shl  shift 159
+	Shr  shift 158
+	.  reduce 27 (src line 270)
+
+
+state 115
+	shift_expr:  add_expr.    (29)
+	add_expr:  add_expr.'+' mult_expr 
+	add_expr:  add_expr.'-' mult_expr 
+
+	'+'  shift 160
+	'-'  shift 161
+	.  reduce 29 (src line 279)
+
+
+state 116
+	add_expr:  mult_expr.    (32)
+	mult_expr:  mult_expr.'*' unary_expr 
+	mult_expr:  mult_expr.'/' unary_expr 
+	mult_expr:  mult_expr.'%' unary_expr 
+
+	'*'  shift 162
+	'/'  shift 163
+	'%'  shift 164
+	.  reduce 32 (src line 290)
+
+
+state 117
+	mult_expr:  unary_expr.    (35)
+
+	.  reduce 35 (src line 301)
+
+
+state 118
+	unary_expr:  unary_operator.primary_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	primary_expr  goto 165
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 119
+	unary_expr:  primary_expr.    (40)
+
+	.  reduce 40 (src line 319)
+
+
+state 120
+	unary_operator:  '-'.    (41)
+
+	.  reduce 41 (src line 323)
+
+
+state 121
+	unary_operator:  '+'.    (42)
+
+	.  reduce 42 (src line 327)
+
+
+state 122
+	unary_operator:  '~'.    (43)
+
+	.  reduce 43 (src line 330)
+
+
+state 123
+	scoped_name:  scoped_name.Scope Identifier 
+	primary_expr:  scoped_name.    (44)
+
+	Scope  shift 87
+	.  reduce 44 (src line 335)
+
+
+state 124
+	primary_expr:  literal.    (45)
+
+	.  reduce 45 (src line 349)
+
+
+state 125
+	primary_expr:  '('.const_expr ')' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	const_expr  goto 166
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 126
+	literal:  Integer_literal.    (47)
+
+	.  reduce 47 (src line 356)
+
+
+state 127
+	literal:  Floating_pt_literal.    (48)
+
+	.  reduce 48 (src line 360)
+
+
+state 128
+	literal:  Fixed_pt_literal.    (49)
+
+	.  reduce 49 (src line 363)
+
+
+state 129
+	literal:  Character_literal.    (50)
+
+	.  reduce 50 (src line 366)
+
+
+state 130
+	literal:  Wide_character_literal.    (51)
+
+	.  reduce 51 (src line 369)
+
+
+state 131
+	literal:  boolean_literal.    (52)
+
+	.  reduce 52 (src line 372)
+
+
+state 132
+	literal:  String_literal.    (53)
+
+	.  reduce 53 (src line 375)
+
+
+state 133
+	literal:  Wide_string_literal.    (54)
+
+	.  reduce 54 (src line 378)
+
+
+state 134
+	boolean_literal:  RwTRUE.    (55)
+
+	.  reduce 55 (src line 382)
+
+
+state 135
+	boolean_literal:  RwFALSE.    (56)
+
+	.  reduce 56 (src line 384)
+
+
+state 136
+	wide_string_type:  Rwwstring '<' positive_int_const.'>' 
+
+	'>'  shift 167
+	.  error
+
+
+state 137
+	unsigned_longlong_int:  Rwunsigned Rwlong Rwlong.    (86)
+
+	.  reduce 86 (src line 499)
+
+
+state 138
+	any_declarators:  any_declarators ','.any_declarators 
+
+	Identifier  shift 98
+	.  error
+
+	simple_declarator  goto 96
+	any_declarators  goto 168
+	array_declarator  goto 97
+
+state 139
+	array_declarator:  Identifier fixed_array_sizes.    (133)
+	fixed_array_sizes:  fixed_array_sizes.fixed_array_size 
+
+	'['  shift 141
+	.  reduce 133 (src line 659)
+
+	fixed_array_size  goto 169
+
+state 140
+	fixed_array_sizes:  fixed_array_size.    (134)
+
+	.  reduce 134 (src line 660)
+
+
+state 141
+	fixed_array_size:  '['.positive_int_const ']' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	positive_int_const  goto 170
+	const_expr  goto 110
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 142
+	sequence_type:  Rwsequence '<' type_spec.',' positive_int_const '>' 
+	sequence_type:  Rwsequence '<' type_spec.'>' 
+
+	','  shift 171
+	'>'  shift 172
+	.  error
+
+
+state 143
+	type_spec:  simple_type_spec.    (61)
+
+	.  reduce 61 (src line 411)
+
+
+state 144
+	fixed_pt_type:  Rwfixed '<' positive_int_const.',' positive_int_const '>' 
+
+	','  shift 173
+	.  error
+
+
+state 145
+	enum_dcl:  Rwenum Identifier '{' enumerator.'}' 
+	enumerator:  enumerator.',' enumerator 
+
+	'}'  shift 174
+	','  shift 175
+	.  error
+
+
+146: shift/reduce conflict (shift 176(0), red'n 131(0)) on ','
+state 146
+	enumerator:  declarator.    (131)
+	declarator:  declarator.',' declarator 
+
+	','  shift 176
+	.  reduce 131 (src line 652)
+
+
+state 147
+	declarator:  simple_declarator.'=' const_value 
+	declarator:  simple_declarator.    (147)
+
+	'='  shift 177
+	.  reduce 147 (src line 714)
+
+
+state 148
+	struct_def:  Rwstruct Identifier '{' member.'}' 
+	member:  member.member 
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwdouble  shift 43
+	Rwfloat  shift 42
+	Rwlong  shift 44
+	Rwoctet  shift 49
+	Rwshort  shift 60
+	Rwunsigned  shift 61
+	Rwwchar  shift 47
+	'}'  shift 178
+	.  error
+
+	member  goto 179
+	type_spec  goto 150
+	signed_long_int  goto 55
+	simple_type_spec  goto 143
+	floating_pt_type  goto 75
+	base_type_spec  goto 68
+	signed_short_int  goto 54
+	char_type  goto 76
+	wide_char_type  goto 77
+	integer_type  goto 74
+	boolean_type  goto 78
+	octet_type  goto 79
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 69
+
+state 149
+	struct_def:  Rwstruct Identifier '{' '}'.    (109)
+
+	.  reduce 109 (src line 611)
+
+
+state 150
+	member:  type_spec.declarator ';' 
+
+	Identifier  shift 63
+	.  error
+
+	simple_declarator  goto 147
+	declarator  goto 180
+
+state 151
+	union_def:  Rwunion Identifier Rwswitch '('.switch_type_spec ')' '{' switch_body '}' 
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwlong  shift 186
+	Rwshort  shift 60
+	Rwunsigned  shift 61
+	.  error
+
+	signed_long_int  goto 55
+	signed_short_int  goto 54
+	char_type  goto 183
+	integer_type  goto 182
+	boolean_type  goto 184
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 185
+	switch_type_spec  goto 181
+
+state 152
+	module_dcl:  Rwmodule Identifier '{' definitions '}'.    (7)
+
+	.  reduce 7 (src line 173)
+
+
+state 153
+	const_dcl:  Rwconst const_type Identifier '=' const_expr.    (11)
+
+	.  reduce 11 (src line 211)
+
+
+state 154
+	string_type:  Rwstring '<' positive_int_const '>'.    (97)
+
+	.  reduce 97 (src line 545)
+
+
+state 155
+	or_expr:  or_expr '|'.xor_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	xor_expr  goto 187
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 156
+	xor_expr:  xor_expr '^'.and_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	and_expr  goto 188
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 157
+	and_expr:  and_expr '&'.shift_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	shift_expr  goto 189
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 158
+	shift_expr:  shift_expr Shr.add_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	add_expr  goto 190
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 159
+	shift_expr:  shift_expr Shl.add_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	add_expr  goto 191
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 160
+	add_expr:  add_expr '+'.mult_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	mult_expr  goto 192
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 161
+	add_expr:  add_expr '-'.mult_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	mult_expr  goto 193
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 162
+	mult_expr:  mult_expr '*'.unary_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	unary_expr  goto 194
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 163
+	mult_expr:  mult_expr '/'.unary_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	unary_expr  goto 195
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 164
+	mult_expr:  mult_expr '%'.unary_expr 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	literal  goto 124
+	unary_expr  goto 196
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 165
+	unary_expr:  unary_operator primary_expr.    (39)
+
+	.  reduce 39 (src line 315)
+
+
+state 166
+	primary_expr:  '(' const_expr.')' 
+
+	')'  shift 197
+	.  error
+
+
+state 167
+	wide_string_type:  Rwwstring '<' positive_int_const '>'.    (99)
+
+	.  reduce 99 (src line 554)
+
+
+168: shift/reduce conflict (shift 138(0), red'n 145(0)) on ','
+state 168
+	any_declarators:  any_declarators.',' any_declarators 
+	any_declarators:  any_declarators ',' any_declarators.    (145)
+
+	','  shift 138
+	.  reduce 145 (src line 702)
+
+
+state 169
+	fixed_array_sizes:  fixed_array_sizes fixed_array_size.    (135)
+
+	.  reduce 135 (src line 660)
+
+
+state 170
+	fixed_array_size:  '[' positive_int_const.']' 
+
+	']'  shift 198
+	.  error
+
+
+state 171
+	sequence_type:  Rwsequence '<' type_spec ','.positive_int_const '>' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	positive_int_const  goto 199
+	const_expr  goto 110
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 172
+	sequence_type:  Rwsequence '<' type_spec '>'.    (96)
+
+	.  reduce 96 (src line 541)
+
+
+state 173
+	fixed_pt_type:  Rwfixed '<' positive_int_const ','.positive_int_const '>' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	positive_int_const  goto 200
+	const_expr  goto 110
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 174
+	enum_dcl:  Rwenum Identifier '{' enumerator '}'.    (130)
+
+	.  reduce 130 (src line 642)
+
+
+state 175
+	enumerator:  enumerator ','.enumerator 
+
+	Identifier  shift 63
+	.  error
+
+	simple_declarator  goto 147
+	declarator  goto 146
+	enumerator  goto 201
+
+state 176
+	declarator:  declarator ','.declarator 
+
+	Identifier  shift 63
+	.  error
+
+	simple_declarator  goto 147
+	declarator  goto 202
+
+state 177
+	declarator:  simple_declarator '='.const_value 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 206
+	Wide_character_literal  shift 130
+	String_literal  shift 205
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	const_expr  goto 204
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	const_value  goto 203
+	boolean_literal  goto 131
+
+state 178
+	struct_def:  Rwstruct Identifier '{' member '}'.    (108)
+
+	.  reduce 108 (src line 597)
+
+
+179: shift/reduce conflict (shift 52(0), red'n 111(0)) on Identifier
+179: shift/reduce conflict (shift 53(0), red'n 111(0)) on Scope
+179: shift/reduce conflict (shift 48(0), red'n 111(0)) on Rwboolean
+179: shift/reduce conflict (shift 46(0), red'n 111(0)) on Rwchar
+179: shift/reduce conflict (shift 43(0), red'n 111(0)) on Rwdouble
+179: shift/reduce conflict (shift 42(0), red'n 111(0)) on Rwfloat
+179: shift/reduce conflict (shift 44(0), red'n 111(0)) on Rwlong
+179: shift/reduce conflict (shift 49(0), red'n 111(0)) on Rwoctet
+179: shift/reduce conflict (shift 60(0), red'n 111(0)) on Rwshort
+179: shift/reduce conflict (shift 61(0), red'n 111(0)) on Rwunsigned
+179: shift/reduce conflict (shift 47(0), red'n 111(0)) on Rwwchar
+state 179
+	member:  member.member 
+	member:  member member.    (111)
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwdouble  shift 43
+	Rwfloat  shift 42
+	Rwlong  shift 44
+	Rwoctet  shift 49
+	Rwshort  shift 60
+	Rwunsigned  shift 61
+	Rwwchar  shift 47
+	.  reduce 111 (src line 621)
+
+	member  goto 179
+	type_spec  goto 150
+	signed_long_int  goto 55
+	simple_type_spec  goto 143
+	floating_pt_type  goto 75
+	base_type_spec  goto 68
+	signed_short_int  goto 54
+	char_type  goto 76
+	wide_char_type  goto 77
+	integer_type  goto 74
+	boolean_type  goto 78
+	octet_type  goto 79
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 69
+
+state 180
+	member:  type_spec declarator.';' 
+	declarator:  declarator.',' declarator 
+
+	';'  shift 207
+	','  shift 176
+	.  error
+
+
+state 181
+	union_def:  Rwunion Identifier Rwswitch '(' switch_type_spec.')' '{' switch_body '}' 
+
+	')'  shift 208
+	.  error
+
+
+state 182
+	switch_type_spec:  integer_type.    (116)
+
+	.  reduce 116 (src line 633)
+
+
+state 183
+	switch_type_spec:  char_type.    (117)
+
+	.  reduce 117 (src line 633)
+
+
+state 184
+	switch_type_spec:  boolean_type.    (118)
+
+	.  reduce 118 (src line 633)
+
+
+state 185
+	scoped_name:  scoped_name.Scope Identifier 
+	switch_type_spec:  scoped_name.    (119)
+
+	Scope  shift 87
+	.  reduce 119 (src line 633)
+
+
+state 186
+	signed_long_int:  Rwlong.    (79)
+	signed_longlong_int:  Rwlong.Rwlong 
+
+	Rwlong  shift 89
+	.  reduce 79 (src line 471)
+
+
+state 187
+	or_expr:  or_expr '|' xor_expr.    (24)
+	xor_expr:  xor_expr.'^' and_expr 
+
+	'^'  shift 156
+	.  reduce 24 (src line 257)
+
+
+state 188
+	xor_expr:  xor_expr '^' and_expr.    (26)
+	and_expr:  and_expr.'&' shift_expr 
+
+	'&'  shift 157
+	.  reduce 26 (src line 266)
+
+
+state 189
+	and_expr:  and_expr '&' shift_expr.    (28)
+	shift_expr:  shift_expr.Shr add_expr 
+	shift_expr:  shift_expr.Shl add_expr 
+
+	Shl  shift 159
+	Shr  shift 158
+	.  reduce 28 (src line 274)
+
+
+state 190
+	shift_expr:  shift_expr Shr add_expr.    (30)
+	add_expr:  add_expr.'+' mult_expr 
+	add_expr:  add_expr.'-' mult_expr 
+
+	'+'  shift 160
+	'-'  shift 161
+	.  reduce 30 (src line 283)
+
+
+state 191
+	shift_expr:  shift_expr Shl add_expr.    (31)
+	add_expr:  add_expr.'+' mult_expr 
+	add_expr:  add_expr.'-' mult_expr 
+
+	'+'  shift 160
+	'-'  shift 161
+	.  reduce 31 (src line 286)
+
+
+state 192
+	add_expr:  add_expr '+' mult_expr.    (33)
+	mult_expr:  mult_expr.'*' unary_expr 
+	mult_expr:  mult_expr.'/' unary_expr 
+	mult_expr:  mult_expr.'%' unary_expr 
+
+	'*'  shift 162
+	'/'  shift 163
+	'%'  shift 164
+	.  reduce 33 (src line 294)
+
+
+state 193
+	add_expr:  add_expr '-' mult_expr.    (34)
+	mult_expr:  mult_expr.'*' unary_expr 
+	mult_expr:  mult_expr.'/' unary_expr 
+	mult_expr:  mult_expr.'%' unary_expr 
+
+	'*'  shift 162
+	'/'  shift 163
+	'%'  shift 164
+	.  reduce 34 (src line 297)
+
+
+state 194
+	mult_expr:  mult_expr '*' unary_expr.    (36)
+
+	.  reduce 36 (src line 305)
+
+
+state 195
+	mult_expr:  mult_expr '/' unary_expr.    (37)
+
+	.  reduce 37 (src line 308)
+
+
+state 196
+	mult_expr:  mult_expr '%' unary_expr.    (38)
+
+	.  reduce 38 (src line 311)
+
+
+state 197
+	primary_expr:  '(' const_expr ')'.    (46)
+
+	.  reduce 46 (src line 352)
+
+
+state 198
+	fixed_array_size:  '[' positive_int_const ']'.    (136)
+
+	.  reduce 136 (src line 661)
+
+
+state 199
+	sequence_type:  Rwsequence '<' type_spec ',' positive_int_const.'>' 
+
+	'>'  shift 209
+	.  error
+
+
+state 200
+	fixed_pt_type:  Rwfixed '<' positive_int_const ',' positive_int_const.'>' 
+
+	'>'  shift 210
+	.  error
+
+
+201: shift/reduce conflict (shift 175(0), red'n 132(0)) on ','
+state 201
+	enumerator:  enumerator.',' enumerator 
+	enumerator:  enumerator ',' enumerator.    (132)
+
+	','  shift 175
+	.  reduce 132 (src line 654)
+
+
+202: shift/reduce conflict (shift 176(0), red'n 148(0)) on ','
+state 202
+	declarator:  declarator.',' declarator 
+	declarator:  declarator ',' declarator.    (148)
+
+	','  shift 176
+	.  reduce 148 (src line 717)
+
+
+state 203
+	declarator:  simple_declarator '=' const_value.    (146)
+
+	.  reduce 146 (src line 710)
+
+
+state 204
+	const_value:  const_expr.    (149)
+
+	.  reduce 149 (src line 721)
+
+
+ 205: reduce/reduce conflict  (red'ns 53 and 150) on ';'
+ 205: reduce/reduce conflict  (red'ns 53 and 150) on '}'
+ 205: reduce/reduce conflict  (red'ns 53 and 150) on ','
+state 205
+	literal:  String_literal.    (53)
+	const_value:  String_literal.    (150)
+
+	.  reduce 53 (src line 375)
+
+
+ 206: reduce/reduce conflict  (red'ns 50 and 151) on ';'
+ 206: reduce/reduce conflict  (red'ns 50 and 151) on '}'
+ 206: reduce/reduce conflict  (red'ns 50 and 151) on ','
+state 206
+	literal:  Character_literal.    (50)
+	const_value:  Character_literal.    (151)
+
+	.  reduce 50 (src line 366)
+
+
+state 207
+	member:  type_spec declarator ';'.    (110)
+
+	.  reduce 110 (src line 617)
+
+
+state 208
+	union_def:  Rwunion Identifier Rwswitch '(' switch_type_spec ')'.'{' switch_body '}' 
+
+	'{'  shift 211
+	.  error
+
+
+state 209
+	sequence_type:  Rwsequence '<' type_spec ',' positive_int_const '>'.    (95)
+
+	.  reduce 95 (src line 537)
+
+
+state 210
+	fixed_pt_type:  Rwfixed '<' positive_int_const ',' positive_int_const '>'.    (101)
+
+	.  reduce 101 (src line 563)
+
+
+state 211
+	union_def:  Rwunion Identifier Rwswitch '(' switch_type_spec ')' '{'.switch_body '}' 
+
+	Rwcase  shift 217
+	Rwdefault  shift 218
+	.  error
+
+	switch_body  goto 212
+	cases  goto 213
+	case  goto 214
+	case_labels  goto 215
+	case_label  goto 216
+
+state 212
+	union_def:  Rwunion Identifier Rwswitch '(' switch_type_spec ')' '{' switch_body.'}' 
+
+	'}'  shift 219
+	.  error
+
+
+state 213
+	switch_body:  cases.    (120)
+
+	.  reduce 120 (src line 635)
+
+
+state 214
+	cases:  case.    (121)
+	cases:  case.case 
+
+	Rwcase  shift 217
+	Rwdefault  shift 218
+	.  reduce 121 (src line 636)
+
+	case  goto 220
+	case_labels  goto 215
+	case_label  goto 216
+
+state 215
+	case:  case_labels.element_spec ';' 
+
+	Identifier  shift 52
+	Scope  shift 53
+	Rwboolean  shift 48
+	Rwchar  shift 46
+	Rwdouble  shift 43
+	Rwfloat  shift 42
+	Rwlong  shift 44
+	Rwoctet  shift 49
+	Rwshort  shift 60
+	Rwunsigned  shift 61
+	Rwwchar  shift 47
+	.  error
+
+	type_spec  goto 222
+	signed_long_int  goto 55
+	simple_type_spec  goto 143
+	floating_pt_type  goto 75
+	base_type_spec  goto 68
+	signed_short_int  goto 54
+	char_type  goto 76
+	wide_char_type  goto 77
+	integer_type  goto 74
+	boolean_type  goto 78
+	octet_type  goto 79
+	unsigned_short_int  goto 57
+	unsigned_longlong_int  goto 59
+	unsigned_long_int  goto 58
+	signed_int  goto 40
+	signed_longlong_int  goto 56
+	unsigned_int  goto 41
+	scoped_name  goto 69
+	element_spec  goto 221
+
+state 216
+	case_labels:  case_label.    (124)
+	case_labels:  case_label.case_label 
+
+	Rwcase  shift 217
+	Rwdefault  shift 218
+	.  reduce 124 (src line 638)
+
+	case_label  goto 223
+
+state 217
+	case_label:  Rwcase.const_expr ':' 
+
+	Identifier  shift 52
+	Integer_literal  shift 126
+	Floating_pt_literal  shift 127
+	Fixed_pt_literal  shift 128
+	Character_literal  shift 129
+	Wide_character_literal  shift 130
+	String_literal  shift 132
+	Wide_string_literal  shift 133
+	Scope  shift 53
+	RwFALSE  shift 135
+	RwTRUE  shift 134
+	'+'  shift 121
+	'-'  shift 120
+	'~'  shift 122
+	'('  shift 125
+	.  error
+
+	const_expr  goto 224
+	or_expr  goto 111
+	xor_expr  goto 112
+	and_expr  goto 113
+	shift_expr  goto 114
+	literal  goto 124
+	add_expr  goto 115
+	mult_expr  goto 116
+	unary_expr  goto 117
+	primary_expr  goto 119
+	unary_operator  goto 118
+	scoped_name  goto 123
+	boolean_literal  goto 131
+
+state 218
+	case_label:  Rwdefault.':' 
+
+	':'  shift 225
+	.  error
+
+
+state 219
+	union_def:  Rwunion Identifier Rwswitch '(' switch_type_spec ')' '{' switch_body '}'.    (115)
+
+	.  reduce 115 (src line 632)
+
+
+state 220
+	cases:  case case.    (122)
+
+	.  reduce 122 (src line 636)
+
+
+state 221
+	case:  case_labels element_spec.';' 
+
+	';'  shift 226
+	.  error
+
+
+state 222
+	element_spec:  type_spec.declarator 
+
+	Identifier  shift 63
+	.  error
+
+	simple_declarator  goto 147
+	declarator  goto 227
+
+state 223
+	case_labels:  case_label case_label.    (125)
+
+	.  reduce 125 (src line 638)
+
+
+state 224
+	case_label:  Rwcase const_expr.':' 
+
+	':'  shift 228
+	.  error
+
+
+state 225
+	case_label:  Rwdefault ':'.    (127)
+
+	.  reduce 127 (src line 639)
+
+
+state 226
+	case:  case_labels element_spec ';'.    (123)
+
+	.  reduce 123 (src line 637)
+
+
+state 227
+	element_spec:  type_spec declarator.    (128)
+	declarator:  declarator.',' declarator 
+
+	','  shift 176
+	.  reduce 128 (src line 640)
+
+
+state 228
+	case_label:  Rwcase const_expr ':'.    (126)
+
+	.  reduce 126 (src line 639)
+
+Rule not reduced: const_value:  String_literal 
+Rule not reduced: const_value:  Character_literal 
+
+65 terminals, 72 nonterminals
+152 grammar rules, 229/8000 states
+15 shift/reduce, 6 reduce/reduce conflicts reported
+121 working sets used
+memory: parser 715/120000
+103 extra closures
+537 shift entries, 1 exceptions
+133 goto entries
+339 entries saved by goto default
+Optimizer space used: output 379/120000
+379 table entries, 50 zero
+maximum spread: 65, maximum offset: 222
