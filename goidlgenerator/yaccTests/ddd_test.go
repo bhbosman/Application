@@ -23,9 +23,7 @@ func TestNative(t *testing.T) {
 		};`
 
 		reader := bufio.NewReader(strings.NewReader(data))
-		idlExprLex := yacc.NewIdlExprLex(
-			reader, createContext(),
-			verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, createContext(), verbose)
 		assert.Equal(t, yacc.DefNotFound, yacc.IdlExprParse(idlExprLex))
 	})
 	t.Run("No Decl", func(t *testing.T) {
@@ -38,7 +36,7 @@ func TestNative(t *testing.T) {
 		`
 		reader := bufio.NewReader(strings.NewReader(data))
 		ctx := createContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, ctx, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, ctx, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		assert.Len(t, ctx.GetSpecification(), 2)
 	})

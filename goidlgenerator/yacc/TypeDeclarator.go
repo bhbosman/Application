@@ -8,13 +8,13 @@ import (
 )
 
 type TypeDeclarator struct {
-	definedTyped interfaces.IDefinedType
-	declarator   interfaces.IDeclarator
+	DefinedTyped interfaces.IDefinedType
+	Declarator   interfaces.IDeclarator
 	next         interfaces.IDefinitionDeclaration
 }
 
 func (self *TypeDeclarator) GetScopeName() string {
-	return self.declarator.Identifier()
+	return self.Declarator.Identifier()
 }
 
 func (self *TypeDeclarator) GetNext() interfaces.IDefinitionDeclaration {
@@ -29,16 +29,16 @@ func (self *TypeDeclarator) ClearNext() {
 	self.next = nil
 }
 
-func (self *TypeDeclarator) DefinedTyped() interfaces.IDefinedType {
-	return self.definedTyped
+func (self *TypeDeclarator) GetDefinedTyped() interfaces.IDefinedType {
+	return self.DefinedTyped
 }
 
-func (self *TypeDeclarator) Declarator() interfaces.IDeclarator {
-	return self.declarator
+func (self *TypeDeclarator) GetDeclarator() interfaces.IDeclarator {
+	return self.Declarator
 }
 
 func (self *TypeDeclarator) GetName() string {
-	return fmt.Sprintf("typedef %v %v: ", self.definedTyped.GetName(), self.declarator.Identifier())
+	return fmt.Sprintf("typedef %v %v: ", self.DefinedTyped.GetName(), self.Declarator.Identifier())
 }
 
 func Newtypedef_dcl(definedTyped interfaces.IDefinedType, declarator interfaces.IDeclarator) *TypeDeclarator {
@@ -49,7 +49,7 @@ func Newtypedef_dcl(definedTyped interfaces.IDefinedType, declarator interfaces.
 		return nil
 	}
 	return &TypeDeclarator{
-		definedTyped: definedTyped,
-		declarator:   declarator,
+		DefinedTyped: definedTyped,
+		Declarator:   declarator,
 	}
 }

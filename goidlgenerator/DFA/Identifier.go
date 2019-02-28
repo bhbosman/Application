@@ -11,12 +11,12 @@ func (identifier *Identifier) Name() string {
 	return "identifier"
 }
 
-func (identifier *Identifier) Token(lexem string) int {
+func (identifier *Identifier) Token(lexem string) (int, string) {
 	result, ok := identifier.reservedWords[lexem]
 	if ok {
-		return result
+		return result, lexem
 	}
-	return identifier.tokenValue
+	return identifier.tokenValue, lexem
 }
 
 func (identifier *Identifier) StartNode() *PlainNode {

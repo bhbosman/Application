@@ -85,6 +85,9 @@ func (x *IdlExprLex) Lex(yylval *IdlExprSymType) int {
 		switch token {
 		case String_literal:
 			yylval.StringValue = lexValue
+		case Character_literal:
+			yylval.StringValue = lexValue
+
 		case Identifier:
 			yylval.Identifier = lexValue
 			break
@@ -106,7 +109,7 @@ func (x *IdlExprLex) Error(s string) {
 	log.Printf("parse error: %s at (%d,%d).", s, x.Row, x.Col)
 }
 
-func CreateIdlTokens() []DFA.IDFA {
+func CreateIdlTokens() ([]DFA.IDFA, error) {
 	reservedWords := make(map[string]int)
 	reservedWords["boolean"] = Rwboolean
 	reservedWords["case"] = Rwcase
@@ -134,31 +137,74 @@ func CreateIdlTokens() []DFA.IDFA {
 	reservedWords["void"] = Rwvoid
 	reservedWords["wchar"] = Rwwchar
 	reservedWords["wstring"] = Rwwstring
+	reservedWords["bitfield"] = Rwbitfield
 
-	collDfa := []DFA.IDFA{
-		DFA.NewIdentifier(Identifier, reservedWords),
-		DFA.NewDfaInteger(Integer_literal),
-		DFA.NewHexValue(Hex_literal),
-		DFA.NewDfaWhiteSpace(Whitespace),
-		DFA.NewSingleLineComment(SingleLineComment),
-		DFA.NewStringNode(String_literal),
-		DFA.NewCharNode(Character_literal),
-		DFA.NewDfaGenericToken("{", '{', '{'),
-		//DFA.NewDfaGenericToken("\"", '"', '"'),
-		DFA.NewDfaGenericToken("}", '}', '}'),
-		DFA.NewDfaGenericToken("<", '<', '<'),
-		DFA.NewDfaGenericToken(">", '>', '>'),
-		DFA.NewDfaGenericToken("[", '[', '['),
-		DFA.NewDfaGenericToken("]", ']', ']'),
-		DFA.NewDfaGenericToken("=", '=', '='),
-		DFA.NewDfaGenericToken(";", ';', ';'),
-		DFA.NewDfaGenericToken(",", ',', ','),
+	collDfaFunctions := []func() (DFA.IDFA, error){
+		func() (DFA.IDFA, error) {
+			return DFA.NewIdentifier(Identifier, reservedWords), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaInteger(Integer_literal), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewHexValue(Hex_literal), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaWhiteSpace(Whitespace), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewSingleLineComment(SingleLineComment), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewStringNode(String_literal), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewCharNode(Character_literal)
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken("{", '{', '{'), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken("}", '}', '}'), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken("<", '<', '<'), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken(">", '>', '>'), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken("[", '[', '['), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken("]", ']', ']'), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken("=", '=', '='), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken(";", ';', ';'), nil
+		},
+		func() ( DFA.IDFA, error) {
+			return DFA.NewDfaGenericToken(",", ',', ','), nil
+		},
 	}
 
-	return collDfa
+	collDfa := make([]DFA.IDFA, len(collDfaFunctions), len(collDfaFunctions))
+	for i, f := range collDfaFunctions{
+		dfa, err := f()
+		if err != nil {
+			return nil, err
+		}
+		collDfa[i] = dfa
+	}
+
+
+
+	return collDfa, nil
 }
 
-func NewIdlExprLex(inputStream io.ByteScanner, idlExprContext *IdlExprContext, verbose bool) *IdlExprLex {
+func NewIdlExprLex(inputStream io.ByteScanner, idlExprContext *IdlExprContext, verbose bool) (*IdlExprLex, error) {
 	IdlExprErrorVerbose = true
 	tokenToIgnore := []int{
 		Whitespace,
@@ -169,15 +215,20 @@ func NewIdlExprLex(inputStream io.ByteScanner, idlExprContext *IdlExprContext, v
 		tokenToIgnoreMap[token] = token
 	}
 
+	createIdlTokens, err := CreateIdlTokens()
+	if err != nil {
+		return nil, err
+	}
+
 	return &IdlExprLex{
 		InputStream:     inputStream,
-		CollDfa:         CreateIdlTokens(),
+		CollDfa:         createIdlTokens,
 		TokenToIgnore:   tokenToIgnoreMap,
 		Verbose:         verbose,
 		VerboseEachChar: false,
 		Col:             1,
 		Row:             1,
 		idlExprContext:  idlExprContext,
-	}
+	}, nil
 
 }

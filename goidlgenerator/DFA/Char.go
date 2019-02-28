@@ -15,55 +15,125 @@ func (self *CharNode) StartNode() *PlainNode {
 	return self.start
 }
 
-func (self *CharNode) Token(lexem string) int {
-	return self.tokenValue
+func (self *CharNode) Token(lexem string) (int, string) {
+	return self.tokenValue, lexem[1 : len(lexem)-1]
 }
 
-func NewCharNode(tokenValue int) *CharNode {
+func NewCharNode(tokenValue int) (*CharNode, error) {
 	startNode := NewPlainNode("CharNodeStartNode", false)
 	CharNode01 := NewPlainNode("CharNodeCharNode", false)
 	CharNode02 := NewPlainNode("CharNodeCharNode", false)
 	terminalNode := NewPlainNode("CharNodeTerminalNode", true)
-	_ = PlainNodeLink('\'', startNode, CharNode01)
-	_ = PlainNodeLink('\'', CharNode02, terminalNode)
+	if err := PlainNodeLink('\'', startNode, CharNode01); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('\'', CharNode02, terminalNode); err != nil {
+		return nil, err
+	}
 
-	_ = PlainNodeMultiLink('0', '9', CharNode01, CharNode02)
-	_ = PlainNodeMultiLink('a', 'z', CharNode01, CharNode02)
-	_ = PlainNodeMultiLink('A', 'Z', CharNode01, CharNode02)
-	_ = PlainNodeLink(' ', CharNode01, CharNode02)
-	_ = PlainNodeLink('@', CharNode01, CharNode02)
-	_ = PlainNodeLink('#', CharNode01, CharNode02)
-	_ = PlainNodeLink('!', CharNode01, CharNode02)
-	_ = PlainNodeLink('$', CharNode01, CharNode02)
-	_ = PlainNodeLink('%', CharNode01, CharNode02)
-	_ = PlainNodeLink('^', CharNode01, CharNode02)
-	_ = PlainNodeLink('&', CharNode01, CharNode02)
-	_ = PlainNodeLink('*', CharNode01, CharNode02)
-	_ = PlainNodeLink('(', CharNode01, CharNode02)
-	_ = PlainNodeLink(')', CharNode01, CharNode02)
-	_ = PlainNodeLink('-', CharNode01, CharNode02)
-	_ = PlainNodeLink('_', CharNode01, CharNode02)
-	_ = PlainNodeLink('=', CharNode01, CharNode02)
-	_ = PlainNodeLink('+', CharNode01, CharNode02)
-	_ = PlainNodeLink('~', CharNode01, CharNode02)
-	_ = PlainNodeLink('`', CharNode01, CharNode02)
-	_ = PlainNodeLink(',', CharNode01, CharNode02)
-	_ = PlainNodeLink('<', CharNode01, CharNode02)
-	_ = PlainNodeLink('.', CharNode01, CharNode02)
-	_ = PlainNodeLink('>', CharNode01, CharNode02)
-	_ = PlainNodeLink('\\', CharNode01, CharNode02)
-	_ = PlainNodeLink('\'', CharNode01, CharNode02)
-	_ = PlainNodeLink('|', CharNode01, CharNode02)
-	_ = PlainNodeLink(':', CharNode01, CharNode02)
-	_ = PlainNodeLink(';', CharNode01, CharNode02)
-	_ = PlainNodeLink('[', CharNode01, CharNode02)
-	_ = PlainNodeLink(']', CharNode01, CharNode02)
-	_ = PlainNodeLink('{', CharNode01, CharNode02)
-	_ = PlainNodeLink('}', CharNode01, CharNode02)
+	if err := PlainNodeMultiLink('0', '9', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeMultiLink('a', 'z', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeMultiLink('A', 'Z', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink(' ', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('@', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('#', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('!', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('$', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('%', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('^', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('&', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('*', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('(', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink(')', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('-', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('_', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('=', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('+', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('~', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('`', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink(',', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('<', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('.', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('>', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('\\', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('\'', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('|', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink(':', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink(';', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('[', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink(']', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('{', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
+	if err := PlainNodeLink('}', CharNode01, CharNode02); err != nil {
+		return nil, err
+	}
 
 	return &CharNode{
 		tokenValue:   tokenValue,
 		start:        startNode,
 		terminalNode: terminalNode,
-	}
+	}, nil
 }

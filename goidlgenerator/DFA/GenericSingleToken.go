@@ -11,8 +11,8 @@ func (identifier *GenericSingleToken) Name() string {
 	return identifier.tokenDesctiption
 }
 
-func (identifier *GenericSingleToken) Token(lexem string) int {
-	return identifier.tokenValue
+func (identifier *GenericSingleToken) Token(lexem string) (int, string) {
+	return identifier.tokenValue, lexem
 }
 
 func (identifier *GenericSingleToken) StartNode() *PlainNode {

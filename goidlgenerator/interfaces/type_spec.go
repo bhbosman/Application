@@ -30,6 +30,6 @@ type IDefinitionDeclaration interface {
 
 type ITypeDeclaration interface {
 	IDefinitionDeclaration
-	DefinedTyped() IDefinedType
-	Declarator() IDeclarator
+	GetDefinedTyped() IDefinedType
+	GetDeclarator() IDeclarator
 }

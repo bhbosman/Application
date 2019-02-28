@@ -14,8 +14,8 @@ func (self *StringNode) StartNode() *PlainNode {
 	return self.start
 }
 
-func (self *StringNode) Token(lexem string) int {
-	return self.tokenValue
+func (self *StringNode) Token(lexem string) (int, string) {
+	return self.tokenValue, lexem[1 : len(lexem)-1]
 }
 
 func NewStringNode(tokenValue int) *StringNode {
@@ -27,37 +27,37 @@ func NewStringNode(tokenValue int) *StringNode {
 	_ = PlainNodeMultiLink('a', 'z', stringNode, stringNode)
 	_ = PlainNodeMultiLink('A', 'Z', stringNode, stringNode)
 	_ = PlainNodeLink(' ', stringNode, stringNode)
-	_=PlainNodeLink('@', stringNode, stringNode)
-	_=PlainNodeLink('#', stringNode, stringNode)
-	_=PlainNodeLink('!', stringNode, stringNode)
-	_=PlainNodeLink('$', stringNode, stringNode)
-	_=PlainNodeLink('%', stringNode, stringNode)
-	_=PlainNodeLink('^', stringNode, stringNode)
-	_=PlainNodeLink('&', stringNode, stringNode)
-	_=PlainNodeLink('*', stringNode, stringNode)
-	_=PlainNodeLink('(', stringNode, stringNode)
-	_=PlainNodeLink(')', stringNode, stringNode)
-	_=PlainNodeLink('-', stringNode, stringNode)
-	_=PlainNodeLink('_', stringNode, stringNode)
-	_=PlainNodeLink('=', stringNode, stringNode)
-	_=PlainNodeLink('+', stringNode, stringNode)
-	_=PlainNodeLink('~', stringNode, stringNode)
-	_=PlainNodeLink('`', stringNode, stringNode)
-	_=PlainNodeLink(',', stringNode, stringNode)
-	_=PlainNodeLink('<', stringNode, stringNode)
-	_=PlainNodeLink('.', stringNode, stringNode)
-	_=PlainNodeLink('>', stringNode, stringNode)
-	_=PlainNodeLink('\\', stringNode, stringNode)
-	_=PlainNodeLink('\'', stringNode, stringNode)
-	_=PlainNodeLink('|', stringNode, stringNode)
-	_=PlainNodeLink(':', stringNode, stringNode)
-	_=PlainNodeLink(';', stringNode, stringNode)
-	_=PlainNodeLink('[', stringNode, stringNode)
-	_=PlainNodeLink(']', stringNode, stringNode)
-	_=PlainNodeLink('{', stringNode, stringNode)
-	_=PlainNodeLink('}', stringNode, stringNode)
+	_ = PlainNodeLink('@', stringNode, stringNode)
+	_ = PlainNodeLink('#', stringNode, stringNode)
+	_ = PlainNodeLink('!', stringNode, stringNode)
+	_ = PlainNodeLink('$', stringNode, stringNode)
+	_ = PlainNodeLink('%', stringNode, stringNode)
+	_ = PlainNodeLink('^', stringNode, stringNode)
+	_ = PlainNodeLink('&', stringNode, stringNode)
+	_ = PlainNodeLink('*', stringNode, stringNode)
+	_ = PlainNodeLink('(', stringNode, stringNode)
+	_ = PlainNodeLink(')', stringNode, stringNode)
+	_ = PlainNodeLink('-', stringNode, stringNode)
+	_ = PlainNodeLink('_', stringNode, stringNode)
+	_ = PlainNodeLink('=', stringNode, stringNode)
+	_ = PlainNodeLink('+', stringNode, stringNode)
+	_ = PlainNodeLink('~', stringNode, stringNode)
+	_ = PlainNodeLink('`', stringNode, stringNode)
+	_ = PlainNodeLink(',', stringNode, stringNode)
+	_ = PlainNodeLink('<', stringNode, stringNode)
+	_ = PlainNodeLink('.', stringNode, stringNode)
+	_ = PlainNodeLink('>', stringNode, stringNode)
+	_ = PlainNodeLink('\\', stringNode, stringNode)
+	_ = PlainNodeLink('\'', stringNode, stringNode)
+	_ = PlainNodeLink('|', stringNode, stringNode)
+	_ = PlainNodeLink(':', stringNode, stringNode)
+	_ = PlainNodeLink(';', stringNode, stringNode)
+	_ = PlainNodeLink('[', stringNode, stringNode)
+	_ = PlainNodeLink(']', stringNode, stringNode)
+	_ = PlainNodeLink('{', stringNode, stringNode)
+	_ = PlainNodeLink('}', stringNode, stringNode)
 
-	_=PlainNodeLink('"', stringNode, terminalNode)
+	_ = PlainNodeLink('"', stringNode, terminalNode)
 
 	return &StringNode{
 		tokenValue:   tokenValue,
@@ -65,4 +65,3 @@ func NewStringNode(tokenValue int) *StringNode {
 		terminalNode: terminalNode,
 	}
 }
-

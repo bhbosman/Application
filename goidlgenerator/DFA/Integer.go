@@ -15,8 +15,8 @@ func (dfaInteger *Integer) StartNode() *PlainNode {
 	return dfaInteger.start
 }
 
-func (dfaInteger *Integer) Token(lexem string) int {
-	return dfaInteger.tokenValue
+func (dfaInteger *Integer) Token(lexem string) (int, string) {
+	return dfaInteger.tokenValue, lexem
 }
 
 func NewDfaInteger(tokenValue int) *Integer {

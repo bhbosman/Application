@@ -42,8 +42,8 @@ struct Time
 
 enum TEventCode
 {
-    EndOfDay = 'S',
-    StartOfDay = '1'
+    EndOfDay = 'C',
+    StartOfDay = 'O'
 };
 struct SystemEvent
 {
@@ -60,37 +60,80 @@ struct SystemEvent
 //√
 //√
 //
+
+
+enum SymbolDirectorySymbolStatus
+{
+    Halted = 'H',
+    Suspended = 'S',
+    Inactive = 'a'
+};
+
+
+enum SymbolDirectoryOptionType{
+    CallOption = 'C',
+    PutOption = 'P'
+};
+
+typedef bitfield
+    <
+        InverseOrderBook,
+        b1,
+        b2,
+        b3,
+        b4,
+        b5,
+        b6,
+        b7
+    > SymbolDirectoryFlags;
+
+typedef bitfield
+    <
+        Regular,
+        OffBook,
+        b2,
+        b3,
+        b4,
+        BulletinBoard,
+        NegotiatedTrades,
+        b7
+    > SymbolDirectorySubBook;
+
+
+enum SymbolDirectorySettlementMethod{
+    Cash = 'C',
+    Physical = 'P'
+};
+
 struct SymbolDirectory
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType = 0x52;
-    MitchUInt32     Nanosecond;
-    MitchUInt32     InstrumentID;
-    MitchByte       Reserved;
-    MitchByte       Reserved;
-    MitchAlpha001   SymbolStatus;
-    MitchAlpha012   ISIN;
-    MitchAlpha025   Symbol;
-    MitchAlpha012   TIDM;
-    MitchAlpha006   Segment;
-    MitchPrice      PreviousClosePrice;
-    MitchDate       ExpirationDate;
-    MitchAlpha025   Underlying;
-    MitchPrice      StrikePrice;
-    MitchAlpha001   OptionType;
-    MitchAlpha006   Issuer;
-    MitchDate       IssueDate;
-    MitchPrice      Coupon;
-    MitchBitField   Flags;
-    MitchBitField   SubBook;
-    MitchAlpha189   CorporateAction;
-    MitchAlpha025   Leg1Symbol;
-    MitchAlpha025   Leg2Symbol;
-    MitchPrice      ContractMultiplier;
-    MitchAlpha001   SettlementMethod;
-    MitchAlpha030   InstrumentSubCategory;
-
-
+    MitchUInt16                     Length;
+    MitchByte                       MessageType = 0x52;
+    MitchUInt32                     Nanosecond;
+    MitchUInt32                     InstrumentID;
+    MitchByte                       Reserved;
+    MitchByte                       Reserved;
+    SymbolDirectorySymbolStatus     SymbolStatus;
+    MitchAlpha012                   ISIN;
+    MitchAlpha025                   Symbol;
+    MitchAlpha012                   TIDM;
+    MitchAlpha006                   Segment;
+    MitchPrice                      PreviousClosePrice;
+    MitchDate                       ExpirationDate;
+    MitchAlpha025                   Underlying;
+    MitchPrice                      StrikePrice;
+    SymbolDirectoryOptionType       OptionType;
+    MitchAlpha006                   Issuer;
+    MitchDate                       IssueDate;
+    MitchPrice                      Coupon;
+    SymbolDirectoryFlags            Flags;
+    SymbolDirectorySubBook          SubBook;
+    MitchAlpha189                   CorporateAction;
+    MitchAlpha025                   Leg1Symbol;
+    MitchAlpha025                   Leg2Symbol;
+    MitchPrice                      ContractMultiplier;
+    SymbolDirectorySettlementMethod SettlementMethod;
+    MitchAlpha030                   InstrumentSubCategory;
 };
 
 
@@ -101,20 +144,65 @@ struct SymbolDirectory
 //√
 //
 
+
+enum SymbolStatusTradingStatus{
+    Halt = 'H',
+    RegularTrading = 'T',
+    OpeningAuctionCall = 'a',
+    PostClose = 'b',
+    MarketClose = 'c',
+    ClosingAuctionCall = 'd',
+    VolatilityAuctionCall = 'e',
+    EODVolumeAuctionCall = 'E',
+    ReOpeningAuctionCall = 'f',
+    Pause = 'l',
+    FuturesCloseOut = 'p',
+    ClosingPriceCross = 's',
+    IntraDayAuctionCall = 'u',
+    EndTradeReporting = 'v',
+    NoActiveSession = 'w',
+    EndOfPostClose = 'x',
+    StarOofTrading = 'y',
+    ClosingPricePublication = 'z'
+};
+
+
+
+enum SymbolStatusSessionChangeReason
+{
+    ScheduledTransition = 0,
+    ExtendedByMarketOps = 1,
+    ShortenedByMarketOps = 2,
+    MarketOrderImbalance = 3,
+    PriceOutsideRange = 4,
+    CircuitBreakerTripped = 5,
+    Unavailable = 9
+};
+
+
+
+enum SymbolStatusBookType
+{
+    OnBook           = 1,
+    OffBook          = 2,
+    BulletinBoard    = 9,
+    NegotiatedTrades = 11
+};
+
 struct SymbolStatus
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType = 0x48;
-    MitchUInt32     Nanosecond;
-    MitchUInt32     InstrumentID;
-    MitchByte       Reserved;
-    MitchByte       Reserved;
-    MitchByte       TradingStatus;
-    MitchBitField   Flags;
-    MitchAlpha004   Reason;
-    MitchByte       SessionChangeReason;
-    MitchTime       NewEndTime;
-    MitchByte       BookType;
+    MitchUInt16                     Length;
+    MitchByte                       MessageType = 0x48;
+    MitchUInt32                     Nanosecond;
+    MitchUInt32                     InstrumentID;
+    MitchByte                       Reserved;
+    MitchByte                       Reserved;
+    SymbolStatusTradingStatus       TradingStatus;
+    MitchBitField                   Flags;
+    MitchAlpha004                   Reason;
+    SymbolStatusSessionChangeReason SessionChangeReason;
+    MitchTime                       NewEndTime;
+    SymbolStatusBookType            BookType;
 };
 
 //Add Order
@@ -127,8 +215,9 @@ struct SymbolStatus
 struct AddOrder
 {
     MitchUInt16     Length;
-    MitchByte       MessageType;
+    MitchByte       MessageType = 0x41;
     MitchUInt32     Nanosecond;
+    MitchUInt64     OrderId;
 };
 
 //Add Attributed Order

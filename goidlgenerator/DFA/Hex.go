@@ -14,8 +14,8 @@ func (hex *Hex) StartNode() *PlainNode {
 	return hex.start
 }
 
-func (hex *Hex) Token(lexem string) int {
-	return hex.tokenValue
+func (hex *Hex) Token(lexem string) (int, string) {
+	return hex.tokenValue, lexem
 }
 
 func NewHexValue(tokenValue int) *Hex {

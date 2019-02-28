@@ -31,7 +31,7 @@ func (self *NodeWalker) Reset() {
 	self.currentNode = self.Dfa.StartNode()
 }
 
-func (self *NodeWalker) Token(lexem string) int {
+func (self *NodeWalker) Token(lexem string) (int, string) {
 	return self.Dfa.Token(lexem)
 }
 

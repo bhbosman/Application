@@ -38,9 +38,12 @@ func TestDfaIdentifier(t *testing.T) {
 		nodeWalker := NewNodeWalker(NewIdentifier(1234, rv))
 		b := WalkString(nodeWalker, []byte("walk"))
 		assert.True(t, b)
-		assert.Equal(t, 1, nodeWalker.Token("AA"))
-		assert.Equal(t, 3, nodeWalker.Token("BB"))
-		assert.Equal(t, 1234, nodeWalker.Token("walk"))
+		token01, _ := nodeWalker.Token("AA")
+		assert.Equal(t, 1, token01)
+		token02, _ := nodeWalker.Token("BB")
+		assert.Equal(t, 3, token02)
+		token03, _ := nodeWalker.Token("walk")
+		assert.Equal(t, 1234, token03)
 	})
 
 }

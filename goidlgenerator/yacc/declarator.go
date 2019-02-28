@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
-	"reflect"
 )
 
 //go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
 type Declarator struct {
 	identifier   string
-	defaultValue interface{}
+	defaultValue *ConstantValue
 	next         interfaces.IDeclarator `json:"-"`
 }
 
@@ -49,23 +48,24 @@ func (self *Declarator) MarshalJSON() ([]byte, error) {
 			Type:       "Declarator",
 			Identifier: self.identifier,
 		})
-
 	}
 
 	return json.Marshal(&struct {
-		Type             string      `json:"Type"`
-		Identifier       string      `json:"Identifier"`
-		DefaultValue     interface{} `json:"DefaultValue"`
-		DefaultValueType string      `json:"DefaultValueType"`
+		Type                  string      `json:"Type"`
+		Identifier            string      `json:"Identifier"`
+		DefaultValue          interface{} `json:"DefaultValue"`
+		DefaultValueType      string      `json:"DefaultValueType"`
+		DefaultValueMaxLength int         `json:"DefaultValueMaxLength"`
 	}{
-		Type:             "Declarator",
-		Identifier:       self.identifier,
-		DefaultValue:     self.defaultValue,
-		DefaultValueType: reflect.TypeOf(self.defaultValue).String(),
+		Type:                  "Declarator",
+		Identifier:            self.identifier,
+		DefaultValue:          self.defaultValue.Value,
+		DefaultValueType:      self.defaultValue.Type.String(),
+		DefaultValueMaxLength: self.defaultValue.MaxLength,
 	})
 }
 
-func NewDeclarator(Identifier string, defaultValue interface{}) *Declarator {
+func NewDeclarator(Identifier string, defaultValue *ConstantValue) *Declarator {
 	return &Declarator{
 		identifier:   Identifier,
 		defaultValue: defaultValue,

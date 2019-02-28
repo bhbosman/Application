@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
+	"reflect"
 )
 
 const NoCtx int = 99998
@@ -14,6 +15,13 @@ const NoLex int = 99999
 const DefNotFound int = 10005
 const ErrorOnAddTypedefDcl = 10006
 const ErrorTypeisNull = 10007
+const ErrorMustbeAnInt = 10008
+
+type ConstantValue struct {
+	Value     interface{}
+	Type      reflect.Type
+	MaxLength int
+}
 
 func GetIdlExprLex(item IdlExprLexer) (*IdlExprLex, error) {
 	if item == nil {
@@ -39,10 +47,10 @@ func AddDefinitions(definitions interfaces.IDefinitionDeclaration) []interfaces.
 	for definition01 != nil {
 		inner01 := definition01
 		if typeDeclaration, ok := definition01.(interfaces.ITypeDeclaration); ok {
-			declarator02 := typeDeclaration.Declarator()
+			declarator02 := typeDeclaration.GetDeclarator()
 			for declarator02 != nil {
 				inner02 := declarator02
-				newType := Newtypedef_dcl(typeDeclaration.DefinedTyped(), inner02)
+				newType := Newtypedef_dcl(typeDeclaration.GetDefinedTyped(), inner02)
 				result = append(result, newType)
 
 				declarator02 = declarator02.GetNext()
@@ -63,9 +71,9 @@ func AddTypedefDcl(idlExprlex IdlExprLexer, typeDecl interfaces.ITypeDeclaration
 		return err
 	}
 
-	declarator := typeDecl.Declarator()
+	declarator := typeDecl.GetDeclarator()
 	for declarator != nil {
-		newType := Newtypedef_dcl(typeDecl.DefinedTyped(), declarator)
+		newType := Newtypedef_dcl(typeDecl.GetDefinedTyped(), declarator)
 		context.AddDefinition(newType)
 		declarator = declarator.GetNext()
 	}

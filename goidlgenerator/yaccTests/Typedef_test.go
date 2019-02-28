@@ -23,9 +23,7 @@ func TestTypeDef(t *testing.T) {
 		};`
 
 		reader := bufio.NewReader(strings.NewReader(data))
-		idlExprLex := yacc.NewIdlExprLex(
-			reader, createContext(),
-			verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, createContext(), verbose)
 		assert.Equal(t, yacc.DefNotFound, yacc.IdlExprParse(idlExprLex))
 
 	})
@@ -39,7 +37,7 @@ func TestTypeDef(t *testing.T) {
 		};`
 
 		reader := bufio.NewReader(strings.NewReader(data))
-		idlExprLex := yacc.NewIdlExprLex(reader, createContext(), verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, createContext(), verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 	})
 

@@ -10,8 +10,8 @@ func (identifier *WhiteSpace) Name() string {
 	return "WhiteSpace"
 }
 
-func (identifier *WhiteSpace) Token(lexem string) int {
-	return identifier.tokenValue
+func (identifier *WhiteSpace) Token(lexem string) (int, string) {
+	return identifier.tokenValue, lexem
 }
 
 func (identifier *WhiteSpace) StartNode() *PlainNode {

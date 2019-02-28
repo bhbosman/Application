@@ -23,7 +23,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -46,8 +46,8 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
-		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)){
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
 
@@ -72,7 +72,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -95,7 +95,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -123,7 +123,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -145,7 +145,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -167,7 +167,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -189,7 +189,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -211,7 +211,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -233,7 +233,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -255,7 +255,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -277,7 +277,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -299,7 +299,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -321,7 +321,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -343,7 +343,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -367,7 +367,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 
 		jsonPublish := Publish.HasOutputType(Publish.Json)
@@ -383,8 +383,7 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext,
-			verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 
 		jsonPublish := Publish.HasOutputType(Publish.Json)
@@ -407,7 +406,7 @@ func TestStructWithTypes(t *testing.T) {
 	`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		assert.NotNil(t, DeclaredTypes)

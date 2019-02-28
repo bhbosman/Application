@@ -48,7 +48,8 @@ func (receiver *Collection) Token(lexem string) (int, string, error) {
 	if len(receiver.coll) != 1 {
 		return 0, "", TooManyTokenError
 	}
-	return receiver.coll[0].Token(lexem), lexem, nil
+	tokenValue, lexemValue := receiver.coll[0].Token(lexem)
+	return tokenValue, lexemValue, nil
 }
 
 func NewDfaCollection(coll []IDFA, row, col int) *Collection {

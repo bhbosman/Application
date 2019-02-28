@@ -2,6 +2,7 @@
 package yacc
 	//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 	import (
+		"reflect"
 		"github.com/bhbosman/Application/goidlgenerator/interfaces"
 		"github.com/bhbosman/Application/goidlgenerator/DefinedTypes"
 		"github.com/bhbosman/Application/goidlgenerator/TempleteTypes")
@@ -50,14 +51,16 @@ package yacc
 %token Rwvoid
 %token Rwwchar
 %token Rwwstring
+%token Rwbitfield
 
 
 %union{
 	Identifier 	string
 	IntegerValue    int64
-	CharValue 	rune
-	StringValue    	string
-	ConstValue interface{}
+	StringValue string
+	FloatValue float64
+	ConstValue *ConstantValue
+	BoolValue bool
 
 	Member 		*Member
 	Declarator 	interfaces.IDeclarator
@@ -67,29 +70,27 @@ package yacc
 	Specification []interfaces.IDefinitionDeclaration
 }
 
-%type	<StringValue>	String_literal
-%type	<CharValue>	Character_literal
-%type	<Identifier>	Identifier
-%type	<Identifier>	simple_declarator
-%type	<Identifier> native_dcl
+%type	<StringValue>	String_literal Wide_string_literal
+%type	<StringValue>	Character_literal Wide_character_literal
+%type	<Identifier>	Identifier simple_declarator native_dcl
+%type	<ConstValue>	literal primary_expr
 
+%type 	<FloatValue> 	Floating_pt_literal
 %type	<IntegerValue>	positive_int_const
-
 %type	<IntegerValue>	const_expr
 %type	<IntegerValue>	or_expr
 %type	<IntegerValue>	xor_expr
 %type	<IntegerValue>	and_expr
 %type	<IntegerValue>	shift_expr
-%type	<IntegerValue>	literal
+
 %type	<IntegerValue>	Integer_literal
 %type	<IntegerValue>	add_expr
 %type	<IntegerValue>	mult_expr
 %type	<IntegerValue>	unary_expr
-%type	<IntegerValue>	primary_expr
+
 %type	<IntegerValue>	unary_operator
 
-
-
+%type	<BoolValue>	boolean_literal
 
 %type	<Member>	member
 %type	<DefinedType>	type_spec
@@ -113,6 +114,7 @@ package yacc
 %type	<DefinedType>	const_type
 %type	<DefinedType>	fixed_pt_const_type
 %type	<DefinedType>	sequence_type
+%type	<DefinedType>	bitfield_type
 %type	<DefinedType>	template_type_spec
 %type	<DefinedType>	string_type
 %type	<DefinedType>	wide_string_type
@@ -133,7 +135,7 @@ package yacc
 
 
 %type	<Declarator>	declarator any_declarators enumerator
-%type	<ConstValue>	const_value
+
 
 
 %%
@@ -313,10 +315,22 @@ mult_expr :
 
 unary_expr :
 	unary_operator primary_expr {
-		$$ = $2
+		value, ok := $2.Value.(int64)
+		if ok{
+			$$ = value
+		}else{
+			SendError(IdlExprlex, "Value must be an integer (int64)")
+			return ErrorMustbeAnInt
+		}
 	}
 	| primary_expr{
-		$$=$1
+		value, ok := $1.Value.(int64)
+		if ok{
+			$$ = value
+		}else{
+			SendError(IdlExprlex, "Value must be an integer (int64)")
+			return ErrorMustbeAnInt
+		}
 	}
 
 unary_operator :
@@ -349,38 +363,62 @@ primary_expr :
 		$$ = $1
 	}
 	| '(' const_expr ')'{
-		$$ = 0
+		$$ = &ConstantValue{
+			Value: $2,
+			Type: reflect.TypeOf(int64(0))}
 	}
 
 literal :
 	Integer_literal{
-		$$ = $1
+		$$ = &ConstantValue{
+			Value: $1,
+			Type: reflect.TypeOf(int64(0)),
+			MaxLength: 0}
 	}
 	| Floating_pt_literal{
-		$$ = 0
+		$$ = nil
 	}
 	| Fixed_pt_literal{
-		$$ = 0
+		$$ = nil
 	}
 	| Character_literal{
-		$$ = 0
+		$$ = &ConstantValue{
+			Value: $1,
+			Type: reflect.TypeOf("A"),
+			MaxLength: 1}
 	}
 	| Wide_character_literal{
-		$$ = 0
+		$$ = &ConstantValue{
+			Value: $1,
+			Type: reflect.TypeOf("A"),
+			MaxLength: 1}
 	}
 	| boolean_literal{
-		$$ = 0
+		$$ = &ConstantValue{
+			Value: $1,
+			Type: reflect.TypeOf(true),
+			MaxLength: 0}
 	}
 	| String_literal{
-		$$ = 0
+		$$ = &ConstantValue{
+			Value: $1,
+			Type: reflect.TypeOf("ABC"),
+			MaxLength: 0}
 	}
 	| Wide_string_literal{
-		$$ = 0
+		$$ = &ConstantValue{
+			Value: $1,
+			Type: reflect.TypeOf("ABC"),
+			MaxLength: 0}
 	}
 
 boolean_literal :
-	RwTRUE
-	| RwFALSE
+	RwTRUE{
+		$$ = true
+	}
+	| RwFALSE{
+		$$ = false
+	}
 
 positive_int_const : const_expr
 
@@ -532,6 +570,14 @@ template_type_spec :
 	| fixed_pt_type{
 		$$ = $1
 	}
+	|bitfield_type{
+	}
+
+bitfield_type:
+	Rwbitfield '<' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator '>'{
+		$$ = NewBitField($3, $5, $7, $9, $11, $13, $15, $17)
+	}
+
 
 sequence_type :
 	Rwsequence '<' type_spec ',' positive_int_const '>'{
@@ -707,7 +753,7 @@ any_declarators:
 // (68) <declarator> ::= <simple_declarator>
 // */
 declarator :
-	simple_declarator '='  const_value {
+	simple_declarator '=' literal {
 		$$ = NewDeclarator($1, $3)
 	}
 	|simple_declarator{
@@ -715,17 +761,6 @@ declarator :
 	}
 	|declarator ',' declarator{
 		$1.SetNext($3)
-		$$ = $1
-	}
-const_value:
-	const_expr{
-		$$ = $1
-	}
-	| Rwconst String_literal{
-		__yyfmt__.Println("ddddd")
-		$$ = $2
-	}
-	| Character_literal{
 		$$ = $1
 	}
 %%

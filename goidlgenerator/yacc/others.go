@@ -12,7 +12,6 @@ func Newunion_dcl() interfaces.IDefinitionDeclaration {
 	return nil
 }
 
-
 func Newstruct_forward_dcl() interfaces.IDefinitionDeclaration {
 	return nil
 }

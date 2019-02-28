@@ -15,8 +15,8 @@ func (self *SingleLineComment) StartNode() *PlainNode {
 	return self.start
 }
 
-func (self *SingleLineComment) Token(lexem string) int {
-	return self.tokenValue
+func (self *SingleLineComment) Token(lexem string) (int, string) {
+	return self.tokenValue, lexem
 }
 
 func NewSingleLineComment(tokenValue int) *SingleLineComment {
