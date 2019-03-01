@@ -701,13 +701,28 @@ enumerator :
 	}
 
 
-array_declarator : Identifier fixed_array_sizes
-fixed_array_sizes: fixed_array_size | fixed_array_sizes fixed_array_size
-fixed_array_size : '[' positive_int_const ']'
+array_declarator :
+	Identifier fixed_array_sizes{
+
+	}
+
+fixed_array_sizes:
+	fixed_array_size{
+
+	}
+	| fixed_array_sizes fixed_array_size{
+
+	}
+
+fixed_array_size :
+	'[' positive_int_const ']'{
+	}
+
 native_dcl :
 	Rwnative simple_declarator{
 		$$ = $2
 	}
+
 simple_declarator :
 	Identifier{
 		$$ =$1

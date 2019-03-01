@@ -1,5 +1,8 @@
 package yacc
 
+
+//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
+
 import (
 	"encoding/json"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"

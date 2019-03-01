@@ -533,19 +533,19 @@ state 61
 state 62
 	native_dcl:  Rwnative simple_declarator.    (139)
 
-	.  reduce 139 (src line 707)
+	.  reduce 139 (src line 721)
 
 
 state 63
 	simple_declarator:  Identifier.    (140)
 
-	.  reduce 140 (src line 711)
+	.  reduce 140 (src line 726)
 
 
 state 64
 	typedef_dcl:  Rwtypedef type_declarator.    (141)
 
-	.  reduce 141 (src line 716)
+	.  reduce 141 (src line 731)
 
 
 state 65
@@ -853,19 +853,19 @@ state 97
 	any_declarators:  any_declarators.',' any_declarators 
 
 	','  shift 141
-	.  reduce 142 (src line 725)
+	.  reduce 142 (src line 740)
 
 
 state 98
 	any_declarators:  simple_declarator.    (145)
 
-	.  reduce 145 (src line 740)
+	.  reduce 145 (src line 755)
 
 
 state 99
 	any_declarators:  array_declarator.    (146)
 
-	.  reduce 146 (src line 744)
+	.  reduce 146 (src line 759)
 
 
 state 100
@@ -873,7 +873,7 @@ state 100
 	simple_declarator:  Identifier.    (140)
 
 	'['  shift 144
-	.  reduce 140 (src line 711)
+	.  reduce 140 (src line 726)
 
 	fixed_array_sizes  goto 142
 	fixed_array_size  goto 143
@@ -883,7 +883,7 @@ state 101
 	any_declarators:  any_declarators.',' any_declarators 
 
 	','  shift 141
-	.  reduce 143 (src line 729)
+	.  reduce 143 (src line 744)
 
 
 state 102
@@ -891,7 +891,7 @@ state 102
 	any_declarators:  any_declarators.',' any_declarators 
 
 	','  shift 141
-	.  reduce 144 (src line 732)
+	.  reduce 144 (src line 747)
 
 
 state 103
@@ -1361,7 +1361,7 @@ state 142
 state 143
 	fixed_array_sizes:  fixed_array_size.    (136)
 
-	.  reduce 136 (src line 705)
+	.  reduce 136 (src line 709)
 
 
 state 144
@@ -1451,7 +1451,7 @@ state 151
 	declarator:  simple_declarator.    (149)
 
 	'='  shift 182
-	.  reduce 149 (src line 759)
+	.  reduce 149 (src line 774)
 
 
 state 152
@@ -1864,13 +1864,13 @@ state 172
 	any_declarators:  any_declarators ',' any_declarators.    (147)
 
 	','  shift 141
-	.  reduce 147 (src line 747)
+	.  reduce 147 (src line 762)
 
 
 state 173
 	fixed_array_sizes:  fixed_array_sizes fixed_array_size.    (137)
 
-	.  reduce 137 (src line 705)
+	.  reduce 137 (src line 713)
 
 
 state 174
@@ -2207,7 +2207,7 @@ state 202
 state 203
 	fixed_array_size:  '[' positive_int_const ']'.    (138)
 
-	.  reduce 138 (src line 706)
+	.  reduce 138 (src line 717)
 
 
 state 204
@@ -2246,13 +2246,13 @@ state 208
 	declarator:  declarator ',' declarator.    (150)
 
 	','  shift 181
-	.  reduce 150 (src line 762)
+	.  reduce 150 (src line 777)
 
 
 state 209
 	declarator:  simple_declarator '=' literal.    (148)
 
-	.  reduce 148 (src line 755)
+	.  reduce 148 (src line 770)
 
 
 state 210

@@ -212,12 +212,42 @@ struct SymbolStatus
 //√
 //
 
+
+enum AddOrderSide
+{
+    BuyOrder = 'B',
+    SellOrder = 'S'
+};
+
+
+typedef bitfield
+    <
+        b0,
+        b1,
+        b2,
+        b3,
+        MarketOrder,
+        BulletinBoard,
+        b6,
+        b7
+    > AddOrderFlags;
+
+
+
+
 struct AddOrder
 {
     MitchUInt16     Length;
     MitchByte       MessageType = 0x41;
     MitchUInt32     Nanosecond;
     MitchUInt64     OrderId;
+    AddOrderSide    Side;
+    MitchUInt32     Quantity;
+    MitchUInt32     InstrumentID;
+    MitchByte       Reserved;
+    MitchByte       Reserved;
+    MitchPrice      Price;
+    AddOrderFlags   Flags;
 };
 
 //Add Attributed Order
@@ -230,8 +260,15 @@ struct AddOrder
 struct AddAttributedOrder
 {
     MitchUInt16     Length;
-    MitchByte       MessageType;
+    MitchByte       MessageType = 0x46;
     MitchUInt32     Nanosecond;
+    MitchByte OrderID;
+    MitchUInt32 Side;
+    MitchUInt64 Quantity;
+    MitchByte InstrumentID;
+    MitchUInt32 Price;
+    MitchUInt32 Attribution;
+    MitchBitField Flags;
 };
 
 //Order Deleted
@@ -242,9 +279,10 @@ struct AddAttributedOrder
 //
 struct OrderDeleted
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+    MitchUInt16 Length;
+    MitchByte MessageType;
+    MitchUInt32 Nanosecond;
+    MitchUInt64 OrderID;
 };
 
 
@@ -257,9 +295,13 @@ struct OrderDeleted
 
 struct OrderModified
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+    MitchUInt16 Length;
+    MitchByte MessageType;
+    MitchUInt32 Nanosecond;
+    MitchUInt64 OrderID;
+    MitchUInt32 NewQuantity;
+    MitchPrice NewPrice;
+    MitchBitField Flags;
 };
 
 //Order Book Clear
@@ -274,6 +316,7 @@ struct OrderBookClear
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
+    MitchUInt32     InstrumentID;
 };
 
 //Order Executed
@@ -286,9 +329,8 @@ struct OrderBookClear
 
 struct OrderExecuted
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+UInt8 Sub Book
+Byte Book Type
 };
 
 //Order Executed With Price/ Size

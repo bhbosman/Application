@@ -69,10 +69,13 @@ func main() {
 
 		idlExprContext := yacc.NewIdlExprContext()
 		for i, reader := range inStream {
-			lex := yacc.NewIdlExprLex(
+			lex, err := yacc.NewIdlExprLex(
 				bufio.NewReader(reader),
 				idlExprContext,
 				*verbose)
+			if err != nil {
+				continue
+			}
 			resultInstance := yacc.IdlExprParse(lex)
 			if resultInstance == 0 {
 				for _, definitionDeclaration := range idlExprContext.GetSpecification() {
