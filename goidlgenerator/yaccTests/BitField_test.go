@@ -3,7 +3,7 @@ package yaccTests
 import (
 	"bufio"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
-	"github.com/stretchr/assert"
+	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
 )

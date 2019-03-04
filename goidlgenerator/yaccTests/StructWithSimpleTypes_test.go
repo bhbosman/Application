@@ -370,7 +370,8 @@ func TestStructWithTypes(t *testing.T) {
 		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 
-		jsonPublish := Publish.HasOutputType(Publish.Json)
+		jsonPublish, err := Publish.HasOutputType(Publish.Json)
+		assert.NoError(t, err)
 		assert.NotNil(t, jsonPublish)
 	})
 
@@ -386,7 +387,8 @@ func TestStructWithTypes(t *testing.T) {
 		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 
-		jsonPublish := Publish.HasOutputType(Publish.Json)
+		jsonPublish, err := Publish.HasOutputType(Publish.Json)
+		assert.NoError(t, err)
 		assert.NotNil(t, jsonPublish)
 	})
 
@@ -412,7 +414,8 @@ func TestStructWithTypes(t *testing.T) {
 		assert.NotNil(t, DeclaredTypes)
 		assert.Equal(t, 2, len(DeclaredTypes))
 
-		jsonPublish := Publish.HasOutputType(Publish.Json)
+		jsonPublish, err := Publish.HasOutputType(Publish.Json)
+		assert.NoError(t, err)
 		assert.NotNil(t, jsonPublish)
 
 	})

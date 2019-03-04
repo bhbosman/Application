@@ -42,7 +42,7 @@ func main() {
 
 	outStream, err := GetOutput(*outputFile)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, ("Output file could not be created.\n"))
+		_, _ = fmt.Fprintf(os.Stderr, "Output file could not be created.\n")
 		os.Exit(2)
 		return
 	}
@@ -53,8 +53,8 @@ func main() {
 
 	inStream, err := GetInput(flag.Args())
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, ("No input file. See help:\n"))
-		os.Exit(2)
+		_, _ = fmt.Fprintf(os.Stderr, "No input file. See help:\n")
+		os.Exit(3)
 		return
 	}
 	for _, closer := range inStream {
@@ -90,11 +90,11 @@ func main() {
 
 	}(inStream)
 	if err != nil {
-		os.Exit(1)
+		os.Exit(4)
 	}
 	jsonPublisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
 	if err != nil{
-		os.Exit(2)
+		os.Exit(5)
 	}
 	jsonPublisher.Export(outStream, definitionDeclarations)
 }

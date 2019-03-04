@@ -1,8 +1,8 @@
 package Publish
 
 import (
+	"errors"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
-	"github.com/pkg/errors"
 	"io"
 )
 
@@ -26,7 +26,7 @@ func ToOutputType(s string) OutputType {
 }
 
 type IPublish interface {
-	Export(outputStream io.Writer, declaredTypes []interfaces.IDefinitionDeclaration)
+	Export(outputStream io.Writer, declaredTypes []interfaces.IDefinitionDeclaration) error
 }
 
 var registrations map[OutputType]IPublish

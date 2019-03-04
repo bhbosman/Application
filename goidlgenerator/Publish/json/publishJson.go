@@ -11,12 +11,14 @@ import (
 type publishJson struct {
 }
 
-func (self *publishJson) Export(outputStream io.Writer, declaredTypes []interfaces.IDefinitionDeclaration) {
+func (self *publishJson) Export(outputStream io.Writer, declaredTypes []interfaces.IDefinitionDeclaration) error {
 	fmt.Println(len(declaredTypes))
 	bytes, err := json.MarshalIndent(declaredTypes, "", "\t")
 	if err != nil {
+		return err
 	}
-	_, _ = outputStream.Write(bytes)
+	_, err = outputStream.Write(bytes)
+	return err
 }
 
 func newPublishJson() *publishJson {
