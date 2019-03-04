@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
+	_ "github.com/bhbosman/Application/goidlgenerator/Publish/go"
 	_ "github.com/bhbosman/Application/goidlgenerator/Publish/json"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
@@ -91,9 +92,11 @@ func main() {
 	if err != nil {
 		os.Exit(1)
 	}
-	jsonPublisher := Publish.HasOutputType(Publish.ToOutputType(*outputType))
+	jsonPublisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
+	if err != nil{
+		os.Exit(2)
+	}
 	jsonPublisher.Export(outStream, definitionDeclarations)
-
 }
 
 type WriterNoCloser struct {
