@@ -11,11 +11,14 @@ native  MitchBitField;
 native  MitchByte;
 native  MitchDate;
 native  MitchTime;
-native  MitchPrice;
+native  MitchPrice04;
+native  MitchPrice08;
 native  MitchUInt08;
 native  MitchUInt16;
 native  MitchUInt32;
 native  MitchUInt64;
+
+
 
 //Time
 //Sent by the server for every second for which at least one application message is generated. This message is not transmitted during periods where no other application messages are generated.
@@ -118,20 +121,20 @@ struct SymbolDirectory
     MitchAlpha025                   Symbol;
     MitchAlpha012                   TIDM;
     MitchAlpha006                   Segment;
-    MitchPrice                      PreviousClosePrice;
+    MitchPrice08                      PreviousClosePrice;
     MitchDate                       ExpirationDate;
     MitchAlpha025                   Underlying;
-    MitchPrice                      StrikePrice;
+    MitchPrice08                      StrikePrice;
     SymbolDirectoryOptionType       OptionType;
     MitchAlpha006                   Issuer;
     MitchDate                       IssueDate;
-    MitchPrice                      Coupon;
+    MitchPrice08                      Coupon;
     SymbolDirectoryFlags            Flags;
     SymbolDirectorySubBook          SubBook;
     MitchAlpha189                   CorporateAction;
     MitchAlpha025                   Leg1Symbol;
     MitchAlpha025                   Leg2Symbol;
-    MitchPrice                      ContractMultiplier;
+    MitchPrice08                      ContractMultiplier;
     SymbolDirectorySettlementMethod SettlementMethod;
     MitchAlpha030                   InstrumentSubCategory;
 };
@@ -246,7 +249,7 @@ struct AddOrder
     MitchUInt32     InstrumentID;
     MitchByte       Reserved;
     MitchByte       Reserved;
-    MitchPrice      Price;
+    MitchPrice08      Price;
     AddOrderFlags   Flags;
 };
 
@@ -300,7 +303,7 @@ struct OrderModified
     MitchUInt32 Nanosecond;
     MitchUInt64 OrderID;
     MitchUInt32 NewQuantity;
-    MitchPrice NewPrice;
+    MitchPrice08 NewPrice;
     MitchBitField Flags;
 };
 
@@ -311,12 +314,16 @@ struct OrderModified
 //√
 //
 
+
+
 struct OrderBookClear
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
     MitchUInt32     InstrumentID;
+    MitchUInt08 SubBook;
+    MitchByte BookType;
 };
 
 //Order Executed
@@ -329,8 +336,15 @@ struct OrderBookClear
 
 struct OrderExecuted
 {
-UInt8 Sub Book
-Byte Book Type
+    MitchUInt16 Length;
+    MitchByte   MessageType;
+    MitchUInt32 Nanosecond;
+    MitchUInt64 OrderID;
+    MitchUInt32 ExecutedQuantity;
+    MitchUInt64 TradeID;
+    MitchPrice08  LastOptPx;
+    MitchPrice08  Volatility;
+    MitchPrice08  UnderlyingReferencePrice;
 };
 
 //Order Executed With Price/ Size
@@ -341,11 +355,23 @@ Byte Book Type
 //√
 //
 
+
+
+
 struct OrderExecutedWithPriceSize
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+    MitchUInt16 Length;
+    MitchByte   MessageType;
+    MitchUInt32 Nanosecond;
+    MitchUInt64 OrderID;
+    MitchUInt32 ExecutedQuantity;
+    MitchUInt32 DisplayQuantity;
+    MitchUInt64 TradeID;
+    MitchByte   Printable;
+    MitchPrice08  Price;
+    MitchPrice08  LastOptPx;
+    MitchPrice08  Volatility;
+    MitchPrice08  UnderlyingReferencePrice;
 };
 
 //Trade
@@ -356,11 +382,28 @@ struct OrderExecutedWithPriceSize
 //√
 //
 
+
+
+
+
+
 struct Trade
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+    MitchUInt16 Length;
+    MitchByte   MessageType;
+    MitchUInt32 Nanosecond;
+    MitchUInt32 ExecutedQuantity;
+    MitchUInt32 InstrumentID;
+    MitchByte   Reserved;
+    MitchByte   Reserved;
+    MitchPrice08  Price;
+    MitchUInt64 TradeID;
+    MitchUInt08  SubBook;
+    MitchBitField  Flags;
+    MitchAlpha006  TradeSubType;
+    MitchPrice08  LastOptPx;
+    MitchPrice08  Volatility;
+    MitchPrice08  UnderlyingReferencePrice;
 };
 
 
@@ -371,11 +414,27 @@ struct Trade
 //√
 //
 
+
+
+
+
+
+
 struct AuctionTrade
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
+    MitchUInt32     Quantity;
+    MitchUInt32     InstrumentID;
+    MitchByte       Reserved;
+    MitchByte       Reserved;
+    MitchPrice08    Price;
+    MitchUInt64     TradeID;
+    MitchByte       AuctionType;
+    MitchPrice08    LastOptPx;
+    MitchPrice08    Volatility;
+    MitchPrice08    UnderlyingReferencePrice;
 };
 
 //Off Book Trade
@@ -385,11 +444,30 @@ struct AuctionTrade
 //√
 //
 
+
+
+
+
+
+
 struct OffBookTrade
 {
+
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
+    MitchUInt32     ExecutedQuantity;
+    MitchUInt32     InstrumentID;
+    MitchByte       Reserved;
+    MitchByte       Reserved;
+    MitchPrice08    Price;
+    MitchUInt64     TradeID;
+    MitchAlpha006   OffBookTradeType;
+    MitchTime       TradeTime;
+    MitchDate       TradeDate;
+    MitchPrice08    LastOptPx;
+    MitchPrice08    Volatility;
+    MitchPrice08    UnderlyingReferencePrice;
 };
 
 //Trade Break
@@ -398,11 +476,15 @@ struct OffBookTrade
 //×
 //√
 //
+
+
 struct TradeBreak
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+    MitchUInt16 Length;
+    MitchByte   MessageType;
+    MitchUInt32 Nanosecond;
+    MitchUInt64 TradeID;
+    MitchByte   TradeType;
 };
 
 //Recovery Trade
@@ -412,11 +494,29 @@ struct TradeBreak
 //×
 //
 
+
+
 struct RecoveryTrade
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
+    MitchUInt32     ExecutedQuantity;
+    MitchUInt32     InstrumentID;
+    MitchByte       Reserved;
+    MitchByte       Reserved;
+    MitchPrice08    Price;
+    MitchUInt64     TradeID;
+    MitchByte       AuctionType;
+    MitchAlpha006   OffBookRFQTradeType;
+    MitchTime       TradeTime;
+    MitchDate       TradeDate;
+    MitchByte       ActionType;
+    MitchUInt08     SubBook;
+    MitchBitField   Flags;
+    MitchPrice08    LastOptPx;
+    MitchPrice08    Volatility;
+    MitchPrice08    UnderlyingReferencePrice;
 };
 
 
@@ -427,11 +527,26 @@ struct RecoveryTrade
 //√
 //
 
+
+
+
+
+
+
+
 struct AuctionInfo
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
+    MitchUInt32     PairedQuantity;
+    MitchUInt32     Reserved;
+    MitchByte       ImbalanceDirection;
+    MitchUInt32     InstrumentID;
+    MitchByte       Reserved;
+    MitchByte       Reserved;
+    MitchPrice08    Price;
+    MitchByte       AuctionType;
 };
 
 //Statistics
@@ -441,11 +556,19 @@ struct AuctionInfo
 //√
 //
 
+
 struct Statistics
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
+    MitchUInt32     InstrumentID;
+    MitchByte       Reserved;
+    MitchByte       Reserved;
+    MitchAlpha006   StatisticType;
+    MitchPrice08    Price;
+    MitchAlpha006   OpenCloseIndicator;
+    MitchUInt08      SubBook;
 };
 
 //Extended Statistics
@@ -455,11 +578,25 @@ struct Statistics
 //√
 //
 
+
+
 struct ExtendedStatistics
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
     MitchUInt32     Nanosecond;
+    MitchUInt32     InstrumentID;
+    MitchPrice08    HighPrice;
+    MitchPrice08    LowPrice;
+    MitchPrice08    VWAP;
+    MitchUInt32     Volume;
+    MitchPrice04    Turnover;
+    MitchUInt32     NumberofTrades;
+    MitchAlpha001   ReservedField;
+    MitchUInt08      SubBook;
+    MitchPrice08    NotionalExposure;
+    MitchPrice08    NotionalDeltaExposure;
+    MitchPrice08    OpenInterest;
 };
 //News
 //Used to publish market operations announcements.
@@ -468,11 +605,20 @@ struct ExtendedStatistics
 //√
 //
 
+
+
+
 struct News
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+    MitchUInt16 Length;
+    MitchByte   MessageType;
+    MitchUInt32 Nanosecond;
+    MitchTime   Time;
+    MitchByte   Urgency;
+    MitchAlpha001  Headline;
+    MitchAlpha001  Text;
+    MitchAlpha001  Instruments;
+    MitchAlpha001  Underlyings;
 };
 
 //Top Of Book
@@ -482,9 +628,22 @@ struct News
 //×
 
 
+
+
+
+
 struct TopOfBook
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
+    MitchUInt16    Length;
+    MitchByte      MessageType;
+    MitchUInt32    Nanosecond;
+    MitchUInt32    instrumentID;
+    MitchUInt16    ReserveField;
+    MitchBitField SubBook;
+    MitchByte      Action;
+    MitchByte      Side;
+    MitchPrice08     Price;
+    MitchUInt32    Quantity;
+    MitchUInt32    MarketOrderQuantity;
+    MitchUInt32   ReservedField;
 };

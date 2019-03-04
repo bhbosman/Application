@@ -2,6 +2,7 @@ package Publish
 
 import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
+	"github.com/pkg/errors"
 	"io"
 )
 
@@ -38,12 +39,12 @@ func Register(outputType OutputType, publish IPublish) {
 	registrations[outputType] = publish
 }
 
-func HasOutputType(outputType OutputType) IPublish {
+func HasOutputType(outputType OutputType) (IPublish,  error) {
 	result, ok := registrations[outputType]
 	if ok {
-		return result
+		return result, nil
 	}
-	return nil
+	return nil, errors.New("Could not find publisher")
 }
 
 func PublishOutputType(outputType OutputType, declaredTypes []interfaces.IDefinitionDeclaration, writer io.Writer) error {
