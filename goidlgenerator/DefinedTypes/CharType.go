@@ -6,7 +6,7 @@ type CharType struct {
 }
 
 func (*CharType) GetName() string {
-	return "char"
+	return "IDLCharType"
 }
 
 func (self *CharType) MarshalJSON() ([]byte, error) {

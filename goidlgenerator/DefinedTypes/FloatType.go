@@ -6,7 +6,7 @@ type FloatType struct {
 }
 
 func (*FloatType) GetName() string {
-	return ""
+	return "IDLFloatType"
 }
 
 func (self *FloatType) MarshalJSON() ([]byte, error) {

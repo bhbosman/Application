@@ -6,7 +6,7 @@ type OctetType struct {
 }
 
 func (*OctetType) GetName() string {
-	return "octet"
+	return "IDLOctetType"
 }
 
 func (self *OctetType) MarshalJSON() ([]byte, error) {

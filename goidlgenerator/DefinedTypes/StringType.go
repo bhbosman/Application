@@ -10,7 +10,7 @@ type StringType struct {
 }
 
 func (*StringType) GetName() string {
-	return "string"
+	return "IDLStringType"
 }
 
 func (receiver *StringType) String() string {

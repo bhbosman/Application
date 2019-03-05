@@ -12,10 +12,24 @@ import (
 type publishGolang struct {
 }
 
-func (self *publishGolang) Export(outputStream io.Writer, declaredTypes []interfaces.IDefinitionDeclaration) error{
-	decl := `struct {{.GetName()}} 
-			{};`
 
+const decl string  =
+`
+//
+// {{.GetScopeName}}
+//
+struct {{.GetScopeName}} 
+{
+	{{range .Members}}{{.Declarator.Identifier}} {{.DefinedType.GetName}};
+	{{end}}
+};
+
+`
+
+
+
+
+func (self *publishGolang) Export(outputStream io.Writer, packageName string, declaredTypes []interfaces.IDefinitionDeclaration) error{
 
 	templateDeclaration, err := template.New("structDef").Parse(decl)
 

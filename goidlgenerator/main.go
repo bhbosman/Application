@@ -27,7 +27,7 @@ func main() {
 	outputFile := flag.String("out", "", "outputFile")
 	outputType := flag.String("outType", "json", "outputType")
 	verbose := flag.Bool("verbose", false, "verbose")
-
+	packageName := flag.String("packageName", "default", "packageName")
 	showHelp := flag.Bool("help", false, "Show this")
 
 	flag.Parse()
@@ -96,7 +96,11 @@ func main() {
 	if err != nil{
 		os.Exit(5)
 	}
-	jsonPublisher.Export(outStream, definitionDeclarations)
+	err = jsonPublisher.Export(outStream, *packageName, definitionDeclarations)
+	if err != nil{
+		os.Exit(6)
+	}
+
 }
 
 type WriterNoCloser struct {

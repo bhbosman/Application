@@ -11,7 +11,7 @@ import (
 type publishJson struct {
 }
 
-func (self *publishJson) Export(outputStream io.Writer, declaredTypes []interfaces.IDefinitionDeclaration) error {
+func (self *publishJson) Export(outputStream io.Writer, packageName string, declaredTypes []interfaces.IDefinitionDeclaration) error {
 	fmt.Println(len(declaredTypes))
 	bytes, err := json.MarshalIndent(declaredTypes, "", "\t")
 	if err != nil {

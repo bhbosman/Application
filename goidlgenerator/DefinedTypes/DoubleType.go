@@ -6,7 +6,7 @@ type DoubleType struct {
 }
 
 func (*DoubleType) GetName() string {
-	return "double"
+	return "IDLDoubleType"
 }
 
 func (self *DoubleType) MarshalJSON() ([]byte, error) {

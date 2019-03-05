@@ -6,7 +6,7 @@ type LongDoubleType struct {
 }
 
 func (*LongDoubleType) GetName() string {
-	return "LongDouble"
+	return "IDLLongDoubleType"
 }
 
 func (self *LongDoubleType) MarshalJSON() ([]byte, error) {
