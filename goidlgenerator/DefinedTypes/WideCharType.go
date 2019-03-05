@@ -6,7 +6,7 @@ type WideCharType struct {
 }
 
 func (*WideCharType) GetName() string {
-	return "wchar"
+	return "IDLWideCharType"
 }
 
 func (self *WideCharType) MarshalJSON() ([]byte, error) {

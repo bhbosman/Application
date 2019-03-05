@@ -6,7 +6,7 @@ type SignedLongLongType struct {
 }
 
 func (*SignedLongLongType) GetName() string {
-	return "SignedLongLong"
+	return "IDLSignedLongLongType"
 }
 
 func (self *SignedLongLongType) MarshalJSON() ([]byte, error) {

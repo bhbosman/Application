@@ -6,7 +6,7 @@ type BooleanType struct {
 }
 
 func (*BooleanType) GetName() string {
-	return "boolean"
+	return "IDLBooleanType"
 }
 
 func (self *BooleanType) MarshalJSON() ([]byte, error) {

@@ -6,7 +6,7 @@ type FixedType struct {
 }
 
 func (*FixedType) GetName() string {
-	return ""
+	return "IDLFixedType"
 }
 
 func (self *FixedType) MarshalJSON() ([]byte, error) {
