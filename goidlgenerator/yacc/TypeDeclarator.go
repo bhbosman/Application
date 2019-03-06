@@ -1,6 +1,6 @@
 package yacc
 
-//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
+//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
 
 import (
 	"fmt"

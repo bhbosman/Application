@@ -1,12 +1,11 @@
 package yacc
 
-//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
+//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
 
 import (
 	"errors"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
-	"reflect"
 )
 
 const NoCtx int = 99998
@@ -17,11 +16,6 @@ const ErrorOnAddTypedefDcl = 10006
 const ErrorTypeisNull = 10007
 const ErrorMustbeAnInt = 10008
 
-type ConstantValue struct {
-	Value     interface{}
-	Type      reflect.Type
-	MaxLength int
-}
 
 func GetIdlExprLex(item IdlExprLexer) (*IdlExprLex, error) {
 	if item == nil {

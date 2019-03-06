@@ -6,12 +6,16 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
+//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
 
 type Declarator struct {
 	identifier   string
 	defaultValue *ConstantValue
 	next         interfaces.IDeclarator `json:"-"`
+}
+
+func (self *Declarator) GetDefaultValue() interfaces.IConstantValue {
+	return self.defaultValue
 }
 
 func (self *Declarator) ClearNext() {
