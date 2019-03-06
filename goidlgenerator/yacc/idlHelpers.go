@@ -1,6 +1,6 @@
 package yacc
 
-//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
+//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
 import (
 	"errors"
@@ -15,7 +15,6 @@ const DefNotFound int = 10005
 const ErrorOnAddTypedefDcl = 10006
 const ErrorTypeisNull = 10007
 const ErrorMustbeAnInt = 10008
-
 
 func GetIdlExprLex(item IdlExprLexer) (*IdlExprLex, error) {
 	if item == nil {

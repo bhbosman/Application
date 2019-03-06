@@ -14,14 +14,21 @@ import (
 func TestPublishOfStructDefinition(t *testing.T) {
 	verbose := false
 
-	t.Run("WithBooleanType", func(t *testing.T) {
+	t.Run("", func(t *testing.T) {
 		data := `
-		struct HelloWorld
-		{
-			long a = "ssss";
-			long a = 123;
-			long a = 123;
-		};`
+			typedef bitfield
+    		<
+        		InverseOrderBook,
+        		b1,
+        		b2,
+        		b3,
+        		b4,
+        		b5,
+        		b6,
+        		b7
+			> SymbolDirectoryFlags, sss, ssss;
+		
+		`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
@@ -34,6 +41,5 @@ func TestPublishOfStructDefinition(t *testing.T) {
 		err := newPublishGolang().Export(os.Stdout, "dddd", DeclaredTypes)
 		assert.NoError(t, err)
 	})
-
 
 }

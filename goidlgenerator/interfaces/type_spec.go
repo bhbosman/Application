@@ -8,8 +8,7 @@ type IDeclarator interface {
 	SetNext(next IDeclarator)
 	GetNext() IDeclarator
 	ClearNext()
-	GetDefaultValue() IConstantValue
-
+	DefaultValue() IConstantValue
 }
 
 type IScopeName interface {
@@ -39,7 +38,7 @@ type ITypeDeclaration interface {
 }
 
 type IConstantValue interface {
-	GetValue() interface{}
-	GetType() reflect.Type
-	GetMaxLength() int
+	Value() interface{}
+	ValueKind() reflect.Kind
+	MaxLength() int
 }

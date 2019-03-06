@@ -51,7 +51,7 @@ func PublishOutputType(outputType OutputType, packageName string, declaredTypes 
 	result, ok := registrations[outputType]
 	if ok {
 		err := result.Export(writer, packageName, declaredTypes)
-		if err != nil{
+		if err != nil {
 			return err
 		}
 	}
