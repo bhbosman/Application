@@ -1,6 +1,6 @@
 package yacc
 
-//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
+//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
 import (
 	"fmt"
@@ -38,7 +38,7 @@ func (self *TypeDeclarator) GetDeclarator() interfaces.IDeclarator {
 }
 
 func (self *TypeDeclarator) GetName() string {
-	return fmt.Sprintf("typedef %v %v: ", self.DefinedTyped.GetName(), self.Declarator.Identifier())
+	return fmt.Sprintf(self.Declarator.Identifier())
 }
 
 func Newtypedef_dcl(definedTyped interfaces.IDefinedType, declarator interfaces.IDeclarator) *TypeDeclarator {

@@ -1,9 +1,12 @@
 package GeneratedFiles
 
 type MitchAlpha001 [1]byte
+type MitchAlpha004 [4]byte
 type MitchAlpha006 [6]byte
 type MitchAlpha012 [12]byte
 type MitchAlpha025 [25]byte
+type MitchAlpha030 [20]byte
+type MitchAlpha189 [189]byte
 
 type MitchBitField uint8
 type MitchByte uint8

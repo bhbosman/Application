@@ -1,6 +1,6 @@
 package yacc
 
-//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
+//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
 import (
 	"bytes"
@@ -143,63 +143,61 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 		func() (DFA.IDFA, error) {
 			return DFA.NewIdentifier(Identifier, reservedWords), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaInteger(Integer_literal), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewHexValue(Hex_literal), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaWhiteSpace(Whitespace), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewSingleLineComment(SingleLineComment), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewStringNode(String_literal), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewCharNode(Character_literal)
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken("{", '{', '{'), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken("}", '}', '}'), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken("<", '<', '<'), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken(">", '>', '>'), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken("[", '[', '['), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken("]", ']', ']'), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken("=", '=', '='), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken(";", ';', ';'), nil
 		},
-		func() ( DFA.IDFA, error) {
+		func() (DFA.IDFA, error) {
 			return DFA.NewDfaGenericToken(",", ',', ','), nil
 		},
 	}
 
 	collDfa := make([]DFA.IDFA, len(collDfaFunctions), len(collDfaFunctions))
-	for i, f := range collDfaFunctions{
+	for i, f := range collDfaFunctions {
 		dfa, err := f()
 		if err != nil {
 			return nil, err
 		}
 		collDfa[i] = dfa
 	}
-
-
 
 	return collDfa, nil
 }

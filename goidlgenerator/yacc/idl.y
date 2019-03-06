@@ -2,7 +2,6 @@
 package yacc
 	//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 	import (
-		"reflect"
 		"github.com/bhbosman/Application/goidlgenerator/interfaces"
 		"github.com/bhbosman/Application/goidlgenerator/DefinedTypes"
 		"github.com/bhbosman/Application/goidlgenerator/TempleteTypes")
@@ -59,7 +58,7 @@ package yacc
 	IntegerValue    int64
 	StringValue string
 	FloatValue float64
-	ConstValue *ConstantValue
+	ConstValue interfaces.IConstantValue
 	BoolValue bool
 
 	Member 		*Member
@@ -315,7 +314,7 @@ mult_expr :
 
 unary_expr :
 	unary_operator primary_expr {
-		value, ok := $2.Value.(int64)
+		value, ok := $2.Value().(int64)
 		if ok{
 			$$ = value
 		}else{
@@ -324,7 +323,7 @@ unary_expr :
 		}
 	}
 	| primary_expr{
-		value, ok := $1.Value.(int64)
+		value, ok := $1.Value().(int64)
 		if ok{
 			$$ = value
 		}else{
@@ -363,17 +362,12 @@ primary_expr :
 		$$ = $1
 	}
 	| '(' const_expr ')'{
-		$$ = &ConstantValue{
-			Value: $2,
-			Type: reflect.TypeOf(int64(0))}
+		$$ = newConstantValueWithNoLength($2)
 	}
 
 literal :
 	Integer_literal{
-		$$ = &ConstantValue{
-			Value: $1,
-			Type: reflect.TypeOf(int64(0)),
-			MaxLength: 0}
+		$$ = newConstantValueWithNoLength($1)
 	}
 	| Floating_pt_literal{
 		$$ = nil
@@ -382,34 +376,19 @@ literal :
 		$$ = nil
 	}
 	| Character_literal{
-		$$ = &ConstantValue{
-			Value: $1,
-			Type: reflect.TypeOf("A"),
-			MaxLength: 1}
+		$$ = newConstantValue($1, 1)
 	}
 	| Wide_character_literal{
-		$$ = &ConstantValue{
-			Value: $1,
-			Type: reflect.TypeOf("A"),
-			MaxLength: 1}
+		$$ = newConstantValue($1, 1)
 	}
 	| boolean_literal{
-		$$ = &ConstantValue{
-			Value: $1,
-			Type: reflect.TypeOf(true),
-			MaxLength: 0}
+		$$ = newConstantValueWithNoLength($1)
 	}
 	| String_literal{
-		$$ = &ConstantValue{
-			Value: $1,
-			Type: reflect.TypeOf("ABC"),
-			MaxLength: 0}
+		$$ = newConstantValueWithNoLength($1)
 	}
 	| Wide_string_literal{
-		$$ = &ConstantValue{
-			Value: $1,
-			Type: reflect.TypeOf("ABC"),
-			MaxLength: 0}
+		$$ = newConstantValueWithNoLength($1)
 	}
 
 boolean_literal :

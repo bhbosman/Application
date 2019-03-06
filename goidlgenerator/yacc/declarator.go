@@ -6,15 +6,15 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
+//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
 type Declarator struct {
 	identifier   string
-	defaultValue *ConstantValue
+	defaultValue interfaces.IConstantValue
 	next         interfaces.IDeclarator `json:"-"`
 }
 
-func (self *Declarator) GetDefaultValue() interfaces.IConstantValue {
+func (self *Declarator) DefaultValue() interfaces.IConstantValue {
 	return self.defaultValue
 }
 
@@ -63,15 +63,15 @@ func (self *Declarator) MarshalJSON() ([]byte, error) {
 	}{
 		Type:                  "Declarator",
 		Identifier:            self.identifier,
-		DefaultValue:          self.defaultValue.Value,
-		DefaultValueType:      self.defaultValue.Type.String(),
-		DefaultValueMaxLength: self.defaultValue.MaxLength,
+		DefaultValue:          self.defaultValue.Value(),
+		DefaultValueType:      self.defaultValue.ValueKind().String(),
+		DefaultValueMaxLength: self.defaultValue.MaxLength(),
 	})
 }
 
-func NewDeclarator(Identifier string, defaultValue *ConstantValue) *Declarator {
+func NewDeclarator(identifier string, defaultValue interfaces.IConstantValue) *Declarator {
 	return &Declarator{
-		identifier:   Identifier,
+		identifier:   identifier,
 		defaultValue: defaultValue,
 		next:         nil,
 	}

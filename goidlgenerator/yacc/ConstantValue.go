@@ -1,28 +1,38 @@
 package yacc
 
 import (
+	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"reflect"
 )
 
+//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
-
-type ConstantValue struct {
-	Value     interface{}
-	Type      reflect.Type
-	MaxLength int
+type constantValue struct {
+	value     interface{}
+	valueKind reflect.Kind
+	maxLength int
 }
 
-
-func (self *ConstantValue) GetValue() interface{} {
-	return self.Value
+func newConstantValue(value interface{}, maxLength int) interfaces.IConstantValue {
+	return &constantValue{
+		value:     value,
+		valueKind: reflect.TypeOf(value).Kind(),
+		maxLength: maxLength,
+	}
 }
 
-func (self *ConstantValue) GetType() reflect.Type {
-	return self.Type
+func newConstantValueWithNoLength(value interface{}) interfaces.IConstantValue {
+	return newConstantValue(value, -1)
 }
 
-func (self *ConstantValue) GetMaxLength() int {
-	return self.MaxLength
+func (self *constantValue) Value() interface{} {
+	return self.value
 }
 
+func (self *constantValue) ValueKind() reflect.Kind {
+	return self.valueKind
+}
 
+func (self *constantValue) MaxLength() int {
+	return self.maxLength
+}

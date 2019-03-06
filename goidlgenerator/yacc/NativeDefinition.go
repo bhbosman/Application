@@ -1,6 +1,6 @@
 package yacc
 
-//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
+//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
 import (
 	"encoding/json"
