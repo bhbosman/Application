@@ -1,11 +1,15 @@
 package interfaces
 
+import "reflect"
+
 type IDeclarator interface {
 	Identifier() string
 	Next() IDeclarator
 	SetNext(next IDeclarator)
 	GetNext() IDeclarator
 	ClearNext()
+	GetDefaultValue() IConstantValue
+
 }
 
 type IScopeName interface {
@@ -32,4 +36,10 @@ type ITypeDeclaration interface {
 	IDefinitionDeclaration
 	GetDefinedTyped() IDefinedType
 	GetDeclarator() IDeclarator
+}
+
+type IConstantValue interface {
+	GetValue() interface{}
+	GetType() reflect.Type
+	GetMaxLength() int
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
+//publishGo:generate goyacc -o idl.publishGo -p "IdlExpr" idl.y
 
 type StructDefinition struct {
 	Type       string                            `json:"Type"`

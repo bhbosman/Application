@@ -6,7 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
-	_ "github.com/bhbosman/Application/goidlgenerator/Publish/go"
+	_ "github.com/bhbosman/Application/goidlgenerator/Publish/publishGo"
 	_ "github.com/bhbosman/Application/goidlgenerator/Publish/json"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
@@ -16,7 +16,8 @@ import (
 	"strings"
 )
 
-//go:generate goyacc -o yacc/idl.go -p "IdlExpr" yacc/idl.y
+
+//go:generate goyacc -o yacc/idl.publishGo -p "IdlExpr" yacc/idl.y
 //go:generate go clean
 //go:generate go build
 //go:generate go install
@@ -94,10 +95,12 @@ func main() {
 	}
 	jsonPublisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
 	if err != nil{
+		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
 		os.Exit(5)
 	}
 	err = jsonPublisher.Export(outStream, *packageName, definitionDeclarations)
 	if err != nil{
+		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
 		os.Exit(6)
 	}
 
