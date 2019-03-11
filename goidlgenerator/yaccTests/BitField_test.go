@@ -2,6 +2,7 @@ package yaccTests
 
 import (
 	"bufio"
+	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -20,8 +21,11 @@ func TestBitField(t *testing.T) {
 
 		reader := bufio.NewReader(strings.NewReader(data))
 		idlExprLex, _ := yacc.NewIdlExprLex(
-			reader, createContext(),
-			verbose)
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: createContext(),
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 	})
 

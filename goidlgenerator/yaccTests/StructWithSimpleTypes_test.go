@@ -2,7 +2,7 @@ package yaccTests
 
 import (
 	"bufio"
-	"github.com/bhbosman/Application/goidlgenerator/DefinedTypes"
+	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
 	_ "github.com/bhbosman/Application/goidlgenerator/Publish/json"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
@@ -23,7 +23,13 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose,
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+			})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -35,7 +41,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.BooleanType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.BooleanType{}, member.DefinedType)
 	})
 
 	t.Run("WithBooleanTypeWithIntAssignment", func(t *testing.T) {
@@ -46,7 +52,13 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose,
+			})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -61,7 +73,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.BooleanType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.BooleanType{}, member.DefinedType)
 	})
 
 	t.Run("WithBooleanTypeWithHexAssignment", func(t *testing.T) {
@@ -72,7 +84,13 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose,
+			})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -84,7 +102,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.BooleanType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.BooleanType{}, member.DefinedType)
 	})
 
 	t.Run("WithCharType", func(t *testing.T) {
@@ -95,7 +113,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -111,9 +134,9 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Equal(t, "a", member.Declarator.Identifier())
 		assert.NotNil(t, member.DefinedType)
 		s := member.DefinedType.GetName()
-		assert.Equal(t, "char", s)
+		assert.Equal(t, "IDLCharType", s)
 
-		assert.IsType(t, &DefinedTypes.CharType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.CharType{}, member.DefinedType)
 	})
 	t.Run("WithDoubleType", func(t *testing.T) {
 		data := `
@@ -123,7 +146,11 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(yacc.NewIdlExprLexParams{
+			IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+			InputStream:    reader,
+			IdlExprContext: IdlExprContext,
+			Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -135,7 +162,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.DoubleType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.DoubleType{}, member.DefinedType)
 	})
 	t.Run("WithFloatType", func(t *testing.T) {
 		data := `
@@ -145,7 +172,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -157,7 +189,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.FloatType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.FloatType{}, member.DefinedType)
 	})
 	t.Run("WithLongDoubleType", func(t *testing.T) {
 		data := `
@@ -167,7 +199,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -179,7 +216,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.LongDoubleType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.LongDoubleType{}, member.DefinedType)
 	})
 	t.Run("WithOctetType", func(t *testing.T) {
 		data := `
@@ -189,7 +226,13 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose,
+			})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -201,7 +244,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.OctetType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.OctetType{}, member.DefinedType)
 	})
 	t.Run("WithSignedLongLongType", func(t *testing.T) {
 		data := `
@@ -211,7 +254,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -223,7 +271,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.SignedLongLongType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.SignedLongLongType{}, member.DefinedType)
 	})
 	t.Run("WithSignedLongType", func(t *testing.T) {
 		data := `
@@ -233,7 +281,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -245,7 +298,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.SignedLongType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.SignedLongType{}, member.DefinedType)
 	})
 	t.Run("WithSignedShortType", func(t *testing.T) {
 		data := `
@@ -255,7 +308,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -267,7 +325,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.SignedShortType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.SignedShortType{}, member.DefinedType)
 	})
 	t.Run("WithUnsignedLongLongType", func(t *testing.T) {
 		data := `
@@ -277,7 +335,11 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(yacc.NewIdlExprLexParams{
+			IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+			InputStream:    reader,
+			IdlExprContext: IdlExprContext,
+			Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -289,7 +351,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.UnsignedLongLongType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.UnsignedLongLongType{}, member.DefinedType)
 	})
 	t.Run("WithUnsignedLongType", func(t *testing.T) {
 		data := `
@@ -299,7 +361,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -311,7 +378,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.UnsignedLongType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.UnsignedLongType{}, member.DefinedType)
 	})
 	t.Run("WithUnsignedShortType", func(t *testing.T) {
 		data := `
@@ -321,7 +388,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -333,7 +405,7 @@ func TestStructWithTypes(t *testing.T) {
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
-		assert.IsType(t, &DefinedTypes.UnSignedShortType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.UnSignedShortType{}, member.DefinedType)
 	})
 	t.Run("WithWideCharType", func(t *testing.T) {
 		data := `
@@ -343,7 +415,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -356,7 +433,7 @@ func TestStructWithTypes(t *testing.T) {
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
 		assert.NotNil(t, member.DefinedType)
-		assert.IsType(t, &DefinedTypes.CharType{}, member.DefinedType)
+		assert.IsType(t, &IdlDefinedTypes.CharType{}, member.DefinedType)
 	})
 
 	t.Run("02", func(t *testing.T) {
@@ -367,7 +444,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 
 		jsonPublish, err := Publish.HasOutputType(Publish.Json)
@@ -384,7 +466,12 @@ func TestStructWithTypes(t *testing.T) {
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 
 		jsonPublish, err := Publish.HasOutputType(Publish.Json)
@@ -408,7 +495,12 @@ func TestStructWithTypes(t *testing.T) {
 	`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		assert.NotNil(t, DeclaredTypes)

@@ -22,6 +22,27 @@ type BitField struct {
 	Next       interfaces.IDefinitionDeclaration
 }
 
+func (self *BitField) GetSequenceCount() (bool, int) {
+	return false, 0
+}
+
+func (self *BitField) GetPackageName() (bool, string) {
+	return false, ""
+}
+
+
+func (self *BitField) Kind() interfaces.Kind {
+	return interfaces.BitField
+}
+
+func (self *BitField) DefaultValue() string {
+	return "nil"
+}
+
+func (self *BitField) Predefined() bool {
+	return false
+}
+
 var bitFieldCounter = 0
 
 func getNumber() int {

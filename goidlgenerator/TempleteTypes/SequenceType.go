@@ -11,6 +11,28 @@ type SequenceType struct {
 	next         interfaces.IDefinitionDeclaration
 }
 
+
+func (self *SequenceType) GetPackageName() (bool, string) {
+	return false, ""
+}
+
+
+func (self *SequenceType) GetSequenceCount() (bool, int) {
+	return false, 0
+}
+
+func (self *SequenceType) Predefined() bool {
+	return false
+}
+
+func (self *SequenceType) Kind() interfaces.Kind {
+	return interfaces.Invalid
+}
+
+func (self *SequenceType) DefaultValue() string {
+	return "nil"
+}
+
 func (self *SequenceType) Length() int64 {
 	return self.length
 }

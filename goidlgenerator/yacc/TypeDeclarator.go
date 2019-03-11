@@ -13,6 +13,27 @@ type TypeDeclarator struct {
 	next         interfaces.IDefinitionDeclaration
 }
 
+func (self *TypeDeclarator) GetPackageName() (bool, string) {
+	return false, ""
+}
+
+
+func (self *TypeDeclarator) GetSequenceCount() (bool, int) {
+	return false, 0
+}
+
+func (self *TypeDeclarator) Kind() interfaces.Kind {
+	return interfaces.TypeDeclarator
+}
+
+func (self *TypeDeclarator) DefaultValue() string {
+	return "nil"
+}
+
+func (self *TypeDeclarator) Predefined() bool {
+	return false
+}
+
 func (self *TypeDeclarator) GetScopeName() string {
 	return self.Declarator.Identifier()
 }

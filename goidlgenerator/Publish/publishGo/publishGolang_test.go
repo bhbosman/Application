@@ -2,6 +2,8 @@ package publishGo
 
 import (
 	"bufio"
+	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
+	"github.com/bhbosman/Application/goidlgenerator/Publish"
 	_ "github.com/bhbosman/Application/goidlgenerator/Publish/json"
 	"os"
 
@@ -26,19 +28,33 @@ func TestPublishOfStructDefinition(t *testing.T) {
         		b5,
         		b6,
         		b7
-			> SymbolDirectoryFlags, sss, ssss;
+			> SymbolDirectoryFlags, A, B;
 		
 		`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+
+		lexParams := yacc.NewIdlExprLexParams{
+			InputStream:    reader,
+			IdlExprContext: IdlExprContext,
+			Verbose:        verbose,
+			IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+		}
+
+		idlExprLex, _ := yacc.NewIdlExprLex(lexParams)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
 			return
 		}
 
-		err := newPublishGolang().Export(os.Stdout, "dddd", DeclaredTypes)
+		params := Publish.ExportParams{
+			OutputStream:    os.Stdout,
+			TypeInformation: nil,
+			PackageName:     "ddd",
+			DeclaredTypes:   DeclaredTypes,
+		}
+		err := newPublishGolang().Export(params)
 		assert.NoError(t, err)
 	})
 

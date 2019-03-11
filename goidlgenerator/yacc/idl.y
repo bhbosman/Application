@@ -3,8 +3,10 @@ package yacc
 	//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 	import (
 		"github.com/bhbosman/Application/goidlgenerator/interfaces"
-		"github.com/bhbosman/Application/goidlgenerator/DefinedTypes"
-		"github.com/bhbosman/Application/goidlgenerator/TempleteTypes")
+		"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
+		"github.com/bhbosman/Application/goidlgenerator/TempleteTypes"
+		"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
+		)
 %}
 
 
@@ -52,6 +54,21 @@ package yacc
 %token Rwwstring
 %token Rwbitfield
 
+%token RwMitchAlpha
+%token RwMitchBitField
+%token RwMitchByte
+%token RwMitchDate
+%token RwMitchTime
+%token RwMitchPrice04
+%token RwMitchPrice08
+%token RwMitchUInt08
+%token RwMitchUInt16
+%token RwMitchUInt32
+%token RwMitchUInt64
+
+
+
+
 
 %union{
 	Identifier 	string
@@ -65,7 +82,6 @@ package yacc
 	Declarator 	interfaces.IDeclarator
 	DefinedType 	interfaces.IDefinedType
 	DefinitionDeclaration interfaces.IDefinitionDeclaration
-	ScopeName interfaces.IScopeName
 	Specification []interfaces.IDefinitionDeclaration
 }
 
@@ -97,6 +113,7 @@ package yacc
 %type	<DefinedType>	simple_type_spec
 %type	<DefinedType>	floating_pt_type
 %type	<DefinedType>	base_type_spec
+%type	<DefinedType>	mitch_type_spec
 %type	<DefinedType>	signed_short_int
 %type	<DefinedType>	char_type
 %type	<DefinedType>	wide_char_type
@@ -109,7 +126,7 @@ package yacc
 %type	<DefinedType>	signed_int
 %type	<DefinedType>	signed_longlong_int
 %type	<DefinedType>	unsigned_int
-%type	<ScopeName>	scoped_name
+%type	<DefinedType>	scoped_name
 %type	<DefinedType>	const_type
 %type	<DefinedType>	fixed_pt_const_type
 %type	<DefinedType>	sequence_type
@@ -190,24 +207,24 @@ scoped_name :
 			return NoLex
 		}
 	}
-	| Scope Identifier{
-		lex, err := GetIdlExprLex(IdlExprlex)
-		if err == nil && lex != nil {
-			$$ = NewScopeName($2)
-		} else {
-			return NoLex
-		}
-
-	}
-	| scoped_name Scope Identifier{
-		lex, err := GetIdlExprLex(IdlExprlex)
-		if err == nil && lex != nil {
-			$$ = NewScopeName($1.GetName()+$3)
-		} else{
-			return NoLex
-		}
-
-	}
+//	| Scope Identifier{
+//		lex, err := GetIdlExprLex(IdlExprlex)
+//		if err == nil && lex != nil {
+//			$$ = NewScopeName($2)
+//		} else {
+//			return NoLex
+//		}
+//
+//	}
+//	| scoped_name Scope Identifier{
+//		lex, err := GetIdlExprLex(IdlExprlex)
+//		if err == nil && lex != nil {
+//			$$ = NewScopeName($1.GetName()+$3)
+//		} else{
+//			return NoLex
+//		}
+//
+//	}
 const_dcl :
 	Rwconst const_type Identifier '=' const_expr{
 		$$ = Newconst_dcl()
@@ -362,12 +379,12 @@ primary_expr :
 		$$ = $1
 	}
 	| '(' const_expr ')'{
-		$$ = newConstantValueWithNoLength($2)
+		$$ = newConstantValueWithNoLength($2, interfaces.Int64)
 	}
 
 literal :
 	Integer_literal{
-		$$ = newConstantValueWithNoLength($1)
+		$$ = newConstantValueWithNoLength($1, interfaces.Int64)
 	}
 	| Floating_pt_literal{
 		$$ = nil
@@ -376,19 +393,19 @@ literal :
 		$$ = nil
 	}
 	| Character_literal{
-		$$ = newConstantValue($1, 1)
+		$$ = newConstantValue($1, interfaces.Char,1)
 	}
 	| Wide_character_literal{
-		$$ = newConstantValue($1, 1)
+		$$ = newConstantValue($1, interfaces.WChar, 1)
 	}
 	| boolean_literal{
-		$$ = newConstantValueWithNoLength($1)
+		$$ = newConstantValueWithNoLength($1,interfaces.Bool)
 	}
 	| String_literal{
-		$$ = newConstantValueWithNoLength($1)
+		$$ = newConstantValueWithNoLength($1, interfaces.String)
 	}
 	| Wide_string_literal{
-		$$ = newConstantValueWithNoLength($1)
+		$$ = newConstantValueWithNoLength($1, interfaces.WideString)
 	}
 
 boolean_literal :
@@ -427,12 +444,88 @@ type_dcl :
 type_spec : simple_type_spec{
 	$$ = $1
 }
+
+mitch_type_spec:
+	RwMitchAlpha '<' positive_int_const '>'{
+		$$ = MitchDefinedTypes.NewMitchAlpha($3)
+	}
+	|RwMitchBitField{
+		$$ = MitchDefinedTypes.NewMitchBitField()
+	}
+	|RwMitchByte{
+		$$ = MitchDefinedTypes.NewMitchByte()
+	}
+	|RwMitchDate{
+		$$ = MitchDefinedTypes.NewMitchDate()
+	}
+	|RwMitchTime{
+		$$ = MitchDefinedTypes.NewMitchTime()
+	}
+	|RwMitchPrice04{
+		$$ = MitchDefinedTypes.NewMitchPrice04()
+	}
+	|RwMitchPrice08{
+		$$ = MitchDefinedTypes.NewMitchPrice08()
+	}
+	|RwMitchUInt08{
+		$$ = MitchDefinedTypes.NewMitchUInt08()
+	}
+	|RwMitchUInt16{
+		$$ = MitchDefinedTypes.NewMitchUInt16()
+	}
+	|RwMitchUInt32{
+		$$ = MitchDefinedTypes.NewMitchUInt32()
+	}
+	|RwMitchUInt64{
+		$$ = MitchDefinedTypes.NewMitchUInt64()
+	}
+
 simple_type_spec :
-	base_type_spec{
+	mitch_type_spec{
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+			if context.IDlBaseType.Name() != interfaces.IDlBaseType_Mitch {
+			IdlExprlex.Error(__yyfmt__.Sprintf("IDlBaseType not set to IDlBaseType_Micth. %v is an invalid token", $1.GetName()))
+			return NoLex
+
+		}
+		$$ = $1
+	}
+
+
+	|base_type_spec{
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+
+		if context.IDlBaseType.Name() != interfaces.IDlBaseType_Native {
+			IdlExprlex.Error(__yyfmt__.Sprintf("IDlBaseType not set to IDlBaseType_Native. %v is an invalid token", $1))
+			return NoLex
+
+		}
 		$$ = $1
 	}
 	| scoped_name{
 		$$ = $1
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+
+		if !context.IDlBaseType.CanScope($1) {
+			IdlExprlex.Error(__yyfmt__.Sprintf("No scoping allowed. %v is an invalid token", $1.GetName()))
+			return ErrorNoScopingAllowed
+		}
+		$$ = $1
+
+
+
 	}
 base_type_spec :
 	integer_type{
@@ -455,13 +548,13 @@ base_type_spec :
 	}
 floating_pt_type :
 	Rwfloat {
-		$$ = DefinedTypes.NewFloatType()
+		$$ = IdlDefinedTypes.NewFloatType()
 	}
 	| Rwdouble{
-        	$$ = DefinedTypes.NewDoubleType()
+        	$$ = IdlDefinedTypes.NewDoubleType()
      	}
 	| Rwlong Rwdouble{
-               	$$ = DefinedTypes.NewLongDoubleType()
+               	$$ = IdlDefinedTypes.NewLongDoubleType()
        	}
 integer_type :
 	signed_int{
@@ -482,15 +575,15 @@ signed_int :
 	}
 signed_short_int :
 	Rwshort{
-		$$ = DefinedTypes.NewSignedShortType()
+		$$ = IdlDefinedTypes.NewSignedShortType()
 	}
 signed_long_int :
 	Rwlong{
-		$$ = DefinedTypes.NewSignedLongType()
+		$$ = IdlDefinedTypes.NewSignedLongType()
 	}
 signed_longlong_int :
 	Rwlong Rwlong{
-		$$ = DefinedTypes.NewSignedLongLongType()
+		$$ = IdlDefinedTypes.NewSignedLongLongType()
 	}
 
 unsigned_int :
@@ -506,34 +599,34 @@ unsigned_int :
 
 unsigned_short_int :
 	Rwunsigned Rwshort{
-		$$ = DefinedTypes.NewUnSignedShortType()
+		$$ = IdlDefinedTypes.NewUnSignedShortType()
 	}
 unsigned_long_int :
 	Rwunsigned Rwlong{
-		$$ = DefinedTypes.NewUnsignedLongType()
+		$$ = IdlDefinedTypes.NewUnsignedLongType()
 	}
 unsigned_longlong_int :
 	Rwunsigned Rwlong Rwlong{
-		$$ = DefinedTypes.NewUnsignedLongLongType()
+		$$ = IdlDefinedTypes.NewUnsignedLongLongType()
 	}
 
 char_type :
 	Rwchar{
-		$$ = DefinedTypes.NewCharType()
+		$$ = IdlDefinedTypes.NewCharType()
 	}
 
 wide_char_type :
 	Rwwchar{
-		$$ = DefinedTypes.NewWideCharType()
+		$$ = IdlDefinedTypes.NewWideCharType()
 	}
 boolean_type :
 	Rwboolean{
-		$$ = DefinedTypes.NewBooleanType()
+		$$ = IdlDefinedTypes.NewBooleanType()
 	}
 
 octet_type :
 	Rwoctet{
-		$$ = DefinedTypes.NewOctetType()
+		$$ = IdlDefinedTypes.NewOctetType()
 	}
 
 template_type_spec :
@@ -550,7 +643,8 @@ template_type_spec :
 		$$ = $1
 	}
 	|bitfield_type{
-	}
+		$$ = $1
+        }
 
 bitfield_type:
 	Rwbitfield '<' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator '>'{
@@ -568,30 +662,30 @@ sequence_type :
 
 string_type :
 	Rwstring '<' positive_int_const '>'{
-		$$ = DefinedTypes.NewStringType($3)
+		$$ = IdlDefinedTypes.NewStringType($3)
 	}
 	|
 	Rwstring{
-		$$ = DefinedTypes.NewStringType(-1)
+		$$ = IdlDefinedTypes.NewStringType(-1)
 	}
 
 wide_string_type :
 	Rwwstring '<' positive_int_const '>'{
-		$$ = DefinedTypes.NewWideStringType($3)
+		$$ = IdlDefinedTypes.NewWideStringType($3)
 	}
 	| Rwwstring{
-		$$ = DefinedTypes.NewWideStringType(-1)
+		$$ = IdlDefinedTypes.NewWideStringType(-1)
 	}
 
 
 fixed_pt_type :
 	Rwfixed '<' positive_int_const ',' positive_int_const '>'{
-		$$ = DefinedTypes.NewFixedType()
+		$$ = IdlDefinedTypes.NewFixedType()
 	}
 
 fixed_pt_const_type :
 	Rwfixed{
-		$$ = DefinedTypes.NewFixedType()
+		$$ = IdlDefinedTypes.NewFixedType()
 	}
 
 constr_type_dcl :

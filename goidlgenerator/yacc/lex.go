@@ -4,14 +4,30 @@ package yacc
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/DFA"
+	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
+	"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
+	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"io"
 	"log"
 	"strconv"
 )
 
 const eof = 0
+
+func StringToIDlBaseType(s string) (interfaces.IBaseTypeInformation, error) {
+	switch s {
+	case "IdlNative":
+		return &IdlDefinedTypes.IdlNativeTypeInformation{}, nil
+	case "Mitch":
+		return &MitchDefinedTypes.MitchTypeInformation{}, nil
+	}
+
+	return nil, errors.New("invalid type")
+
+}
 
 type IdlExprLex struct {
 	InputStream     io.ByteScanner
@@ -22,6 +38,7 @@ type IdlExprLex struct {
 	Col             int
 	Row             int
 	idlExprContext  *IdlExprContext
+	IDlBaseType     interfaces.IBaseTypeInformation
 }
 
 func (x *IdlExprLex) Lex(yylval *IdlExprSymType) int {
@@ -138,6 +155,17 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 	reservedWords["wchar"] = Rwwchar
 	reservedWords["wstring"] = Rwwstring
 	reservedWords["bitfield"] = Rwbitfield
+	reservedWords["MitchAlpha"] = RwMitchAlpha
+	reservedWords["MitchBitField"] = RwMitchBitField
+	reservedWords["MitchByte"] = RwMitchByte
+	reservedWords["MitchDate"] = RwMitchDate
+	reservedWords["MitchTime"] = RwMitchTime
+	reservedWords["MitchPrice04"] = RwMitchPrice04
+	reservedWords["MitchPrice08"] = RwMitchPrice08
+	reservedWords["MitchUInt08"] = RwMitchUInt08
+	reservedWords["MitchUInt16"] = RwMitchUInt16
+	reservedWords["MitchUInt32"] = RwMitchUInt32
+	reservedWords["MitchUInt64"] = RwMitchUInt64
 
 	collDfaFunctions := []func() (DFA.IDFA, error){
 		func() (DFA.IDFA, error) {
@@ -202,7 +230,14 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 	return collDfa, nil
 }
 
-func NewIdlExprLex(inputStream io.ByteScanner, idlExprContext *IdlExprContext, verbose bool) (*IdlExprLex, error) {
+type NewIdlExprLexParams struct {
+	InputStream    io.ByteScanner
+	IdlExprContext *IdlExprContext
+	Verbose        bool
+	IDlBaseType    interfaces.IBaseTypeInformation
+}
+
+func NewIdlExprLex(params NewIdlExprLexParams) (*IdlExprLex, error) {
 	IdlExprErrorVerbose = true
 	tokenToIgnore := []int{
 		Whitespace,
@@ -219,14 +254,15 @@ func NewIdlExprLex(inputStream io.ByteScanner, idlExprContext *IdlExprContext, v
 	}
 
 	return &IdlExprLex{
-		InputStream:     inputStream,
+		InputStream:     params.InputStream,
 		CollDfa:         createIdlTokens,
 		TokenToIgnore:   tokenToIgnoreMap,
-		Verbose:         verbose,
+		Verbose:         params.Verbose,
 		VerboseEachChar: false,
 		Col:             1,
 		Row:             1,
-		idlExprContext:  idlExprContext,
+		idlExprContext:  params.IdlExprContext,
+		IDlBaseType:     params.IDlBaseType,
 	}, nil
 
 }

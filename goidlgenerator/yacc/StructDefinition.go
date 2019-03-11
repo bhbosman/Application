@@ -2,7 +2,6 @@ package yacc
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
@@ -13,6 +12,26 @@ type StructDefinition struct {
 	Identifier string                            `json:"Identifier"`
 	Members    []*Member                         `json:"Members"`
 	Next       interfaces.IDefinitionDeclaration `json:"-"`
+}
+
+func (self *StructDefinition) GetPackageName() (bool, string) {
+	return false, ""
+}
+
+func (self *StructDefinition) GetSequenceCount() (bool, int) {
+	return false, 0
+}
+
+func (self *StructDefinition) Kind() interfaces.Kind {
+	return interfaces.Struct
+}
+
+func (self *StructDefinition) DefaultValue() string {
+	return "nil"
+}
+
+func (self *StructDefinition) Predefined() bool {
+	return false
 }
 
 func (self *StructDefinition) GetScopeName() string {
@@ -28,7 +47,8 @@ func (self *StructDefinition) SetNext(typeSpec interfaces.IDefinitionDeclaration
 }
 
 func (self *StructDefinition) GetName() string {
-	return fmt.Sprintf("struct %v", self.Identifier)
+	return self.Identifier
+
 }
 
 func (self *StructDefinition) AddMember(typeSpec interfaces.IDefinedType, declarator interfaces.IDeclarator) {

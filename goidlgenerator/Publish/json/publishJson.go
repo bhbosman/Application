@@ -4,20 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
-	"github.com/bhbosman/Application/goidlgenerator/interfaces"
-	"io"
 )
 
 type publishJson struct {
 }
 
-func (self *publishJson) Export(outputStream io.Writer, packageName string, declaredTypes []interfaces.IDefinitionDeclaration) error {
-	fmt.Println(len(declaredTypes))
-	bytes, err := json.MarshalIndent(declaredTypes, "", "\t")
+func (self *publishJson) Export(params Publish.ExportParams) error {
+	fmt.Println(len(params.DeclaredTypes))
+	bytes, err := json.MarshalIndent(params.DeclaredTypes, "", "\t")
 	if err != nil {
 		return err
 	}
-	_, err = outputStream.Write(bytes)
+	_, err = params.OutputStream.Write(bytes)
 	return err
 }
 
