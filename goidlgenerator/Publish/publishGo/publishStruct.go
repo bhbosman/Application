@@ -51,18 +51,6 @@ func (self *publishStruct) ExportDefinition(writer io.StringWriter, TypeInformat
 	_, _ = writer.WriteString(fmt.Sprintf("type %s struct {\n", self.data.Identifier))
 	for _, member := range self.data.Members {
 		defaultValue := member.Declarator.DefaultValue()
-
-		//typeValue := func(DefinedType IDefinedType) string {
-		//	b, s := DefinedType.GetPackageName()
-		//	if b {
-		//		return fmt.Sprintf("%v.%v", s, DefinedType.GetName())
-		//	}
-		//	return DefinedType.GetName()
-		//
-		//}(member.DefinedType)
-
-
-
 		returnType := Extansions.TypeValueForDefinedType(member.DefinedType)
 		if defaultValue == nil {
 			_, _ = writer.WriteString(fmt.Sprintf(
