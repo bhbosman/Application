@@ -1,5 +1,4 @@
 
-
 package GeneratedFiles
 import "errors"
 import "fmt"
@@ -38,7 +37,7 @@ func Write_MitchMessage_Time(stream Streams.IMitchWriter, value *MitchMessage_Ti
 }
 
 // MitchMessage_Time reader
-func Read_MitchMessage_Time(stream Streams.IStreamReader) (value *MitchMessage_Time, byteCount int, err error) {
+func Read_MitchMessage_Time(stream Streams.IMitchReader) (value *MitchMessage_Time, byteCount int, err error) {
 	value = NewMitchMessage_Time()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -186,7 +185,7 @@ func Write_MitchMessage_SystemEvent(stream Streams.IMitchWriter, value *MitchMes
 }
 
 // MitchMessage_SystemEvent reader
-func Read_MitchMessage_SystemEvent(stream Streams.IStreamReader) (value *MitchMessage_SystemEvent, byteCount int, err error) {
+func Read_MitchMessage_SystemEvent(stream Streams.IMitchReader) (value *MitchMessage_SystemEvent, byteCount int, err error) {
 	value = NewMitchMessage_SystemEvent()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -575,7 +574,7 @@ func Write_MitchMessage_SymbolDirectory(stream Streams.IMitchWriter, value *Mitc
 }
 
 // MitchMessage_SymbolDirectory reader
-func Read_MitchMessage_SymbolDirectory(stream Streams.IStreamReader) (value *MitchMessage_SymbolDirectory, byteCount int, err error) {
+func Read_MitchMessage_SymbolDirectory(stream Streams.IMitchReader) (value *MitchMessage_SymbolDirectory, byteCount int, err error) {
 	value = NewMitchMessage_SymbolDirectory()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -1000,7 +999,7 @@ func Write_MitchMessage_SymbolStatus(stream Streams.IMitchWriter, value *MitchMe
 }
 
 // MitchMessage_SymbolStatus reader
-func Read_MitchMessage_SymbolStatus(stream Streams.IStreamReader) (value *MitchMessage_SymbolStatus, byteCount int, err error) {
+func Read_MitchMessage_SymbolStatus(stream Streams.IMitchReader) (value *MitchMessage_SymbolStatus, byteCount int, err error) {
 	value = NewMitchMessage_SymbolStatus()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -1240,7 +1239,7 @@ func Write_MitchMessage_AddOrder(stream Streams.IMitchWriter, value *MitchMessag
 }
 
 // MitchMessage_AddOrder reader
-func Read_MitchMessage_AddOrder(stream Streams.IStreamReader) (value *MitchMessage_AddOrder, byteCount int, err error) {
+func Read_MitchMessage_AddOrder(stream Streams.IMitchReader) (value *MitchMessage_AddOrder, byteCount int, err error) {
 	value = NewMitchMessage_AddOrder()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -1426,7 +1425,7 @@ func Write_MitchMessage_AddAttributedOrder(stream Streams.IMitchWriter, value *M
 }
 
 // MitchMessage_AddAttributedOrder reader
-func Read_MitchMessage_AddAttributedOrder(stream Streams.IStreamReader) (value *MitchMessage_AddAttributedOrder, byteCount int, err error) {
+func Read_MitchMessage_AddAttributedOrder(stream Streams.IMitchReader) (value *MitchMessage_AddAttributedOrder, byteCount int, err error) {
 	value = NewMitchMessage_AddAttributedOrder()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -1566,7 +1565,7 @@ func Write_MitchMessage_OrderDeleted(stream Streams.IMitchWriter, value *MitchMe
 }
 
 // MitchMessage_OrderDeleted reader
-func Read_MitchMessage_OrderDeleted(stream Streams.IStreamReader) (value *MitchMessage_OrderDeleted, byteCount int, err error) {
+func Read_MitchMessage_OrderDeleted(stream Streams.IMitchReader) (value *MitchMessage_OrderDeleted, byteCount int, err error) {
 	value = NewMitchMessage_OrderDeleted()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -1698,7 +1697,7 @@ func Write_MitchMessage_OrderModified(stream Streams.IMitchWriter, value *MitchM
 }
 
 // MitchMessage_OrderModified reader
-func Read_MitchMessage_OrderModified(stream Streams.IStreamReader) (value *MitchMessage_OrderModified, byteCount int, err error) {
+func Read_MitchMessage_OrderModified(stream Streams.IMitchReader) (value *MitchMessage_OrderModified, byteCount int, err error) {
 	value = NewMitchMessage_OrderModified()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -1923,7 +1922,7 @@ func Write_MitchMessage_OrderBookClear(stream Streams.IMitchWriter, value *Mitch
 }
 
 // MitchMessage_OrderBookClear reader
-func Read_MitchMessage_OrderBookClear(stream Streams.IStreamReader) (value *MitchMessage_OrderBookClear, byteCount int, err error) {
+func Read_MitchMessage_OrderBookClear(stream Streams.IMitchReader) (value *MitchMessage_OrderBookClear, byteCount int, err error) {
 	value = NewMitchMessage_OrderBookClear()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -2073,7 +2072,7 @@ func Write_MitchMessage_OrderExecuted(stream Streams.IMitchWriter, value *MitchM
 }
 
 // MitchMessage_OrderExecuted reader
-func Read_MitchMessage_OrderExecuted(stream Streams.IStreamReader) (value *MitchMessage_OrderExecuted, byteCount int, err error) {
+func Read_MitchMessage_OrderExecuted(stream Streams.IMitchReader) (value *MitchMessage_OrderExecuted, byteCount int, err error) {
 	value = NewMitchMessage_OrderExecuted()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -2256,7 +2255,7 @@ func Write_MitchMessage_OrderExecutedWithPriceSize(stream Streams.IMitchWriter, 
 }
 
 // MitchMessage_OrderExecutedWithPriceSize reader
-func Read_MitchMessage_OrderExecutedWithPriceSize(stream Streams.IStreamReader) (value *MitchMessage_OrderExecutedWithPriceSize, byteCount int, err error) {
+func Read_MitchMessage_OrderExecutedWithPriceSize(stream Streams.IMitchReader) (value *MitchMessage_OrderExecutedWithPriceSize, byteCount int, err error) {
 	value = NewMitchMessage_OrderExecutedWithPriceSize()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -2472,7 +2471,7 @@ func Write_MitchMessage_Trade(stream Streams.IMitchWriter, value *MitchMessage_T
 }
 
 // MitchMessage_Trade reader
-func Read_MitchMessage_Trade(stream Streams.IStreamReader) (value *MitchMessage_Trade, byteCount int, err error) {
+func Read_MitchMessage_Trade(stream Streams.IMitchReader) (value *MitchMessage_Trade, byteCount int, err error) {
 	value = NewMitchMessage_Trade()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -2691,7 +2690,7 @@ func Write_MitchMessage_AuctionTrade(stream Streams.IMitchWriter, value *MitchMe
 }
 
 // MitchMessage_AuctionTrade reader
-func Read_MitchMessage_AuctionTrade(stream Streams.IStreamReader) (value *MitchMessage_AuctionTrade, byteCount int, err error) {
+func Read_MitchMessage_AuctionTrade(stream Streams.IMitchReader) (value *MitchMessage_AuctionTrade, byteCount int, err error) {
 	value = NewMitchMessage_AuctionTrade()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -2912,7 +2911,7 @@ func Write_MitchMessage_OffBookTrade(stream Streams.IMitchWriter, value *MitchMe
 }
 
 // MitchMessage_OffBookTrade reader
-func Read_MitchMessage_OffBookTrade(stream Streams.IStreamReader) (value *MitchMessage_OffBookTrade, byteCount int, err error) {
+func Read_MitchMessage_OffBookTrade(stream Streams.IMitchReader) (value *MitchMessage_OffBookTrade, byteCount int, err error) {
 	value = NewMitchMessage_OffBookTrade()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -3083,7 +3082,7 @@ func Write_MitchMessage_TradeBreak(stream Streams.IMitchWriter, value *MitchMess
 }
 
 // MitchMessage_TradeBreak reader
-func Read_MitchMessage_TradeBreak(stream Streams.IStreamReader) (value *MitchMessage_TradeBreak, byteCount int, err error) {
+func Read_MitchMessage_TradeBreak(stream Streams.IMitchReader) (value *MitchMessage_TradeBreak, byteCount int, err error) {
 	value = NewMitchMessage_TradeBreak()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -3288,7 +3287,7 @@ func Write_MitchMessage_RecoveryTrade(stream Streams.IMitchWriter, value *MitchM
 }
 
 // MitchMessage_RecoveryTrade reader
-func Read_MitchMessage_RecoveryTrade(stream Streams.IStreamReader) (value *MitchMessage_RecoveryTrade, byteCount int, err error) {
+func Read_MitchMessage_RecoveryTrade(stream Streams.IMitchReader) (value *MitchMessage_RecoveryTrade, byteCount int, err error) {
 	value = NewMitchMessage_RecoveryTrade()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -3515,7 +3514,7 @@ func Write_MitchMessage_AuctionInfo(stream Streams.IMitchWriter, value *MitchMes
 }
 
 // MitchMessage_AuctionInfo reader
-func Read_MitchMessage_AuctionInfo(stream Streams.IStreamReader) (value *MitchMessage_AuctionInfo, byteCount int, err error) {
+func Read_MitchMessage_AuctionInfo(stream Streams.IMitchReader) (value *MitchMessage_AuctionInfo, byteCount int, err error) {
 	value = NewMitchMessage_AuctionInfo()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -3696,7 +3695,7 @@ func Write_MitchMessage_Statistics(stream Streams.IMitchWriter, value *MitchMess
 }
 
 // MitchMessage_Statistics reader
-func Read_MitchMessage_Statistics(stream Streams.IStreamReader) (value *MitchMessage_Statistics, byteCount int, err error) {
+func Read_MitchMessage_Statistics(stream Streams.IMitchReader) (value *MitchMessage_Statistics, byteCount int, err error) {
 	value = NewMitchMessage_Statistics()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -3902,7 +3901,7 @@ func Write_MitchMessage_ExtendedStatistics(stream Streams.IMitchWriter, value *M
 }
 
 // MitchMessage_ExtendedStatistics reader
-func Read_MitchMessage_ExtendedStatistics(stream Streams.IStreamReader) (value *MitchMessage_ExtendedStatistics, byteCount int, err error) {
+func Read_MitchMessage_ExtendedStatistics(stream Streams.IMitchReader) (value *MitchMessage_ExtendedStatistics, byteCount int, err error) {
 	value = NewMitchMessage_ExtendedStatistics()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -4097,7 +4096,7 @@ func Write_MitchMessage_News(stream Streams.IMitchWriter, value *MitchMessage_Ne
 }
 
 // MitchMessage_News reader
-func Read_MitchMessage_News(stream Streams.IStreamReader) (value *MitchMessage_News, byteCount int, err error) {
+func Read_MitchMessage_News(stream Streams.IMitchReader) (value *MitchMessage_News, byteCount int, err error) {
 	value = NewMitchMessage_News()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()
@@ -4286,7 +4285,7 @@ func Write_MitchMessage_TopOfBook(stream Streams.IMitchWriter, value *MitchMessa
 }
 
 // MitchMessage_TopOfBook reader
-func Read_MitchMessage_TopOfBook(stream Streams.IStreamReader) (value *MitchMessage_TopOfBook, byteCount int, err error) {
+func Read_MitchMessage_TopOfBook(stream Streams.IMitchReader) (value *MitchMessage_TopOfBook, byteCount int, err error) {
 	value = NewMitchMessage_TopOfBook()
 	var n int 
 	value.Length, n, err = stream.Read_MitchUInt16()

@@ -57,6 +57,7 @@ func (self *publishPredefined) Export(writer io.StringWriter, typeInformation in
 				typeCode:        typeCode})
 		self.GenerateReadFunction(
 			writer,
+			typeInformation,
 			GenerateReadFunctionParams{
 				typeInformation: typeInformation,
 				typeNamePrefix:  typeNamePrefix,
@@ -72,10 +73,10 @@ type GenerateReadFunctionParams struct {
 	defaultValue    interface{}
 }
 
-func (self *publishPredefined) GenerateReadFunction(writer io.StringWriter,  params GenerateReadFunctionParams) {
+func (self *publishPredefined) GenerateReadFunction(writer io.StringWriter,  typeInformation interfaces.IBaseTypeInformation, params GenerateReadFunctionParams) {
 	returnType := Extansions.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", params.typeNamePrefix))
-	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.IStreamReader) (%v, int, error) {\n", params.typeNamePrefix, returnType))
+	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (%v, int, error) {\n", params.typeNamePrefix, typeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Read_%v()\n",  params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))

@@ -20,7 +20,7 @@ import (
 //go:generate go clean
 //go:generate go build
 //go:generate go install
-//go:generate rm -rf goidlgenerator
+
 
 func main() {
 	//inputFile := flag.String("in", "", "inputFile")

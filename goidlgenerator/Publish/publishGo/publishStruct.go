@@ -95,7 +95,7 @@ func (self *publishStruct) ExportDefaultConstructor(writer io.StringWriter, Type
 func (self *publishStruct) GenerateReadFunction(writer io.StringWriter, TypeInformation IBaseTypeInformation, typeNamePrefix string, typeCode uint32) {
 	returnType := "*" + typeNamePrefix
 	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", typeNamePrefix))
-	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.IStreamReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, returnType))
+	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
 
 	_, _ = writer.WriteString(fmt.Sprintf("\tvalue = New%v()\n", typeNamePrefix))
 
