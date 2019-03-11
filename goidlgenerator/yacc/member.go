@@ -14,7 +14,6 @@ type Member struct {
 }
 
 func (self *Member) MarshalJSON() ([]byte, error) {
-	self.DefinedType.GetName()
 	return json.Marshal(&struct {
 		Type        string                  `json:"Type"`
 		Declarator  interfaces.IDeclarator  `json:"Declarator"`

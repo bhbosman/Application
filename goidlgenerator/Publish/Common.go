@@ -25,8 +25,15 @@ func ToOutputType(s string) OutputType {
 	}
 }
 
+type ExportParams struct {
+	OutputStream    io.Writer
+	TypeInformation interfaces.IBaseTypeInformation
+	PackageName     string
+	DeclaredTypes   []interfaces.IDefinitionDeclaration
+}
+
 type IPublish interface {
-	Export(outputStream io.Writer, packageName string, declaredTypes []interfaces.IDefinitionDeclaration) error
+	Export(params ExportParams) error
 }
 
 var registrations map[OutputType]IPublish
@@ -47,10 +54,19 @@ func HasOutputType(outputType OutputType) (IPublish, error) {
 	return nil, errors.New("Could not find publisher")
 }
 
-func PublishOutputType(outputType OutputType, packageName string, declaredTypes []interfaces.IDefinitionDeclaration, writer io.Writer) error {
+func PublishOutputType(
+	outputType OutputType,
+	writer io.Writer,
+	information interfaces.IBaseTypeInformation,
+	packageName string,
+	declaredTypes []interfaces.IDefinitionDeclaration) error {
 	result, ok := registrations[outputType]
 	if ok {
-		err := result.Export(writer, packageName, declaredTypes)
+		err := result.Export(ExportParams{
+			OutputStream:    writer,
+			TypeInformation: information,
+			PackageName:     packageName,
+			DeclaredTypes:   declaredTypes})
 		if err != nil {
 			return err
 		}

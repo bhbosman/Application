@@ -1,6 +1,21 @@
 package interfaces
 
-import "reflect"
+type IDlBaseType string
+
+const IDlBaseType_Native_Value IDlBaseType = "IdlNative"
+const IDlBaseType_Mitch_Value IDlBaseType = "Mitch"
+
+const (
+	IDlBaseType_Native IDlBaseType = IDlBaseType_Native_Value
+	IDlBaseType_Mitch              = IDlBaseType_Mitch_Value
+)
+
+type IBaseTypeInformation interface {
+	Name() IDlBaseType
+	DefaultDecls() ([]IDefinitionDeclaration, error)
+	CanScope(decl IDefinedType) bool
+	//GetPackageName() (bool, string)
+}
 
 type IDeclarator interface {
 	Identifier() string
@@ -11,16 +26,13 @@ type IDeclarator interface {
 	DefaultValue() IConstantValue
 }
 
-type IScopeName interface {
-	GetName() string
-}
-
 type IDefinedType interface {
-	IScopeName
-}
-
-type IPreDefinedType interface {
-	IDefinedType
+	GetPackageName() (bool, string)
+	GetSequenceCount() (bool, int)
+	GetName() string
+	Kind() Kind
+	DefaultValue() string
+	Predefined() bool
 }
 
 type IDefinitionDeclaration interface {
@@ -39,6 +51,6 @@ type ITypeDeclaration interface {
 
 type IConstantValue interface {
 	Value() interface{}
-	ValueKind() reflect.Kind
+	ValueKind() Kind
 	MaxLength() int
 }

@@ -2,13 +2,35 @@ package yacc
 
 //go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
-import "github.com/bhbosman/Application/goidlgenerator/interfaces"
+import (
+	"github.com/bhbosman/Application/goidlgenerator/interfaces"
+)
 
 type EnumDecl struct {
 	Type       string                            `json:"Type"`
 	Identifier string                            `json:"Identifier"`
 	Next       interfaces.IDefinitionDeclaration `json:"-"`
 	Decls      []interfaces.IDeclarator
+}
+
+func (self *EnumDecl) GetPackageName() (bool, string) {
+	return false, ""
+}
+
+func (self *EnumDecl) GetSequenceCount() (bool, int) {
+	return false, 0
+}
+
+func (self *EnumDecl) Kind() interfaces.Kind {
+	return interfaces.Enum
+}
+
+func (self *EnumDecl) DefaultValue() string {
+	return "0"
+}
+
+func (self *EnumDecl) Predefined() bool {
+	return false
 }
 
 func (self *EnumDecl) GetName() string {

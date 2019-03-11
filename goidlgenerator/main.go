@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-//go:generate goyacc -o yacc/idl.publishGo -p "IdlExpr" yacc/idl.y
+//go:generate goyacc -o yacc/idl.go -p "IdlExpr" yacc/idl.y
 //go:generate go clean
 //go:generate go build
 //go:generate go install
@@ -28,6 +28,8 @@ func main() {
 	outputType := flag.String("outType", "json", "outputType")
 	verbose := flag.Bool("verbose", false, "verbose")
 	packageName := flag.String("packageName", "default", "packageName")
+	defaultTypes := flag.Bool("defaultTypes", false, "Generate the built in types for the type in use")
+	typesToUseAsString := flag.String("typesToUse", "IdlNative", `values "IdlNative" or "Mitch"`)
 	showHelp := flag.Bool("help", false, "Show this")
 
 	flag.Parse()
@@ -35,6 +37,16 @@ func main() {
 	if *showHelp {
 		_, _ = fmt.Fprintln(os.Stderr, "goidlgenerator params args\n\twhere params is")
 		flag.PrintDefaults()
+
+		fmt.Println(">>>>>>>>>>>>>")
+
+		if *verbose {
+			flag.VisitAll(func(i *flag.Flag) {
+				fmt.Println(i.Name, i.Value)
+			})
+		}
+		fmt.Println("<<<<<<<<<<<<<")
+
 		os.Exit(1)
 		return
 
@@ -51,11 +63,47 @@ func main() {
 		_ = outStream.Close()
 	}()
 
+	typesInUse, err := yacc.StringToIDlBaseType(*typesToUseAsString)
+	if err != nil {
+		_, _ = os.Stderr.WriteString(fmt.Sprintf("Invalid type in use (%v).", typesToUseAsString))
+		os.Exit(7)
+	}
+
+	var definitionDeclarations []interfaces.IDefinitionDeclaration = nil
+	if !*defaultTypes {
+		definitionDeclarations = ReadFromSource(*verbose, typesInUse)
+
+	} else {
+		definitionDeclarations, err = typesInUse.DefaultDecls()
+		if err != nil {
+			_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
+			os.Exit(10)
+		}
+
+	}
+	publisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
+	if err != nil {
+		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
+		os.Exit(5)
+	}
+	err = publisher.Export(Publish.ExportParams{
+		OutputStream:    outStream,
+		TypeInformation: typesInUse,
+		PackageName:     *packageName,
+		DeclaredTypes:   definitionDeclarations})
+	if err != nil {
+		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
+		os.Exit(6)
+	}
+
+}
+
+func ReadFromSource(verbose bool, typesInUse interfaces.IBaseTypeInformation) []interfaces.IDefinitionDeclaration {
 	inStream, err := GetInput(flag.Args())
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "No input file. See help:\n")
 		os.Exit(3)
-		return
+		return nil
 	}
 	for _, closer := range inStream {
 		defer func(closer io.Closer) {
@@ -71,9 +119,12 @@ func main() {
 		idlExprContext := yacc.NewIdlExprContext()
 		for i, reader := range inStream {
 			lex, err := yacc.NewIdlExprLex(
-				bufio.NewReader(reader),
-				idlExprContext,
-				*verbose)
+				yacc.NewIdlExprLexParams{
+					InputStream:    bufio.NewReader(reader),
+					IdlExprContext: idlExprContext,
+					Verbose:        verbose,
+					IDlBaseType:    typesInUse,
+				})
 			if err != nil {
 				continue
 			}
@@ -92,17 +143,8 @@ func main() {
 	if err != nil {
 		os.Exit(4)
 	}
-	jsonPublisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
-	if err != nil {
-		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
-		os.Exit(5)
-	}
-	err = jsonPublisher.Export(outStream, *packageName, definitionDeclarations)
-	if err != nil {
-		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
-		os.Exit(6)
-	}
 
+	return definitionDeclarations
 }
 
 type WriterNoCloser struct {

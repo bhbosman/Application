@@ -1,12 +1,14 @@
 package publishGo
 
 import (
+	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 	"io"
 )
 
 type publishTypeDecl struct {
-	data *yacc.TypeDeclarator
+	data            *yacc.TypeDeclarator
+	typeInformation interfaces.IBaseTypeInformation
 }
 
 func (self *publishTypeDecl) ExportDefinition(writer io.StringWriter) {
@@ -42,6 +44,9 @@ func (self *publishTypeDecl) Export(writer io.StringWriter) {
 	}
 }
 
-func NewpublishTypeDecl(data *yacc.TypeDeclarator) *publishTypeDecl {
-	return &publishTypeDecl{data: data}
+func NewpublishTypeDecl(data *yacc.TypeDeclarator, typeInformation interfaces.IBaseTypeInformation) *publishTypeDecl {
+	return &publishTypeDecl{
+		data:            data,
+		typeInformation: typeInformation,
+	}
 }

@@ -1,23 +1,3 @@
-native  MitchAlpha001;
-native  MitchAlpha004;
-native  MitchAlpha006;
-native  MitchAlpha011;
-native  MitchAlpha012;
-native  MitchAlpha025;
-native  MitchAlpha030;
-native  MitchAlpha189;
-
-
-native  MitchBitField;
-native  MitchByte;
-native  MitchDate;
-native  MitchTime;
-native  MitchPrice04;
-native  MitchPrice08;
-native  MitchUInt08;
-native  MitchUInt16;
-native  MitchUInt32;
-native  MitchUInt64;
 
 
 
@@ -29,7 +9,7 @@ native  MitchUInt64;
 //
 
 
-struct Time
+struct MitchMessage_Time
 {
     MitchUInt16 Length;
     MitchByte   MessageType = 0x54;
@@ -49,7 +29,8 @@ enum TEventCode
     EndOfDay = 'C',
     StartOfDay = 'O'
 };
-struct SystemEvent
+
+struct MitchMessage_SystemEvent
 {
     MitchUInt16 Length;
     MitchByte   MessageType = 0x53;
@@ -109,7 +90,7 @@ enum SymbolDirectorySettlementMethod{
     Physical ='P'
 };
 
-struct SymbolDirectory
+struct MitchMessage_SymbolDirectory
 {
     MitchUInt16                     Length;
     MitchByte                       MessageType = 0x52;
@@ -118,26 +99,26 @@ struct SymbolDirectory
     MitchByte                       Reserved01;
     MitchByte                       Reserved02;
     SymbolDirectorySymbolStatus     SymbolStatus;
-    MitchAlpha012                   ISIN;
-    MitchAlpha025                   Symbol;
-    MitchAlpha012                   TIDM;
-    MitchAlpha006                   Segment;
+    MitchAlpha<12>                   ISIN;
+    MitchAlpha<25>                   Symbol;
+    MitchAlpha<12>                   TIDM;
+    MitchAlpha<6>                   Segment;
     MitchPrice08                      PreviousClosePrice;
     MitchDate                       ExpirationDate;
-    MitchAlpha025                   Underlying;
+    MitchAlpha<25>                   Underlying;
     MitchPrice08                      StrikePrice;
     SymbolDirectoryOptionType       OptionType;
-    MitchAlpha006                   Issuer;
+    MitchAlpha<6>                   Issuer;
     MitchDate                       IssueDate;
     MitchPrice08                      Coupon;
     SymbolDirectoryFlags            Flags;
     SymbolDirectorySubBook          SubBook;
-    MitchAlpha189                   CorporateAction;
-    MitchAlpha025                   Leg1Symbol;
-    MitchAlpha025                   Leg2Symbol;
+    MitchAlpha<189>                   CorporateAction;
+    MitchAlpha<25>                   Leg1Symbol;
+    MitchAlpha<25>                   Leg2Symbol;
     MitchPrice08                      ContractMultiplier;
     SymbolDirectorySettlementMethod SettlementMethod;
-    MitchAlpha030                   InstrumentSubCategory;
+    MitchAlpha<30>                   InstrumentSubCategory;
 };
 
 
@@ -193,7 +174,7 @@ enum SymbolStatusBookType
     NegotiatedTrades = 11
 };
 
-struct SymbolStatus
+struct MitchMessage_SymbolStatus
 {
     MitchUInt16                     Length;
     MitchByte                       MessageType = 0x48;
@@ -203,7 +184,7 @@ struct SymbolStatus
     MitchByte                       Reserved02;
     SymbolStatusTradingStatus       TradingStatus;
     MitchBitField                   Flags;
-    MitchAlpha004                   Reason;
+    MitchAlpha<4>                   Reason;
     SymbolStatusSessionChangeReason SessionChangeReason;
     MitchTime                       NewEndTime;
     SymbolStatusBookType            BookType;
@@ -239,7 +220,7 @@ typedef bitfield
 
 
 
-struct AddOrder
+struct MitchMessage_AddOrder
 {
     MitchUInt16     Length;
     MitchByte       MessageType = 0x41;
@@ -280,7 +261,7 @@ typedef bitfield
 
 
 
-struct AddAttributedOrder
+struct MitchMessage_AddAttributedOrder
 {
     MitchUInt16                 Length;
     MitchByte                   MessageType = 0x46;
@@ -290,7 +271,7 @@ struct AddAttributedOrder
     MitchUInt32                 Quantity;
     MitchUInt32                 InstrumentID;
     MitchPrice08                Price;
-    MitchAlpha011               Attribution;
+    MitchAlpha<11>               Attribution;
     AddAttributedOrderFlags    Flags;
 };
 
@@ -300,7 +281,7 @@ struct AddAttributedOrder
 //×
 //√
 //
-struct OrderDeleted
+struct MitchMessage_OrderDeleted
 {
     MitchUInt16 Length;
     MitchByte MessageType = 0x44;
@@ -329,7 +310,7 @@ typedef bitfield
         b7
     > OrderModifiedFlags;
 
-struct OrderModified
+struct MitchMessage_OrderModified
 {
     MitchUInt16         Length;
     MitchByte           MessageType = 0x55;
@@ -341,7 +322,7 @@ struct OrderModified
 };
 
 //Order Book Clear
-//Sent to instruct Recipients to remove all orders from the order book for the specified instrument.
+//Sent to instruct MitchMessage_Recipients to remove all orders from the order book for the specified instrument.
 //√
 //×
 //√
@@ -375,7 +356,7 @@ enum OrderBookClearBookType
 
 
 
-struct OrderBookClear
+struct MitchMessage_OrderBookClear
 {
     MitchUInt16             Length;
     MitchByte               MessageType = 0x79;
@@ -393,7 +374,7 @@ struct OrderBookClear
 //√
 //
 
-struct OrderExecuted
+struct MitchMessage_OrderExecuted
 {
     MitchUInt16 Length;
     MitchByte   MessageType;
@@ -417,7 +398,7 @@ struct OrderExecuted
 
 
 
-struct OrderExecutedWithPriceSize
+struct MitchMessage_OrderExecutedWithPriceSize
 {
     MitchUInt16 Length;
     MitchByte   MessageType;
@@ -446,7 +427,7 @@ struct OrderExecutedWithPriceSize
 
 
 
-struct Trade
+struct MitchMessage_Trade
 {
     MitchUInt16 Length;
     MitchByte   MessageType;
@@ -459,7 +440,7 @@ struct Trade
     MitchUInt64 TradeID;
     MitchUInt08  SubBook;
     MitchBitField  Flags;
-    MitchAlpha006  TradeSubType;
+    MitchAlpha<6>  TradeSubType;
     MitchPrice08  LastOptPx;
     MitchPrice08  Volatility;
     MitchPrice08  UnderlyingReferencePrice;
@@ -479,7 +460,7 @@ struct Trade
 
 
 
-struct AuctionTrade
+struct MitchMessage_AuctionTrade
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
@@ -509,7 +490,7 @@ struct AuctionTrade
 
 
 
-struct OffBookTrade
+struct MitchMessage_OffBookTrade
 {
 
     MitchUInt16     Length;
@@ -521,7 +502,7 @@ struct OffBookTrade
     MitchByte       Reserved02;
     MitchPrice08    Price;
     MitchUInt64     TradeID;
-    MitchAlpha006   OffBookTradeType;
+    MitchAlpha<6>   OffBookTradeType;
     MitchTime       TradeTime;
     MitchDate       TradeDate;
     MitchPrice08    LastOptPx;
@@ -537,7 +518,7 @@ struct OffBookTrade
 //
 
 
-struct TradeBreak
+struct MitchMessage_TradeBreak
 {
     MitchUInt16 Length;
     MitchByte   MessageType;
@@ -555,7 +536,7 @@ struct TradeBreak
 
 
 
-struct RecoveryTrade
+struct MitchMessage_RecoveryTrade
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
@@ -567,7 +548,7 @@ struct RecoveryTrade
     MitchPrice08    Price;
     MitchUInt64     TradeID;
     MitchByte       AuctionType;
-    MitchAlpha006   OffBookRFQTradeType;
+    MitchAlpha<6>   OffBookRFQTradeType;
     MitchTime       TradeTime;
     MitchDate       TradeDate;
     MitchByte       ActionType;
@@ -593,7 +574,7 @@ struct RecoveryTrade
 
 
 
-struct AuctionInfo
+struct MitchMessage_AuctionInfo
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
@@ -616,7 +597,7 @@ struct AuctionInfo
 //
 
 
-struct Statistics
+struct MitchMessage_Statistics
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
@@ -624,9 +605,9 @@ struct Statistics
     MitchUInt32     InstrumentID;
     MitchByte       Reserved01;
     MitchByte       Reserved02;
-    MitchAlpha006   StatisticType;
+    MitchAlpha<6>   StatisticType;
     MitchPrice08    Price;
-    MitchAlpha006   OpenCloseIndicator;
+    MitchAlpha<6>   OpenCloseIndicator;
     MitchUInt08      SubBook;
 };
 
@@ -639,7 +620,7 @@ struct Statistics
 
 
 
-struct ExtendedStatistics
+struct MitchMessage_ExtendedStatistics
 {
     MitchUInt16     Length;
     MitchByte       MessageType;
@@ -651,7 +632,7 @@ struct ExtendedStatistics
     MitchUInt32     Volume;
     MitchPrice04    Turnover;
     MitchUInt32     NumberofTrades;
-    MitchAlpha001   Reserved01;
+    MitchAlpha<1>   Reserved01;
     MitchUInt08      SubBook;
     MitchPrice08    NotionalExposure;
     MitchPrice08    NotionalDeltaExposure;
@@ -667,17 +648,17 @@ struct ExtendedStatistics
 
 
 
-struct News
+struct MitchMessage_News
 {
     MitchUInt16 Length;
     MitchByte   MessageType;
     MitchUInt32 Nanosecond;
     MitchTime   Time;
     MitchByte   Urgency;
-    MitchAlpha001  Headline;
-    MitchAlpha001  Text;
-    MitchAlpha001  Instruments;
-    MitchAlpha001  Underlyings;
+    MitchAlpha<1>  Headline;
+    MitchAlpha<1>  Text;
+    MitchAlpha<1>  Instruments;
+    MitchAlpha<1>  Underlyings;
 };
 
 //Top Of Book
@@ -691,7 +672,7 @@ struct News
 
 
 
-struct TopOfBook
+struct MitchMessage_TopOfBook
 {
     MitchUInt16    Length;
     MitchByte      MessageType;

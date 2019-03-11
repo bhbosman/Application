@@ -11,6 +11,26 @@ type NativeDefinition struct {
 	Identifier string                            `json:"Identifier"`
 	Next       interfaces.IDefinitionDeclaration `json:"-"`
 }
+func (self *NativeDefinition) GetPackageName() (bool, string) {
+	return false, ""
+}
+
+
+func (self *NativeDefinition) GetSequenceCount() (bool, int) {
+	return false, 0
+}
+
+func (self *NativeDefinition) Kind() interfaces.Kind {
+	return interfaces.Invalid
+}
+
+func (self *NativeDefinition) DefaultValue() string {
+	return "nil"
+}
+
+func (self *NativeDefinition) Predefined() bool {
+	return false
+}
 
 func (self *NativeDefinition) GetName() string {
 	return self.Identifier

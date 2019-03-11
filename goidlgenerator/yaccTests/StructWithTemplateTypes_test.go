@@ -2,7 +2,7 @@ package yaccTests
 
 import (
 	"bufio"
-	"github.com/bhbosman/Application/goidlgenerator/DefinedTypes"
+	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 	_ "github.com/bhbosman/Application/goidlgenerator/Publish/json"
 	"github.com/bhbosman/Application/goidlgenerator/TempleteTypes"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
@@ -18,7 +18,12 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		data := `typedef string a;`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -29,14 +34,19 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		assert.Len(t, DeclaredTypes, 1)
 		assert.IsType(t, &yacc.TypeDeclarator{}, DeclaredTypes[0])
 		typeDeclaration := DeclaredTypes[0].(*yacc.TypeDeclarator)
-		assert.IsType(t, &DefinedTypes.StringType{}, typeDeclaration.GetDefinedTyped())
+		assert.IsType(t, &IdlDefinedTypes.StringType{}, typeDeclaration.GetDefinedTyped())
 		assert.Equal(t, "a", typeDeclaration.GetDeclarator().Identifier())
 	})
 	t.Run("TypeDefStringTwoIdentifier", func(t *testing.T) {
 		data := `typedef string a, b;`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -48,19 +58,24 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 
 		assert.IsType(t, &yacc.TypeDeclarator{}, DeclaredTypes[0])
 		typeDeclaration := DeclaredTypes[0].(*yacc.TypeDeclarator)
-		assert.IsType(t, &DefinedTypes.StringType{}, typeDeclaration.GetDefinedTyped())
+		assert.IsType(t, &IdlDefinedTypes.StringType{}, typeDeclaration.GetDefinedTyped())
 		assert.Equal(t, "a", typeDeclaration.GetDeclarator().Identifier())
 
 		assert.IsType(t, &yacc.TypeDeclarator{}, DeclaredTypes[1])
 		typeDeclaration = DeclaredTypes[1].(*yacc.TypeDeclarator)
-		assert.IsType(t, &DefinedTypes.StringType{}, typeDeclaration.GetDefinedTyped())
+		assert.IsType(t, &IdlDefinedTypes.StringType{}, typeDeclaration.GetDefinedTyped())
 		assert.Equal(t, "b", typeDeclaration.GetDeclarator().Identifier())
 	})
 	t.Run("TypeDefWideStringOneIdentifier", func(t *testing.T) {
 		data := `typedef wstring a;`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -72,7 +87,7 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 
 		assert.IsType(t, &yacc.TypeDeclarator{}, DeclaredTypes[0])
 		typeDeclaration := DeclaredTypes[0].(*yacc.TypeDeclarator)
-		assert.IsType(t, &DefinedTypes.WideStringType{}, typeDeclaration.GetDefinedTyped())
+		assert.IsType(t, &IdlDefinedTypes.WideStringType{}, typeDeclaration.GetDefinedTyped())
 		assert.Equal(t, "a", typeDeclaration.GetDeclarator().Identifier())
 	})
 	t.Run("TypeDefWideStringTwoIdentifier", func(t *testing.T) {
@@ -82,7 +97,12 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 			`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -94,19 +114,24 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 
 		assert.IsType(t, &yacc.TypeDeclarator{}, DeclaredTypes[0])
 		typeDeclaration := DeclaredTypes[0].(*yacc.TypeDeclarator)
-		assert.IsType(t, &DefinedTypes.WideStringType{}, typeDeclaration.GetDefinedTyped())
+		assert.IsType(t, &IdlDefinedTypes.WideStringType{}, typeDeclaration.GetDefinedTyped())
 		assert.Equal(t, "a", typeDeclaration.GetDeclarator().Identifier())
 
 		assert.IsType(t, &yacc.TypeDeclarator{}, DeclaredTypes[1])
 		typeDeclaration = DeclaredTypes[1].(*yacc.TypeDeclarator)
-		assert.IsType(t, &DefinedTypes.WideStringType{}, typeDeclaration.GetDefinedTyped())
+		assert.IsType(t, &IdlDefinedTypes.WideStringType{}, typeDeclaration.GetDefinedTyped())
 		assert.Equal(t, "b", typeDeclaration.GetDeclarator().Identifier())
 	})
 	t.Run("TypeDefLongTwoIdentifier", func(t *testing.T) {
 		data := `typedef long a, b;`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -124,7 +149,12 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlExprContext, verbose)
+		idlExprLex, _ := yacc.NewIdlExprLex(
+			yacc.NewIdlExprLexParams{
+				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
+				InputStream:    reader,
+				IdlExprContext: IdlExprContext,
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
 			return
 		}
