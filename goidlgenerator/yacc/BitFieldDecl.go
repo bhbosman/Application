@@ -30,7 +30,6 @@ func (self *BitField) GetPackageName() (bool, string) {
 	return false, ""
 }
 
-
 func (self *BitField) Kind() interfaces.Kind {
 	return interfaces.BitField
 }

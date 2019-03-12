@@ -21,7 +21,6 @@ import (
 //go:generate go build
 //go:generate go install
 
-
 func main() {
 	//inputFile := flag.String("in", "", "inputFile")
 	outputFile := flag.String("out", "", "outputFile")
@@ -119,11 +118,11 @@ func ReadFromSource(verbose bool, typesInUse interfaces.IBaseTypeInformation) []
 		idlExprContext := yacc.NewIdlExprContext()
 		for i, reader := range inStream {
 			lex, err := yacc.NewIdlExprLex(
+				bufio.NewReader(reader),
+				typesInUse,
 				yacc.NewIdlExprLexParams{
-					InputStream:    bufio.NewReader(reader),
 					IdlExprContext: idlExprContext,
 					Verbose:        verbose,
-					IDlBaseType:    typesInUse,
 				})
 			if err != nil {
 				continue

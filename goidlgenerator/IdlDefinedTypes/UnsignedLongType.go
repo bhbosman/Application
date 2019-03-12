@@ -6,7 +6,6 @@ import (
 )
 
 type UnsignedLongType struct {
-
 }
 
 func (self *UnsignedLongType) GetSequenceCount() (bool, int) {
@@ -19,22 +18,6 @@ func (self *UnsignedLongType) GetPackageName() (bool, string) {
 
 func (self *UnsignedLongType) DefaultValue() string {
 	return "0"
-}
-
-func (self *UnsignedLongType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *UnsignedLongType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *UnsignedLongType) ClearNext() {
-
-}
-
-func (self *UnsignedLongType) GetScopeName() string {
-	return self.GetName()
 }
 
 func (*UnsignedLongType) GetName() string {
@@ -56,6 +39,3 @@ func (self *UnsignedLongType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewUnsignedLongType() *UnsignedLongType {
-	return &UnsignedLongType{}
-}

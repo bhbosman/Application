@@ -6,6 +6,8 @@ type Kind byte
 
 const (
 	Invalid Kind = iota
+	Sequence
+	Native
 	Struct
 	Uint08
 	Uint16
@@ -19,6 +21,11 @@ const (
 	Bool
 	WChar
 	Char
+	Double
+	Fixed
+	Float
+	LongDouble
+	Octet
 	WideString
 	Enum
 	BitField
@@ -28,7 +35,6 @@ const (
 	MitchByte
 	MitchDate
 	MitchTime
-	MitchString
 	MitchPrice04
 	MitchPrice08
 	MitchUInt08
@@ -47,6 +53,8 @@ func (k Kind) String() string {
 
 var kindNames = []string{
 	Invalid:        "Invalid",
+	Sequence:       "Sequence",
+	Native:         "Native",
 	Struct:         "Struct",
 	Uint08:         "Uint08",
 	Uint16:         "Uint16",
@@ -60,6 +68,11 @@ var kindNames = []string{
 	Bool:           "Bool",
 	WChar:          "WChar",
 	Char:           "Char",
+	Double:         "Double",
+	Fixed:          "Fixed",
+	Float:          "Float",
+	LongDouble:     "LongDouble",
+	Octet:          "Octet",
 	WideString:     "WideString",
 	Enum:           "Enum",
 	BitField:       "BitField",
@@ -69,7 +82,6 @@ var kindNames = []string{
 	MitchByte:      "MitchByte",
 	MitchDate:      "MitchDate",
 	MitchTime:      "MitchTime",
-	MitchString:    "MitchString",
 	MitchPrice04:   "MitchPrice04",
 	MitchPrice08:   "MitchPrice08",
 	MitchUInt08:    "MitchUInt08",

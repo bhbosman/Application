@@ -14,7 +14,7 @@ type GenerateMessageWriteFunctionParams struct {
 	typeCode        uint32
 }
 
-func GenerateMessageWriteFunction(writer io.StringWriter,  definedType interfaces.IDefinedType,  params GenerateMessageWriteFunctionParams) {
+func GenerateMessageWriteFunction(writer io.StringWriter, definedType interfaces.IDefinedType, params GenerateMessageWriteFunctionParams) {
 	returnType := Extansions.TypeValueForDefinedType(definedType)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v WriteMessage \n", params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func WriteMessage_%v(stream Streams.I%vWriter, value %v) (int, error) {\n", params.typeNamePrefix, params.TypeInformation.Name(), returnType))

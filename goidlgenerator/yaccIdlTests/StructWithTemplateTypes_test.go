@@ -1,4 +1,4 @@
-package yaccTests
+package yaccIdlTests
 
 import (
 	"bufio"
@@ -19,9 +19,9 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
-				InputStream:    reader,
 				IdlExprContext: IdlExprContext,
 				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
@@ -42,9 +42,9 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
-				InputStream:    reader,
 				IdlExprContext: IdlExprContext,
 				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
@@ -71,9 +71,9 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
-				InputStream:    reader,
 				IdlExprContext: IdlExprContext,
 				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
@@ -98,9 +98,9 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
-				InputStream:    reader,
 				IdlExprContext: IdlExprContext,
 				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
@@ -127,9 +127,9 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
-				InputStream:    reader,
 				IdlExprContext: IdlExprContext,
 				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {
@@ -150,9 +150,9 @@ func TestTypeDefWithTemplateTypes(t *testing.T) {
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
-				InputStream:    reader,
 				IdlExprContext: IdlExprContext,
 				Verbose:        verbose})
 		if !assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex)) {

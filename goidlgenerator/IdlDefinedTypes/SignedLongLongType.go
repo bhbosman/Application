@@ -6,7 +6,6 @@ import (
 )
 
 type SignedLongLongType struct {
-
 }
 
 func (self *SignedLongLongType) GetSequenceCount() (bool, int) {
@@ -17,24 +16,8 @@ func (self *SignedLongLongType) GetPackageName() (bool, string) {
 	return false, "Streams"
 }
 
-func (self *SignedLongLongType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *SignedLongLongType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
 func (self *SignedLongLongType) DefaultValue() string {
 	return "0"
-}
-
-func (self *SignedLongLongType) ClearNext() {
-
-}
-
-func (self *SignedLongLongType) GetScopeName() string {
-	return self.GetName()
 }
 
 func (*SignedLongLongType) GetName() string {
@@ -56,6 +39,3 @@ func (self *SignedLongLongType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewSignedLongLongType() *SignedLongLongType {
-	return &SignedLongLongType{}
-}

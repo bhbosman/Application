@@ -1,7 +1,8 @@
-package yaccTests
+package yaccIdlTests
 
 import (
 	"bufio"
+	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 	. "github.com/bhbosman/Application/goidlgenerator/yacc"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -19,7 +20,12 @@ func TestEnums(t *testing.T) {
 		data := `enum ABC {AA};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		ctx := createContext()
-		idlExprLex, _ := NewIdlExprLex(NewIdlExprLexParams{InputStream: reader, IdlExprContext: ctx, Verbose: verbose})
+		idlExprLex, _ := NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
+			NewIdlExprLexParams{
+				IdlExprContext: ctx,
+				Verbose: verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -33,7 +39,12 @@ func TestEnums(t *testing.T) {
 		data := `enum ABC {AA,BB};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		ctx := createContext()
-		idlExprLex, _ := NewIdlExprLex(NewIdlExprLexParams{InputStream: reader, IdlExprContext: ctx, Verbose: verbose})
+		idlExprLex, _ := NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
+			NewIdlExprLexParams{
+				IdlExprContext: ctx,
+				Verbose: verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -47,7 +58,12 @@ func TestEnums(t *testing.T) {
 		data := `enum ABC {AA=0x12};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		ctx := createContext()
-		idlExprLex, _ := NewIdlExprLex(NewIdlExprLexParams{InputStream: reader, IdlExprContext: ctx, Verbose: verbose})
+		idlExprLex, _ := NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
+			NewIdlExprLexParams{
+				IdlExprContext: ctx,
+				Verbose: verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -62,7 +78,12 @@ func TestEnums(t *testing.T) {
 		data := `enum ABC {AA=12};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		ctx := createContext()
-		idlExprLex, _ := NewIdlExprLex(NewIdlExprLexParams{InputStream: reader, IdlExprContext: ctx, Verbose: verbose})
+		idlExprLex, _ := NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
+			NewIdlExprLexParams{
+				IdlExprContext: ctx,
+				Verbose: verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -76,7 +97,12 @@ func TestEnums(t *testing.T) {
 		data := `enum ABC {A=1,A=0x2,A=-3,A=0x4};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		ctx := createContext()
-		idlExprLex, _ := NewIdlExprLex(NewIdlExprLexParams{InputStream: reader, IdlExprContext: ctx, Verbose: verbose})
+		idlExprLex, _ := NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
+			NewIdlExprLexParams{
+				IdlExprContext: ctx,
+				Verbose: verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -92,7 +118,12 @@ func TestEnums(t *testing.T) {
 		//data := `"1"`
 		reader := bufio.NewReader(strings.NewReader(data))
 		ctx := createContext()
-		idlExprLex, _ := NewIdlExprLex(NewIdlExprLexParams{InputStream: reader, IdlExprContext: ctx, Verbose: verbose})
+		idlExprLex, _ := NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
+			NewIdlExprLexParams{
+				IdlExprContext: ctx,
+				Verbose: verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}

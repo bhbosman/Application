@@ -6,7 +6,6 @@ import (
 )
 
 type OctetType struct {
-
 }
 
 func (self *OctetType) GetSequenceCount() (bool, int) {
@@ -21,24 +20,8 @@ func (self *OctetType) DefaultValue() string {
 	return "0"
 }
 
-func (self *OctetType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *OctetType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *OctetType) ClearNext() {
-
-}
-
-func (self *OctetType) GetScopeName() string {
-	return self.GetName()
-}
-
 func (self *OctetType) Kind() interfaces.Kind {
-	return interfaces.Invalid
+	return interfaces.Octet
 }
 func (self *OctetType) Predefined() bool {
 	return true
@@ -56,6 +39,3 @@ func (self *OctetType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewOctetType() *OctetType {
-	return &OctetType{}
-}

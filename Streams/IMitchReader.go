@@ -1,6 +1,5 @@
 package Streams
 
-
 //noinspection ALL
 type IMitchReader interface {
 	Read_uint32() (value uint32, n int, err error)
@@ -14,4 +13,3 @@ type IMitchReader interface {
 	Read_MitchTime() (MitchTime, int, error)
 	Read_MitchUInt64() (MitchUInt64, int, error)
 }
-

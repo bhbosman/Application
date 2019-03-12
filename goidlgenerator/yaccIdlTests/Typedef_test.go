@@ -1,4 +1,4 @@
-package yaccTests
+package yaccIdlTests
 
 import (
 	"bufio"
@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestNative(t *testing.T) {
+func TestTypeDef(t *testing.T) {
 	verbose := false
 
 	createContext := func() *yacc.IdlExprContext {
@@ -25,31 +25,31 @@ func TestNative(t *testing.T) {
 
 		reader := bufio.NewReader(strings.NewReader(data))
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
-				InputStream:    reader,
 				IdlExprContext: createContext(),
 				Verbose:        verbose})
 		assert.Equal(t, yacc.DefNotFound, yacc.IdlExprParse(idlExprLex))
+
 	})
+
 	t.Run("No Decl", func(t *testing.T) {
 		data := `
-		native abc;
+		typedef long NewType, abc;
 		struct HelloWorld
 		{
-			abc  b;
-		};
-		`
+			NewType a;
+		};`
+
 		reader := bufio.NewReader(strings.NewReader(data))
-		ctx := createContext()
 		idlExprLex, _ := yacc.NewIdlExprLex(
+			reader,
+			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			yacc.NewIdlExprLexParams{
-				InputStream:    reader,
-				IdlExprContext: ctx,
+				IdlExprContext: createContext(),
 				Verbose:        verbose,
-				IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
 			})
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
-		assert.Len(t, ctx.GetSpecification(), 2)
 	})
 }

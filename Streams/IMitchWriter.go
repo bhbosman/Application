@@ -13,5 +13,3 @@ type IMitchWriter interface {
 	Write_MitchBitField(field MitchBitField) (int, error)
 	Write_MitchUInt64(uInt64 MitchUInt64) (int, error)
 }
-
-

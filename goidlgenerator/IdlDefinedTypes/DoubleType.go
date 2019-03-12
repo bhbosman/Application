@@ -6,7 +6,6 @@ import (
 )
 
 type DoubleType struct {
-
 }
 
 func (self *DoubleType) GetSequenceCount() (bool, int) {
@@ -21,22 +20,6 @@ func (self *DoubleType) DefaultValue() string {
 	return "0.0"
 }
 
-func (self *DoubleType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *DoubleType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *DoubleType) ClearNext() {
-
-}
-
-func (self *DoubleType) GetScopeName() string {
-	return self.GetName()
-}
-
 func (*DoubleType) GetName() string {
 	return "IDLDoubleType"
 }
@@ -45,7 +28,7 @@ func (self *DoubleType) Predefined() bool {
 }
 
 func (self *DoubleType) Kind() interfaces.Kind {
-	return interfaces.Invalid
+	return interfaces.Double
 }
 
 func (self *DoubleType) MarshalJSON() ([]byte, error) {
@@ -54,8 +37,4 @@ func (self *DoubleType) MarshalJSON() ([]byte, error) {
 	}{
 		Type: self.GetName(),
 	})
-}
-
-func NewDoubleType() *DoubleType {
-	return &DoubleType{}
 }

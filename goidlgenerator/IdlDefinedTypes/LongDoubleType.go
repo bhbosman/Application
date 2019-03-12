@@ -6,7 +6,6 @@ import (
 )
 
 type LongDoubleType struct {
-
 }
 
 func (self *LongDoubleType) GetSequenceCount() (bool, int) {
@@ -38,7 +37,7 @@ func (self *LongDoubleType) GetScopeName() string {
 }
 
 func (self *LongDoubleType) Kind() interfaces.Kind {
-	return interfaces.Invalid
+	return interfaces.LongDouble
 }
 func (self *LongDoubleType) Predefined() bool {
 	return true
@@ -56,6 +55,3 @@ func (self *LongDoubleType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewLongDoubleType() *LongDoubleType {
-	return &LongDoubleType{}
-}

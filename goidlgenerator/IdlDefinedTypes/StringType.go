@@ -7,8 +7,7 @@ import (
 )
 
 type StringType struct {
-	length      int64
-
+	length int64
 }
 
 func (self *StringType) GetSequenceCount() (bool, int) {
@@ -21,22 +20,6 @@ func (self *StringType) GetPackageName() (bool, string) {
 
 func (self *StringType) DefaultValue() string {
 	return string("\"\"")
-}
-
-func (self *StringType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *StringType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *StringType) ClearNext() {
-
-}
-
-func (self *StringType) GetScopeName() string {
-	return self.GetName()
 }
 
 func (*StringType) GetName() string {
@@ -62,8 +45,3 @@ func (self *StringType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewStringType(length int64) *StringType {
-	return &StringType{
-		length: length,
-	}
-}
