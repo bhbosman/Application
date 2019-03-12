@@ -6,7 +6,6 @@ import (
 )
 
 type FixedType struct {
-
 }
 
 func (self *FixedType) GetSequenceCount() (bool, int) {
@@ -21,28 +20,12 @@ func (self *FixedType) DefaultValue() string {
 	return "0.0"
 }
 
-func (self *FixedType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *FixedType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *FixedType) ClearNext() {
-
-}
-
-func (self *FixedType) GetScopeName() string {
-	return self.GetName()
-}
-
 func (self *FixedType) Predefined() bool {
 	return true
 }
 
 func (self *FixedType) Kind() interfaces.Kind {
-	return interfaces.Invalid
+	return interfaces.Fixed
 }
 
 func (*FixedType) GetName() string {
@@ -55,8 +38,4 @@ func (self *FixedType) MarshalJSON() ([]byte, error) {
 	}{
 		Type: self.GetName(),
 	})
-}
-
-func NewFixedType() *FixedType {
-	return &FixedType{}
 }

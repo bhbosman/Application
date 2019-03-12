@@ -27,13 +27,12 @@ func ToOutputType(s string) OutputType {
 
 type ExportParams struct {
 	OutputStream    io.Writer
-	TypeInformation interfaces.IBaseTypeInformation
 	PackageName     string
 	DeclaredTypes   []interfaces.IDefinitionDeclaration
 }
 
 type IPublish interface {
-	Export(params ExportParams) error
+	Export(TypeInformation interfaces.IBaseTypeInformation, params ExportParams) error
 }
 
 var registrations map[OutputType]IPublish
@@ -62,9 +61,8 @@ func PublishOutputType(
 	declaredTypes []interfaces.IDefinitionDeclaration) error {
 	result, ok := registrations[outputType]
 	if ok {
-		err := result.Export(ExportParams{
+		err := result.Export(information, ExportParams{
 			OutputStream:    writer,
-			TypeInformation: information,
 			PackageName:     packageName,
 			DeclaredTypes:   declaredTypes})
 		if err != nil {

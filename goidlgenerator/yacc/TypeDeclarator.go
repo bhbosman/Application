@@ -17,7 +17,6 @@ func (self *TypeDeclarator) GetPackageName() (bool, string) {
 	return false, ""
 }
 
-
 func (self *TypeDeclarator) GetSequenceCount() (bool, int) {
 	return false, 0
 }

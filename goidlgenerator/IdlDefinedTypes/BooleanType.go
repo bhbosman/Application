@@ -6,7 +6,6 @@ import (
 )
 
 type BooleanType struct {
-
 }
 
 func (self *BooleanType) GetSequenceCount() (bool, int) {
@@ -15,22 +14,6 @@ func (self *BooleanType) GetSequenceCount() (bool, int) {
 
 func (self *BooleanType) GetPackageName() (bool, string) {
 	return false, "Streams"
-}
-
-func (self *BooleanType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *BooleanType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *BooleanType) ClearNext() {
-
-}
-
-func (self *BooleanType) GetScopeName() string {
-	return self.GetName()
 }
 
 func (self *BooleanType) DefaultValue() string {
@@ -55,8 +38,4 @@ func (self *BooleanType) MarshalJSON() ([]byte, error) {
 	}{
 		Type: self.GetName(),
 	})
-}
-
-func NewBooleanType() *BooleanType {
-	return &BooleanType{}
 }

@@ -3,9 +3,7 @@ package yacc
 	//go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 	import (
 		"github.com/bhbosman/Application/goidlgenerator/interfaces"
-		"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 		"github.com/bhbosman/Application/goidlgenerator/TempleteTypes"
-		"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
 		)
 %}
 
@@ -52,8 +50,6 @@ package yacc
 %token Rwvoid
 %token Rwwchar
 %token Rwwstring
-%token Rwbitfield
-
 %token RwMitchAlpha
 %token RwMitchBitField
 %token RwMitchByte
@@ -130,7 +126,7 @@ package yacc
 %type	<DefinedType>	const_type
 %type	<DefinedType>	fixed_pt_const_type
 %type	<DefinedType>	sequence_type
-%type	<DefinedType>	bitfield_type
+//%type	<DefinedType>	bitfield_type
 %type	<DefinedType>	template_type_spec
 %type	<DefinedType>	string_type
 %type	<DefinedType>	wide_string_type
@@ -447,37 +443,89 @@ type_spec : simple_type_spec{
 
 mitch_type_spec:
 	RwMitchAlpha '<' positive_int_const '>'{
-		$$ = MitchDefinedTypes.NewMitchAlpha($3)
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchAlpha, $3)
 	}
-	|RwMitchBitField{
-		$$ = MitchDefinedTypes.NewMitchBitField()
+	|RwMitchBitField '<' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator '>'{
+		$$ = NewBitField($3, $5, $7, $9, $11, $13, $15, $17)
 	}
 	|RwMitchByte{
-		$$ = MitchDefinedTypes.NewMitchByte()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchByte, 0)
 	}
 	|RwMitchDate{
-		$$ = MitchDefinedTypes.NewMitchDate()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchDate, 0)
 	}
 	|RwMitchTime{
-		$$ = MitchDefinedTypes.NewMitchTime()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchTime, 0)
+
 	}
 	|RwMitchPrice04{
-		$$ = MitchDefinedTypes.NewMitchPrice04()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchPrice04, 0)
+
 	}
 	|RwMitchPrice08{
-		$$ = MitchDefinedTypes.NewMitchPrice08()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchPrice08, 0)
 	}
 	|RwMitchUInt08{
-		$$ = MitchDefinedTypes.NewMitchUInt08()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchUInt08, 0)
 	}
 	|RwMitchUInt16{
-		$$ = MitchDefinedTypes.NewMitchUInt16()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchUInt16, 0)
 	}
 	|RwMitchUInt32{
-		$$ = MitchDefinedTypes.NewMitchUInt32()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchUInt32, 0)
 	}
 	|RwMitchUInt64{
-		$$ = MitchDefinedTypes.NewMitchUInt64()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.MitchUInt64, 0)
 	}
 
 simple_type_spec :
@@ -487,7 +535,7 @@ simple_type_spec :
 			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 			return NoLex
 		}
-			if context.IDlBaseType.Name() != interfaces.IDlBaseType_Mitch {
+		if context.IDlBaseType.Name() != interfaces.IDlBaseType_Mitch {
 			IdlExprlex.Error(__yyfmt__.Sprintf("IDlBaseType not set to IDlBaseType_Micth. %v is an invalid token", $1.GetName()))
 			return NoLex
 
@@ -548,13 +596,28 @@ base_type_spec :
 	}
 floating_pt_type :
 	Rwfloat {
-		$$ = IdlDefinedTypes.NewFloatType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Float, 0)
 	}
 	| Rwdouble{
-        	$$ = IdlDefinedTypes.NewDoubleType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Double, 0)
      	}
 	| Rwlong Rwdouble{
-               	$$ = IdlDefinedTypes.NewLongDoubleType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.LongDouble, 0)
        	}
 integer_type :
 	signed_int{
@@ -575,15 +638,30 @@ signed_int :
 	}
 signed_short_int :
 	Rwshort{
-		$$ = IdlDefinedTypes.NewSignedShortType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Int16, 0)
 	}
 signed_long_int :
 	Rwlong{
-		$$ = IdlDefinedTypes.NewSignedLongType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Int32, 0)
 	}
 signed_longlong_int :
 	Rwlong Rwlong{
-		$$ = IdlDefinedTypes.NewSignedLongLongType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Int64, 0)
 	}
 
 unsigned_int :
@@ -599,34 +677,69 @@ unsigned_int :
 
 unsigned_short_int :
 	Rwunsigned Rwshort{
-		$$ = IdlDefinedTypes.NewUnSignedShortType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Uint16, 0)
 	}
 unsigned_long_int :
 	Rwunsigned Rwlong{
-		$$ = IdlDefinedTypes.NewUnsignedLongType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Uint32, 0)
 	}
 unsigned_longlong_int :
 	Rwunsigned Rwlong Rwlong{
-		$$ = IdlDefinedTypes.NewUnsignedLongLongType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Uint64, 0)
 	}
 
 char_type :
 	Rwchar{
-		$$ = IdlDefinedTypes.NewCharType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Char, 0)
 	}
 
 wide_char_type :
 	Rwwchar{
-		$$ = IdlDefinedTypes.NewWideCharType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.WChar, 0)
 	}
 boolean_type :
 	Rwboolean{
-		$$ = IdlDefinedTypes.NewBooleanType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Bool, 0)
 	}
 
 octet_type :
 	Rwoctet{
-		$$ = IdlDefinedTypes.NewOctetType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Octet, 0)
 	}
 
 template_type_spec :
@@ -642,15 +755,6 @@ template_type_spec :
 	| fixed_pt_type{
 		$$ = $1
 	}
-	|bitfield_type{
-		$$ = $1
-        }
-
-bitfield_type:
-	Rwbitfield '<' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator ',' simple_declarator '>'{
-		$$ = NewBitField($3, $5, $7, $9, $11, $13, $15, $17)
-	}
-
 
 sequence_type :
 	Rwsequence '<' type_spec ',' positive_int_const '>'{
@@ -662,30 +766,63 @@ sequence_type :
 
 string_type :
 	Rwstring '<' positive_int_const '>'{
-		$$ = IdlDefinedTypes.NewStringType($3)
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.String, 0)
 	}
 	|
 	Rwstring{
-		$$ = IdlDefinedTypes.NewStringType(-1)
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.String, 0)
 	}
 
 wide_string_type :
 	Rwwstring '<' positive_int_const '>'{
-		$$ = IdlDefinedTypes.NewWideStringType($3)
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.WideString, 0)
 	}
 	| Rwwstring{
-		$$ = IdlDefinedTypes.NewWideStringType(-1)
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.WideString, 0)
 	}
 
 
 fixed_pt_type :
 	Rwfixed '<' positive_int_const ',' positive_int_const '>'{
-		$$ = IdlDefinedTypes.NewFixedType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Fixed, 0)
+
+
+
 	}
 
 fixed_pt_const_type :
 	Rwfixed{
-		$$ = IdlDefinedTypes.NewFixedType()
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$ = context.IDlBaseType.CreateType(interfaces.Fixed, 0)
 	}
 
 constr_type_dcl :

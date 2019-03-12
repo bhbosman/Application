@@ -2,8 +2,8 @@ package publishGo
 
 import (
 	"fmt"
-	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/Extansions"
+	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"io"
 )
 

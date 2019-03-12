@@ -6,7 +6,6 @@ import (
 )
 
 type CharType struct {
-
 }
 
 func (self *CharType) GetSequenceCount() (bool, int) {
@@ -21,24 +20,8 @@ func (self *CharType) DefaultValue() string {
 	return "'0'"
 }
 
-func (self *CharType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *CharType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *CharType) ClearNext() {
-
-}
-
-func (self *CharType) GetScopeName() string {
-	return self.GetName()
-}
-
 func (self *CharType) Kind() interfaces.Kind {
-	return interfaces.Invalid
+	return interfaces.Char
 }
 func (self *CharType) Predefined() bool {
 	return true
@@ -54,8 +37,4 @@ func (self *CharType) MarshalJSON() ([]byte, error) {
 	}{
 		Type: self.GetName(),
 	})
-}
-
-func NewCharType() *CharType {
-	return &CharType{}
 }

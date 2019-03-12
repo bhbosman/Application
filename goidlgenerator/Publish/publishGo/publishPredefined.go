@@ -17,7 +17,6 @@ type publishPredefined struct {
 	data interfaces.IDefinitionDeclaration
 }
 
-
 func (self *publishPredefined) Export(writer io.StringWriter, typeInformation interfaces.IBaseTypeInformation) {
 	if self.data.Predefined() {
 		if self.data.Kind() == interfaces.Invalid {
@@ -73,11 +72,11 @@ type GenerateReadFunctionParams struct {
 	defaultValue    interface{}
 }
 
-func (self *publishPredefined) GenerateReadFunction(writer io.StringWriter,  typeInformation interfaces.IBaseTypeInformation, params GenerateReadFunctionParams) {
+func (self *publishPredefined) GenerateReadFunction(writer io.StringWriter, typeInformation interfaces.IBaseTypeInformation, params GenerateReadFunctionParams) {
 	returnType := Extansions.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (%v, int, error) {\n", params.typeNamePrefix, typeInformation.Name(), returnType))
-	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Read_%v()\n",  params.typeNamePrefix))
+	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Read_%v()\n", params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))
 }

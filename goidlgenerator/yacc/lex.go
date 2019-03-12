@@ -20,9 +20,9 @@ const eof = 0
 func StringToIDlBaseType(s string) (interfaces.IBaseTypeInformation, error) {
 	switch s {
 	case "IdlNative":
-		return &IdlDefinedTypes.IdlNativeTypeInformation{}, nil
+		return IdlDefinedTypes.NewIdlNativeTypeInformation(), nil
 	case "Mitch":
-		return &MitchDefinedTypes.MitchTypeInformation{}, nil
+		return MitchDefinedTypes.NewMitchTypeInformation(), nil
 	}
 
 	return nil, errors.New("invalid type")
@@ -154,9 +154,9 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 	reservedWords["void"] = Rwvoid
 	reservedWords["wchar"] = Rwwchar
 	reservedWords["wstring"] = Rwwstring
-	reservedWords["bitfield"] = Rwbitfield
+	//reservedWords["bitfield"] = Rwbitfield
 	reservedWords["MitchAlpha"] = RwMitchAlpha
-	reservedWords["MitchBitField"] = RwMitchBitField
+	//reservedWords["MitchBitField"] = RwMitchBitField
 	reservedWords["MitchByte"] = RwMitchByte
 	reservedWords["MitchDate"] = RwMitchDate
 	reservedWords["MitchTime"] = RwMitchTime
@@ -231,13 +231,15 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 }
 
 type NewIdlExprLexParams struct {
-	InputStream    io.ByteScanner
 	IdlExprContext *IdlExprContext
 	Verbose        bool
-	IDlBaseType    interfaces.IBaseTypeInformation
 }
 
-func NewIdlExprLex(params NewIdlExprLexParams) (*IdlExprLex, error) {
+func NewIdlExprLex(
+	inputStream    io.ByteScanner,
+	IDlBaseType interfaces.IBaseTypeInformation,
+	params NewIdlExprLexParams) (*IdlExprLex, error) {
+
 	IdlExprErrorVerbose = true
 	tokenToIgnore := []int{
 		Whitespace,
@@ -254,7 +256,7 @@ func NewIdlExprLex(params NewIdlExprLexParams) (*IdlExprLex, error) {
 	}
 
 	return &IdlExprLex{
-		InputStream:     params.InputStream,
+		InputStream:     inputStream,
 		CollDfa:         createIdlTokens,
 		TokenToIgnore:   tokenToIgnoreMap,
 		Verbose:         params.Verbose,
@@ -262,7 +264,7 @@ func NewIdlExprLex(params NewIdlExprLexParams) (*IdlExprLex, error) {
 		Col:             1,
 		Row:             1,
 		idlExprContext:  params.IdlExprContext,
-		IDlBaseType:     params.IDlBaseType,
+		IDlBaseType:     IDlBaseType,
 	}, nil
 
 }

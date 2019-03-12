@@ -35,13 +35,11 @@ func TestPublishOfStructDefinition(t *testing.T) {
 		IdlExprContext := yacc.NewIdlExprContext()
 
 		lexParams := yacc.NewIdlExprLexParams{
-			InputStream:    reader,
 			IdlExprContext: IdlExprContext,
 			Verbose:        verbose,
-			IDlBaseType:    &IdlDefinedTypes.IdlNativeTypeInformation{},
 		}
 
-		idlExprLex, _ := yacc.NewIdlExprLex(lexParams)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlDefinedTypes.NewIdlNativeTypeInformation(),lexParams)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -50,11 +48,10 @@ func TestPublishOfStructDefinition(t *testing.T) {
 
 		params := Publish.ExportParams{
 			OutputStream:    os.Stdout,
-			TypeInformation: nil,
 			PackageName:     "ddd",
 			DeclaredTypes:   DeclaredTypes,
 		}
-		err := newPublishGolang().Export(params)
+		err := newPublishGolang().Export(IdlDefinedTypes.NewIdlNativeTypeInformation(), params)
 		assert.NoError(t, err)
 	})
 

@@ -6,7 +6,6 @@ import (
 )
 
 type WideCharType struct {
-
 }
 
 func (self *WideCharType) GetSequenceCount() (bool, int) {
@@ -21,27 +20,11 @@ func (self *WideCharType) DefaultValue() string {
 	return "'0'"
 }
 
-func (self *WideCharType) GetNext() interfaces.IDefinitionDeclaration {
-	return nil
-}
-
-func (self *WideCharType) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
-
-}
-
-func (self *WideCharType) ClearNext() {
-
-}
-
-func (self *WideCharType) GetScopeName() string {
-	return self.GetName()
-}
-
 func (*WideCharType) GetName() string {
 	return "IDLWideCharType"
 }
 func (self *WideCharType) Kind() interfaces.Kind {
-	return interfaces.Invalid
+	return interfaces.WChar
 }
 func (self *WideCharType) Predefined() bool {
 	return true
@@ -55,6 +38,3 @@ func (self *WideCharType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewWideCharType() *WideCharType {
-	return &WideCharType{}
-}

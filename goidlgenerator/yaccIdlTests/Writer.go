@@ -1,4 +1,4 @@
-package yaccTests
+package yaccIdlTests
 
 import "testing"
 
