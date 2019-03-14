@@ -7,9 +7,14 @@ type PlainNode struct {
 	terminal bool
 }
 
+func (self *PlainNode) NextNodeCount() int {
+	return len(self.nextNode)
+}
+
+
+
 func (self *PlainNode) SetNextExitNode(b byte, node IPlainNode) {
 	self.exitNode[b] = node
-
 }
 
 func (self *PlainNode) ExitNode(b byte) (IPlainNode, bool) {

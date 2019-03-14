@@ -1,7 +1,7 @@
 package DFA
 
 import (
-	"github.com/stretchr/assert"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 

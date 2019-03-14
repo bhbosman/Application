@@ -1,9 +1,20 @@
 package DFA
 
 import (
-	"github.com/stretchr/assert"
+	"errors"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
+
+
+
+type FailStream struct {
+
+}
+
+func (self *FailStream) Write(p []byte) (n int, err error) {
+	return 0, errors.New("Fa")
+}
 
 func TestCharNode(t *testing.T) {
 	t.Run("", func(t *testing.T) {
