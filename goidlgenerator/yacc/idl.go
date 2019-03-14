@@ -800,7 +800,7 @@ IdlExprdefault:
 					IdlExprVAL.DefinedType = definitionDeclaration
 				}
 			} else {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure", IdlExprDollar[1].Identifier))
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure. %v", IdlExprDollar[1].Identifier))
 				return NoLex
 			}
 		}

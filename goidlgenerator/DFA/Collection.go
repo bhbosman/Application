@@ -7,17 +7,17 @@ type Collection struct {
 	row, col int
 }
 
-func (receiver *Collection) Col() int {
-	return receiver.col
+func (self *Collection) Col() int {
+	return self.col
 }
 
-func (receiver *Collection) Row() int {
-	return receiver.row
+func (self *Collection) Row() int {
+	return self.row
 }
 
-func (receiver *Collection) Walk(c byte) (bool, error) {
-	newCollection := make([]*NodeWalker, 0, len(receiver.coll))
-	for _, r := range receiver.coll {
+func (self *Collection) Walk(c byte) (bool, error) {
+	newCollection := make([]*NodeWalker, 0, len(self.coll))
+	for _, r := range self.coll {
 		if b, e := r.WalkNode(c); e == nil && b {
 			newCollection = append(newCollection, r)
 		}
@@ -25,14 +25,14 @@ func (receiver *Collection) Walk(c byte) (bool, error) {
 	if len(newCollection) == 0 {
 		return false, nil
 	}
-	receiver.coll = newCollection
+	self.coll = newCollection
 
 	return true, nil
 }
 
-func (receiver *Collection) IsValid() bool {
-	result := len(receiver.coll) > 0
-	for _, r := range receiver.coll {
+func (self *Collection) IsValid() bool {
+	result := len(self.coll) > 0
+	for _, r := range self.coll {
 		result = result && r.IsValid()
 	}
 	return result
@@ -41,18 +41,18 @@ func (receiver *Collection) IsValid() bool {
 var NoTokenError error = errors.New("")
 var TooManyTokenError error = errors.New("")
 
-func (receiver *Collection) Token(lexem string) (int, string, error) {
-	if receiver.coll == nil {
+func (self *Collection) Token(lexem string) (int, string, error) {
+	if self.coll == nil {
 		return 0, "", NoTokenError
 	}
-	if len(receiver.coll) != 1 {
+	if len(self.coll) != 1 {
 		return 0, "", TooManyTokenError
 	}
-	tokenValue, lexemValue := receiver.coll[0].Token(lexem)
+	tokenValue, lexemValue := self.coll[0].Token(lexem)
 	return tokenValue, lexemValue, nil
 }
 
-func NewDfaCollection(coll []IDFA, row, col int) *Collection {
+func NewDfaCollection(coll []IDfa, row, col int) *Collection {
 	newCollection := make([]*NodeWalker, 0, len(coll))
 	for _, node := range coll {
 		newCollection = append(newCollection, NewNodeWalker(node))

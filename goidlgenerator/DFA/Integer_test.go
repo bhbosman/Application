@@ -70,8 +70,8 @@ func TestDfaInteger(t *testing.T) {
 		inputLexemValue := "(any lexem)"
 		assert.True(t, WalkString(nodeWalker, []byte("12345")))
 		token, lexem := nodeWalker.Token(inputLexemValue)
-		assert.Equal(t,inputLexemValue, lexem)
-		assert.Equal(t,inputTokenValue, token)
+		assert.Equal(t, inputLexemValue, lexem)
+		assert.Equal(t, inputTokenValue, token)
 
 	})
 

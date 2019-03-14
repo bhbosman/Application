@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/bhbosman/Application/Generic"
 	"github.com/bhbosman/Application/goidlgenerator/DFA"
 	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
@@ -31,7 +32,7 @@ func StringToIDlBaseType(s string) (interfaces.IBaseTypeInformation, error) {
 
 type IdlExprLex struct {
 	InputStream     io.ByteScanner
-	CollDfa         []DFA.IDFA
+	CollDfa         []DFA.IDfa
 	TokenToIgnore   map[int]int
 	Verbose         bool
 	VerboseEachChar bool
@@ -126,7 +127,7 @@ func (x *IdlExprLex) Error(s string) {
 	log.Printf("parse error: %s at (%d,%d).", s, x.Row, x.Col)
 }
 
-func CreateIdlTokens() ([]DFA.IDFA, error) {
+func CreateIdlTokens() ([]DFA.IDfa, error) {
 	reservedWords := make(map[string]int)
 	reservedWords["boolean"] = Rwboolean
 	reservedWords["case"] = Rwcase
@@ -167,65 +168,72 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 	reservedWords["MitchUInt64"] = RwMitchUInt64
 	reservedWords["MitchMessageNumberType"] = RwMitchMessageNumberType
 
-	collDfaFunctions := []func() (DFA.IDFA, error){
-		func() (DFA.IDFA, error) {
+	collDfaFunctions := []func() (DFA.IDfa, error){
+		func() (DFA.IDfa, error) {
 			return DFA.NewIdentifier(Identifier, reservedWords), nil
 		},
-		func() (DFA.IDFA, error) {
+		func() (DFA.IDfa, error) {
 			return DFA.NewDfaInteger(Integer_literal), nil
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewHexValue(Hex_literal), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewHexDfa(Hex_literal)
 		},
-		func() (DFA.IDFA, error) {
+		func() (DFA.IDfa, error) {
 			return DFA.NewDfaWhiteSpace(Whitespace), nil
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewSingleLineComment(SingleLineComment), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewSingleLineComment(SingleLineComment)
 		},
-		func() (DFA.IDFA, error) {
+		func() (DFA.IDfa, error) {
 			return DFA.NewStringNode(String_literal), nil
 		},
-		func() (DFA.IDFA, error) {
+		func() (DFA.IDfa, error) {
 			return DFA.NewCharNode(Character_literal)
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken("{", '{', '{'), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken("{", '{', '{')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken("}", '}', '}'), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken("}", '}', '}')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken("<", '<', '<'), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken("<", '<', '<')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken(">", '>', '>'), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken(">", '>', '>')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken("[", '[', '['), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken("[", '[', '[')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken("]", ']', ']'), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken("]", ']', ']')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken("=", '=', '='), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken("=", '=', '=')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken(";", ';', ';'), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken(";", ';', ';')
 		},
-		func() (DFA.IDFA, error) {
-			return DFA.NewDfaGenericToken(",", ',', ','), nil
+		func() (DFA.IDfa, error) {
+			return DFA.NewGenericSingleCharToken(",", ',', ',')
 		},
 	}
 
-	collDfa := make([]DFA.IDFA, len(collDfaFunctions), len(collDfaFunctions))
-	for i, f := range collDfaFunctions {
-		dfa, err := f()
-		if err != nil {
-			return nil, err
+	collDfa := make([]DFA.IDfa, len(collDfaFunctions), len(collDfaFunctions))
+	err := Generic.ErrorListFactory.NewErrorListFunc(func(errorList Generic.IErrorList) {
+		for i, f := range collDfaFunctions {
+			dfa, err := f()
+			if err != nil {
+				errorList.Add(err)
+			}
+			collDfa[i] = dfa
 		}
-		collDfa[i] = dfa
+	})
+	if err != nil {
+		return nil, err
 	}
+
+
 
 	return collDfa, nil
 }

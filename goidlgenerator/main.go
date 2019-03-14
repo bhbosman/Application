@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
 	_ "github.com/bhbosman/Application/goidlgenerator/Publish/json"
 	_ "github.com/bhbosman/Application/goidlgenerator/Publish/publishGo"
@@ -85,8 +86,10 @@ func main() {
 		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
 		os.Exit(5)
 	}
+
 	err = publisher.Export(
 		typesInUse,
+		Extensions.DefaultTypeValueHelper(),
 		Publish.ExportParams{
 			OutputStream:  outStream,
 			PackageName:   *packageName,

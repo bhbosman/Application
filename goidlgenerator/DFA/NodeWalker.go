@@ -6,7 +6,7 @@ type INodeWalker interface {
 }
 
 type NodeWalker struct {
-	Dfa         IDFA
+	Dfa         IDfa
 	currentNode IPlainNode
 	Invalid     bool
 	name        string
@@ -57,7 +57,7 @@ func (self *NodeWalker) Walk(b byte) (IPlainNode, error) {
 
 }
 
-func NewNodeWalker(dfa IDFA) *NodeWalker {
+func NewNodeWalker(dfa IDfa) *NodeWalker {
 	return &NodeWalker{
 		Dfa:         dfa,
 		currentNode: dfa.StartNode(),

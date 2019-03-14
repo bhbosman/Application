@@ -2,7 +2,7 @@ package publishGo
 
 import (
 	"fmt"
-	"github.com/bhbosman/Application/goidlgenerator/Extansions"
+	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"hash/crc32"
 	"io"
@@ -17,7 +17,11 @@ type publishPredefined struct {
 	data interfaces.IDefinitionDeclaration
 }
 
-func (self *publishPredefined) Export(writer io.StringWriter, typeInformation interfaces.IBaseTypeInformation) {
+func (self *publishPredefined) Export(
+	writer io.StringWriter,
+	typeInformation interfaces.IBaseTypeInformation,
+	typeValueHelper Extensions.ITypeValueHelper) {
+
 	if self.data.Predefined() {
 		if self.data.Kind() == interfaces.Invalid {
 			return
@@ -27,7 +31,7 @@ func (self *publishPredefined) Export(writer io.StringWriter, typeInformation in
 
 		_, _ = writer.WriteString(fmt.Sprintf("// %v Declaration TypeCode: 0x%08x\n", typeNamePrefix, typeCode))
 
-		returnType := Extansions.TypeValueForDefinedType(self.data)
+		returnType := typeValueHelper.TypeValueForDefinedType(self.data)
 		GenerateMessageWriteFunction(
 			writer,
 			returnType,
@@ -51,6 +55,7 @@ func (self *publishPredefined) Export(writer io.StringWriter, typeInformation in
 		GenerateIsTypeCodeFunction(writer, typeNamePrefix, typeCode)
 		self.GenerateWriteFunction(
 			writer,
+			typeValueHelper,
 			GenerateWriteFunctionParams{
 				typeInformation: typeInformation,
 				typeNamePrefix:  typeNamePrefix,
@@ -58,6 +63,7 @@ func (self *publishPredefined) Export(writer io.StringWriter, typeInformation in
 		self.GenerateReadFunction(
 			writer,
 			typeInformation,
+			typeValueHelper,
 			GenerateReadFunctionParams{
 				typeInformation: typeInformation,
 				typeNamePrefix:  typeNamePrefix,
@@ -73,8 +79,13 @@ type GenerateReadFunctionParams struct {
 	defaultValue    interface{}
 }
 
-func (self *publishPredefined) GenerateReadFunction(writer io.StringWriter, typeInformation interfaces.IBaseTypeInformation, params GenerateReadFunctionParams) {
-	returnType := Extansions.TypeValueForDefinedType(self.data)
+func (self *publishPredefined) GenerateReadFunction(
+	writer io.StringWriter,
+	typeInformation interfaces.IBaseTypeInformation,
+	typeValueHelper Extensions.ITypeValueHelper,
+	params GenerateReadFunctionParams) {
+
+	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (%v, int, error) {\n", params.typeNamePrefix, typeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Read_%v()\n", params.typeNamePrefix))
@@ -88,8 +99,8 @@ type GenerateWriteFunctionParams struct {
 	typeCode        uint32
 }
 
-func (self *publishPredefined) GenerateWriteFunction(writer io.StringWriter, params GenerateWriteFunctionParams) {
-	returnType := Extansions.TypeValueForDefinedType(self.data)
+func (self *publishPredefined) GenerateWriteFunction(writer io.StringWriter, typeValueHelper Extensions.ITypeValueHelper, params GenerateWriteFunctionParams) {
+	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v writer \n", params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (int, error) {\n", params.typeNamePrefix, params.typeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Write_%v(value)\n", params.typeNamePrefix))

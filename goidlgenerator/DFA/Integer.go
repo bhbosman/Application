@@ -23,11 +23,11 @@ func NewDfaInteger(tokenValue int) *Integer {
 	startNode := NewPlainNode("IntegerStartNode", false)
 	signNode := NewPlainNode("IntegerSignNode", false)
 	terminalNode := NewPlainNode("IntegerTerminalNode", true)
-	_ = PlainNodeMultiLink('1', '9', startNode, terminalNode)
-	_ = PlainNodeLink('+', startNode, signNode)
-	_ = PlainNodeLink('-', startNode, signNode)
-	_ = PlainNodeMultiLink('0', '9', signNode, terminalNode)
-	_ = PlainNodeMultiLink('0', '9', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeMultiLink('1', '9', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('+', startNode, signNode)
+	_ = NodeFactory.PlainNodeLink('-', startNode, signNode)
+	_ = NodeFactory.PlainNodeMultiLink('0', '9', signNode, terminalNode)
+	_ = NodeFactory.PlainNodeMultiLink('0', '9', terminalNode, terminalNode)
 
 	return &Integer{
 		tokenValue:   tokenValue,

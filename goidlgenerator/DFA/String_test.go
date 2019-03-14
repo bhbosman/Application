@@ -6,6 +6,7 @@ import (
 )
 
 func TestStringNode(t *testing.T) {
+
 	t.Run("", func(t *testing.T) {
 		nodeWalker := NewNodeWalker(NewStringNode(1234))
 		//noinspection SpellCheckingInspection

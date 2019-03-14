@@ -22,17 +22,17 @@ func NewDfaWhiteSpace(tokenValue int) *WhiteSpace {
 	startNode := NewPlainNode("WhiteSpaceStartNode", false)
 	terminalNode := NewPlainNode("WhiteSpaceTerminalNode", true)
 
-	_ = PlainNodeLink(' ', startNode, terminalNode)
-	_ = PlainNodeLink('\t', startNode, terminalNode)
-	_ = PlainNodeLink('\n', startNode, terminalNode)
-	_ = PlainNodeLink('\r', startNode, terminalNode)
-	_ = PlainNodeLink('\b', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink(' ', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\t', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\n', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\r', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\b', startNode, terminalNode)
 
-	_ = PlainNodeLink(' ', terminalNode, terminalNode)
-	_ = PlainNodeLink('\t', terminalNode, terminalNode)
-	_ = PlainNodeLink('\n', terminalNode, terminalNode)
-	_ = PlainNodeLink('\r', terminalNode, terminalNode)
-	_ = PlainNodeLink('\b', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink(' ', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\t', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\n', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\r', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('\b', terminalNode, terminalNode)
 
 	return &WhiteSpace{
 		tokenValue:   tokenValue,

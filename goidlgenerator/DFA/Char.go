@@ -1,13 +1,12 @@
 package DFA
 
 import (
-	"fmt"
-	"strings"
+	"github.com/bhbosman/Application/Generic"
 )
 
 type CharNode struct {
-	tokenValue int
-	start      *PlainNode
+	tokenValue   int
+	start        *PlainNode
 	terminalNode *PlainNode
 }
 
@@ -24,58 +23,59 @@ func (self *CharNode) Token(lexem string) (int, string) {
 }
 
 func NewCharNode(tokenValue int) (*CharNode, error) {
-	startNode := NewPlainNode("CharNodeStartNode", false)
-	CharNode01 := NewPlainNode("CharNodeCharNode", false)
-	CharNode02 := NewPlainNode("CharNodeCharNode", false)
-	terminalNode := NewPlainNode("CharNodeTerminalNode", true)
-
-	errorList := make([]string, 0, 16)
-	addError := func(errorList []string, err error){
-		if err != nil {
-			errorList = append(errorList, err.Error())
-		}
-	}
-	addError(errorList, PlainNodeLink('\'', startNode, CharNode01))
-	addError(errorList, PlainNodeLink('\'', CharNode02, terminalNode))
-	addError(errorList, PlainNodeMultiLink('0', '9', CharNode01, CharNode02))
-	addError(errorList, PlainNodeMultiLink('a', 'z', CharNode01, CharNode02))
-	addError(errorList, PlainNodeMultiLink('A', 'Z', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink(' ', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('@', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('#', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('!', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('$', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('%', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('^', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('&', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('*', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('(', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink(')', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('-', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('_', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('=', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('+', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('~', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('`', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink(',', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('<', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('.', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('>', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('\\', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('\'', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('|', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink(':', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink(';', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('[', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink(']', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('{', CharNode01, CharNode02))
-	addError(errorList, PlainNodeLink('}', CharNode01, CharNode02))
-	if len(errorList)> 0{
-		return nil, fmt.Errorf(strings.Join(errorList, "\n"))
+	startNode := NewPlainNode("charNode_startNode", false)
+	firstQuoteNode := NewPlainNode("charNode_firstQuoteNode", false)
+	charNode := NewPlainNode("charNode_harNode", false)
+	escapeNode := NewPlainNode("charNode_escapeNode", false)
+	secondQuoteNode := NewPlainNode("charNode_secondQuoteNode", true)
+	err := Generic.ErrorListFactory.NewErrorListFunc(func(errorList Generic.IErrorList) {
+		errorList.Add(NodeFactory.PlainNodeLink('\'', startNode, firstQuoteNode))
+		errorList.Add(NodeFactory.PlainNodeLink('\'', charNode, secondQuoteNode))
+		errorList.Add(NodeFactory.PlainNodeLink('\\', firstQuoteNode, escapeNode))
+		errorList.Add(NodeFactory.PlainNodeLink('\\', escapeNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('b', escapeNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('n', escapeNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('r', escapeNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('t', escapeNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeMultiLink('0', '9', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeMultiLink('a', 'z', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeMultiLink('A', 'Z', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink(' ', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('@', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('#', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('!', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('$', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('%', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('^', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('&', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('*', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('(', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink(')', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('-', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('_', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('=', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('+', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('~', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('`', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink(',', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('<', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('.', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('>', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('\'', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('|', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink(':', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink(';', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('[', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink(']', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('{', firstQuoteNode, charNode))
+		errorList.Add(NodeFactory.PlainNodeLink('}', firstQuoteNode, charNode))
+	})
+	if err != nil {
+		return nil, err
 	}
 	return &CharNode{
 		tokenValue:   tokenValue,
 		start:        startNode,
-		terminalNode: terminalNode,
+		terminalNode: secondQuoteNode,
 	}, nil
 }

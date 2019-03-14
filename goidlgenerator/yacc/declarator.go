@@ -39,7 +39,7 @@ func (self *Declarator) SetNext(next interfaces.IDeclarator) {
 }
 
 func (receiver *Declarator) String() string {
-	return fmt.Sprintf("Declarator => Name: %v\n", receiver.Identifier)
+	return fmt.Sprintf("Declarator => Name: %v\n", receiver.Identifier())
 }
 
 func (self *Declarator) MarshalJSON() ([]byte, error) {

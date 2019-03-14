@@ -6,6 +6,7 @@ import (
 )
 
 func TestDfaIdentifier(t *testing.T) {
+
 	t.Run("CheckForValidIdentifiers", func(t *testing.T) {
 		nodeWalker := NewNodeWalker(NewIdentifier(1234, nil))
 		assert.True(t, WalkString(nodeWalker, []byte("ABCD")))

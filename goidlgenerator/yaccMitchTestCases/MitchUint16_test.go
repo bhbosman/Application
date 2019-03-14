@@ -101,12 +101,11 @@ func TestMitchTypeInformation(t *testing.T) {
 		assert.Error(t, err)
 		assert.Nil(t, data)
 
-
 		data, err = typeInformation.CreateType(interfaces.MitchAlpha, int64(1))
 		assert.NoError(t, err)
 		assert.NotNil(t, data)
 
-		data, err = typeInformation.CreateType(interfaces.MitchBitField, []string{"1","2","3","4","5","6","7","8" })
+		data, err = typeInformation.CreateType(interfaces.MitchBitField, []string{"1", "2", "3", "4", "5", "6", "7", "8"})
 		assert.NoError(t, err)
 		assert.NotNil(t, data)
 

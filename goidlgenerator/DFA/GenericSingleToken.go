@@ -1,34 +1,34 @@
 package DFA
 
-type GenericSingleToken struct {
+type GenericSingleCharToken struct {
 	tokenValue       int
 	start            *PlainNode
 	terminalNode     *PlainNode
-	tokenDesctiption string
+	tokenDescription string
 }
 
-func (identifier *GenericSingleToken) Name() string {
-	return identifier.tokenDesctiption
+func (identifier *GenericSingleCharToken) Name() string {
+	return identifier.tokenDescription
 }
 
-func (identifier *GenericSingleToken) Token(lexem string) (int, string) {
+func (identifier *GenericSingleCharToken) Token(lexem string) (int, string) {
 	return identifier.tokenValue, lexem
 }
 
-func (identifier *GenericSingleToken) StartNode() *PlainNode {
+func (identifier *GenericSingleCharToken) StartNode() *PlainNode {
 	return identifier.start
 }
 
-func NewDfaGenericToken(tokenDesctiption string, tokenValue int, token byte) *GenericSingleToken {
+func NewGenericSingleCharToken(tokenDesctiption string, tokenValue int, token byte) (*GenericSingleCharToken, error) {
 	startNode := NewPlainNode(tokenDesctiption+"start", false)
 	terminalNode := NewPlainNode(tokenDesctiption+"TerminalNode", true)
 
-	_ = PlainNodeLink(token, startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink(token, startNode, terminalNode)
 
-	return &GenericSingleToken{
+	return &GenericSingleCharToken{
 		tokenValue:       tokenValue,
 		start:            startNode,
 		terminalNode:     terminalNode,
-		tokenDesctiption: tokenDesctiption,
-	}
+		tokenDescription: tokenDesctiption,
+	}, nil
 }

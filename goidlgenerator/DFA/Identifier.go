@@ -1,10 +1,23 @@
 package DFA
 
+type IIdentifierDfa interface {
+	IDfa
+	GetMapCount() int
+	GetMapValue(key string) int
+}
 type Identifier struct {
 	tokenValue    int
 	start         *PlainNode
 	terminalNode  *PlainNode
 	reservedWords map[string]int
+}
+
+func (identifier *Identifier) GetMapCount() int {
+	return len(identifier.reservedWords)
+}
+
+func (identifier *Identifier) GetMapValue(key string) int {
+	return identifier.reservedWords[key]
 }
 
 func (identifier *Identifier) Name() string {
@@ -27,14 +40,14 @@ func NewIdentifier(tokenValue int, reservedWords map[string]int) *Identifier {
 	startNode := NewPlainNode("IdentifierStartNode", false)
 	terminalNode := NewPlainNode("IdentifierTerminalNode", true)
 
-	_ = PlainNodeLink('_', startNode, terminalNode)
-	_ = PlainNodeMultiLink('a', 'z', startNode, terminalNode)
-	_ = PlainNodeMultiLink('A', 'Z', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('_', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeMultiLink('a', 'z', startNode, terminalNode)
+	_ = NodeFactory.PlainNodeMultiLink('A', 'Z', startNode, terminalNode)
 
-	_ = PlainNodeLink('_', terminalNode, terminalNode)
-	_ = PlainNodeMultiLink('a', 'z', terminalNode, terminalNode)
-	_ = PlainNodeMultiLink('A', 'Z', terminalNode, terminalNode)
-	_ = PlainNodeMultiLink('0', '9', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeLink('_', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeMultiLink('a', 'z', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeMultiLink('A', 'Z', terminalNode, terminalNode)
+	_ = NodeFactory.PlainNodeMultiLink('0', '9', terminalNode, terminalNode)
 
 	local_reservedWords := make(map[string]int)
 

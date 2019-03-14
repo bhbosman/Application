@@ -200,7 +200,7 @@ scoped_name :
 				$$ = definitionDeclaration
 			}
 		}else{
-			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure", $1))
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure. %v", $1))
 			return NoLex
 		}
 	}

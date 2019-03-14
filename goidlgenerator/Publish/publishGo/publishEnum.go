@@ -2,7 +2,7 @@ package publishGo
 
 import (
 	"fmt"
-	"github.com/bhbosman/Application/goidlgenerator/Extansions"
+	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 	"io"
@@ -40,7 +40,10 @@ func (self publishEnum) ExportDefinition(writer io.StringWriter) {
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))
 }
 
-func (self publishEnum) Export(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation) {
+func (self publishEnum) Export(
+	writer io.StringWriter,
+	TypeInformation interfaces.IBaseTypeInformation,
+	typeValueHelper Extensions.ITypeValueHelper) {
 	self.ExportDefinition(writer)
 
 	typeNamePrefix := self.data.Identifier
@@ -49,7 +52,7 @@ func (self publishEnum) Export(writer io.StringWriter, TypeInformation interface
 
 	self.ExportDefaultConstructor(writer, TypeInformation)
 
-	returnType := Extansions.TypeValueForDefinedType(self.data)
+	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
 	GenerateMessageWriteFunction(
 		writer,
 		returnType,
@@ -70,8 +73,8 @@ func (self publishEnum) Export(writer io.StringWriter, TypeInformation interface
 			defaultValue:    "0",
 		})
 
-	self.GenerateWriteFunction(writer, TypeInformation, typeNamePrefix, typeCode)
-	self.GenerateReadFunction(writer, TypeInformation, typeNamePrefix, typeCode)
+	self.GenerateWriteFunction(writer, TypeInformation, typeValueHelper, typeNamePrefix, typeCode)
+	self.GenerateReadFunction(writer, TypeInformation, typeValueHelper, typeNamePrefix, typeCode)
 }
 
 func (self *publishEnum) ExportDefaultConstructor(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation) {
@@ -81,8 +84,13 @@ func (self *publishEnum) ExportDefaultConstructor(writer io.StringWriter, TypeIn
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))
 }
 
-func (self publishEnum) GenerateReadFunction(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation, typeNamePrefix string, typeCode uint32) {
-	returnType := Extansions.TypeValueForDefinedType(self.data)
+func (self publishEnum) GenerateReadFunction(
+	writer io.StringWriter,
+	TypeInformation interfaces.IBaseTypeInformation,
+	typeValueHelper Extensions.ITypeValueHelper,
+	typeNamePrefix string, typeCode uint32) {
+
+	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\tv, b, e :=  stream.Read_byte()\n"))
@@ -91,8 +99,13 @@ func (self publishEnum) GenerateReadFunction(writer io.StringWriter, TypeInforma
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))
 }
 
-func (self publishEnum) GenerateWriteFunction(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation, typeNamePrefix string, typeCode uint32) {
-	returnType := Extansions.TypeValueForDefinedType(self.data)
+func (self publishEnum) GenerateWriteFunction(
+	writer io.StringWriter,
+	TypeInformation interfaces.IBaseTypeInformation,
+	typeValueHelper Extensions.ITypeValueHelper,
+	typeNamePrefix string, typeCode uint32) {
+
+	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v writer \n", typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (int, error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Write_byte(byte(value))\n"))

@@ -1,5 +1,7 @@
 package DFA
 
+import "github.com/bhbosman/Application/Generic"
+
 type Hex struct {
 	tokenValue   int
 	start        *PlainNode
@@ -18,24 +20,30 @@ func (hex *Hex) Token(lexem string) (int, string) {
 	return hex.tokenValue, lexem
 }
 
-func NewHexValue(tokenValue int) *Hex {
+func NewHexDfa(tokenValue int) (*Hex, error) {
 	startNode := NewPlainNode("HexStartNode", false)
 	zeroNode := NewPlainNode("HexZeroNode", false)
 	xNode := NewPlainNode("HexHexNode", false)
 	terminalNode := NewPlainNode("HexTerminalNode", true)
-	_ = PlainNodeLink('0', startNode, zeroNode)
-	_ = PlainNodeLink('X', zeroNode, xNode)
-	_ = PlainNodeLink('x', zeroNode, xNode)
-	_ = PlainNodeMultiLink('0', '9', xNode, terminalNode)
-	_ = PlainNodeMultiLink('a', 'f', xNode, terminalNode)
-	_ = PlainNodeMultiLink('A', 'F', xNode, terminalNode)
-	_ = PlainNodeMultiLink('0', '9', terminalNode, terminalNode)
-	_ = PlainNodeMultiLink('a', 'f', terminalNode, terminalNode)
-	_ = PlainNodeMultiLink('A', 'F', terminalNode, terminalNode)
+	err := Generic.ErrorListFactory.NewErrorListFunc(
+		func(errorList Generic.IErrorList) {
+			errorList.Add(NodeFactory.PlainNodeLink('0', startNode, zeroNode))
+			errorList.Add(NodeFactory.PlainNodeLink('X', zeroNode, xNode))
+			errorList.Add(NodeFactory.PlainNodeLink('x', zeroNode, xNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('0', '9', xNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('a', 'f', xNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('A', 'F', xNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('0', '9', terminalNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('a', 'f', terminalNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('A', 'F', terminalNode, terminalNode))
+		})
+	if err != nil {
+		return nil, err
+	}
 
 	return &Hex{
 		tokenValue:   tokenValue,
 		start:        startNode,
 		terminalNode: terminalNode,
-	}
+	}, nil
 }

@@ -2,7 +2,7 @@ package publishGo
 
 import (
 	"fmt"
-	"github.com/bhbosman/Application/goidlgenerator/Extansions"
+	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	. "github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 	"io"
@@ -14,17 +14,17 @@ type publishStruct struct {
 	typeInformation IBaseTypeInformation
 }
 
-func (self *publishStruct) Export(writer io.StringWriter, TypeInformation IBaseTypeInformation) {
+func (self *publishStruct) Export(writer io.StringWriter, TypeInformation IBaseTypeInformation, typeValueHelper Extensions.ITypeValueHelper) {
 	typeNamePrefix := self.data.Identifier
 	typeCode := CalculateCrc(typeNamePrefix)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v Declaration TypeCode: 0x%08x\n", typeNamePrefix, typeCode))
 
-	self.ExportDefinition(writer, TypeInformation)
+	self.ExportDefinition(writer, TypeInformation, typeValueHelper)
 	self.ExportDefaultConstructor(writer, TypeInformation)
 	self.GenerateWriteFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 	self.GenerateReadFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 
-	returnType := Extansions.TypeValueForDefinedType(self.data)
+	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
 	GenerateMessageWriteFunction(
 		writer,
 		returnType,
@@ -49,11 +49,11 @@ func (self *publishStruct) Export(writer io.StringWriter, TypeInformation IBaseT
 
 }
 
-func (self *publishStruct) ExportDefinition(writer io.StringWriter, TypeInformation IBaseTypeInformation) {
+func (self *publishStruct) ExportDefinition(writer io.StringWriter, TypeInformation IBaseTypeInformation, typeValueHelper Extensions.ITypeValueHelper) {
 	_, _ = writer.WriteString(fmt.Sprintf("type %s struct {\n", self.data.Identifier))
 	for _, member := range self.data.Members {
 		defaultValue := member.Declarator.DefaultValue()
-		returnType := Extansions.TypeValueForDefinedType(member.DefinedType)
+		returnType := typeValueHelper.TypeValueForDefinedType(member.DefinedType)
 		if defaultValue == nil {
 			_, _ = writer.WriteString(fmt.Sprintf(
 				"\t%v %v\n",

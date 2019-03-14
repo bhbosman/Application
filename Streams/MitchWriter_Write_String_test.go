@@ -7,8 +7,7 @@ import (
 	"testing"
 )
 
-
-type failBuffer struct{
+type failBuffer struct {
 }
 
 func (self *failBuffer) Write(p []byte) (n int, err error) {
@@ -76,7 +75,5 @@ func TestMitchWriter_Write_String(t *testing.T) {
 		assert.Error(t, e)
 
 	})
-
-
 
 }

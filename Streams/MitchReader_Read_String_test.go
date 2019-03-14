@@ -138,7 +138,7 @@ func TestMitchReader_Read_mitch_time(t *testing.T) {
 
 	t.Run("Test Read Mitch Time", func(t *testing.T) {
 		reader := &MitchReader{reader: bytes.NewReader([]byte(""))}
-		_,_, e := reader.Read_mitch_time()
+		_, _, e := reader.Read_mitch_time()
 		assert.Error(t, e)
 	})
 

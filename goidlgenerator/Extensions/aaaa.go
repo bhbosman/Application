@@ -1,11 +1,18 @@
-package Extansions
+package Extensions
 
 import (
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-func TypeValueForDefinedType(DefinedType interfaces.IDefinedType) string {
+type ITypeValueHelper interface {
+	TypeValueForDefinedType(DefinedType interfaces.IDefinedType) string
+}
+
+type typeValueHelper struct {
+}
+
+func (self *typeValueHelper) TypeValueForDefinedType(DefinedType interfaces.IDefinedType) string {
 	value := func() string {
 		_, packageName, typeName := DefinedType.GetPackageName()
 		if packageName != "" {
@@ -19,4 +26,8 @@ func TypeValueForDefinedType(DefinedType interfaces.IDefinedType) string {
 		}
 		return value
 	}(value)
+}
+
+func DefaultTypeValueHelper() ITypeValueHelper {
+	return &typeValueHelper{}
 }
