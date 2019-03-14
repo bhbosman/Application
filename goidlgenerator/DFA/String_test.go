@@ -1,7 +1,7 @@
 package DFA
 
 import (
-	"github.com/stretchr/assert"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -11,5 +11,4 @@ func TestStringNode(t *testing.T) {
 		//noinspection SpellCheckingInspection
 		assert.True(t, WalkString(nodeWalker, []byte(`"ABCD"`)))
 	})
-
 }

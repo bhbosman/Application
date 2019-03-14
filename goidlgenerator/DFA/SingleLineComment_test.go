@@ -1,7 +1,7 @@
 package DFA
 
 import (
-	"github.com/stretchr/assert"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -20,4 +20,9 @@ func TestComments(t *testing.T) {
 		assert.False(t, WalkString(nodeWalker, []byte("//")))
 	})
 
+	t.Run("Check Token Value", func(t *testing.T) {
+		nodeWalker := NewNodeWalker(NewSingleLineComment(1234))
+		tokenValue, _ := nodeWalker.Token("(any token)")
+		assert.Equal(t, 1234, tokenValue)
+	})
 }

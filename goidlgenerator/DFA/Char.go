@@ -1,9 +1,13 @@
 package DFA
 
+import (
+	"fmt"
+	"strings"
+)
+
 type CharNode struct {
 	tokenValue int
 	start      *PlainNode
-
 	terminalNode *PlainNode
 }
 
@@ -24,113 +28,51 @@ func NewCharNode(tokenValue int) (*CharNode, error) {
 	CharNode01 := NewPlainNode("CharNodeCharNode", false)
 	CharNode02 := NewPlainNode("CharNodeCharNode", false)
 	terminalNode := NewPlainNode("CharNodeTerminalNode", true)
-	if err := PlainNodeLink('\'', startNode, CharNode01); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('\'', CharNode02, terminalNode); err != nil {
-		return nil, err
-	}
 
-	if err := PlainNodeMultiLink('0', '9', CharNode01, CharNode02); err != nil {
-		return nil, err
+	errorList := make([]string, 0, 16)
+	addError := func(errorList []string, err error){
+		if err != nil {
+			errorList = append(errorList, err.Error())
+		}
 	}
-	if err := PlainNodeMultiLink('a', 'z', CharNode01, CharNode02); err != nil {
-		return nil, err
+	addError(errorList, PlainNodeLink('\'', startNode, CharNode01))
+	addError(errorList, PlainNodeLink('\'', CharNode02, terminalNode))
+	addError(errorList, PlainNodeMultiLink('0', '9', CharNode01, CharNode02))
+	addError(errorList, PlainNodeMultiLink('a', 'z', CharNode01, CharNode02))
+	addError(errorList, PlainNodeMultiLink('A', 'Z', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink(' ', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('@', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('#', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('!', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('$', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('%', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('^', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('&', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('*', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('(', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink(')', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('-', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('_', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('=', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('+', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('~', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('`', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink(',', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('<', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('.', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('>', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('\\', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('\'', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('|', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink(':', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink(';', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('[', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink(']', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('{', CharNode01, CharNode02))
+	addError(errorList, PlainNodeLink('}', CharNode01, CharNode02))
+	if len(errorList)> 0{
+		return nil, fmt.Errorf(strings.Join(errorList, "\n"))
 	}
-	if err := PlainNodeMultiLink('A', 'Z', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink(' ', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('@', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('#', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('!', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('$', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('%', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('^', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('&', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('*', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('(', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink(')', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('-', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('_', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('=', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('+', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('~', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('`', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink(',', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('<', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('.', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('>', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('\\', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('\'', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('|', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink(':', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink(';', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('[', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink(']', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('{', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-	if err := PlainNodeLink('}', CharNode01, CharNode02); err != nil {
-		return nil, err
-	}
-
 	return &CharNode{
 		tokenValue:   tokenValue,
 		start:        startNode,

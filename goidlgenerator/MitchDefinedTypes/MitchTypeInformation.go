@@ -1,9 +1,9 @@
 package MitchDefinedTypes
 
 import (
+	"errors"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
-	"github.com/pkg/errors"
 )
 
 type mitchTypeInformation struct {
