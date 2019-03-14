@@ -7,8 +7,12 @@ import (
 type mitchPrice04 struct {
 }
 
-func (self *mitchPrice04) GetPackageName() (bool, string) {
-	return true, "Streams"
+func (self *mitchPrice04) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
+}
+
+func (self *mitchPrice04) GetStreamFunctionName() string {
+	return "mitch_price04"
 }
 
 func (self *mitchPrice04) GetSequenceCount() (bool, int) {
@@ -16,7 +20,7 @@ func (self *mitchPrice04) GetSequenceCount() (bool, int) {
 }
 
 func (self *mitchPrice04) DefaultValue() string {
-	return "false"
+	return "0.0"
 }
 
 func (self *mitchPrice04) Kind() interfaces.Kind {
@@ -27,6 +31,6 @@ func (self *mitchPrice04) Predefined() bool {
 	return true
 }
 
-func (*mitchPrice04) GetName() string {
-	return "MitchPrice04"
+func (self *mitchPrice04) GetName() string {
+	return self.Kind().String()
 }

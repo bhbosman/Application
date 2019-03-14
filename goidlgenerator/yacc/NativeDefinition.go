@@ -12,8 +12,12 @@ type NativeDefinition struct {
 	Next       interfaces.IDefinitionDeclaration `json:"-"`
 }
 
-func (self *NativeDefinition) GetPackageName() (bool, string) {
-	return false, ""
+func (self *NativeDefinition) GetStreamFunctionName() string {
+	return self.Identifier
+}
+
+func (self *NativeDefinition) GetPackageName() (bool, string, string) {
+	return false, "", ""
 }
 
 func (self *NativeDefinition) GetSequenceCount() (bool, int) {

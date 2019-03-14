@@ -1,6 +1,10 @@
 package IdlDefinedTypes
 
-import "github.com/bhbosman/Application/goidlgenerator/interfaces"
+import (
+	"errors"
+	"fmt"
+	"github.com/bhbosman/Application/goidlgenerator/interfaces"
+)
 
 type idlNativeTypeInformation struct {
 	BooleanType          *BooleanType
@@ -22,16 +26,15 @@ type idlNativeTypeInformation struct {
 	createFunc           map[interfaces.Kind]func(data interface{}) interfaces.IDefinedType
 }
 
-
 func (self *idlNativeTypeInformation) CanScope(decl interfaces.IDefinedType) bool {
 	return true
 }
 
-func (self *idlNativeTypeInformation) CreateType(kind interfaces.Kind, data interface{}) interfaces.IDefinedType {
+func (self *idlNativeTypeInformation) CreateType(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
 	if result, ok := self.createFunc[kind]; ok {
-		return result(data)
+		return result(data), nil
 	}
-	panic("asdasasdasas")
+	return nil, errors.New(fmt.Sprintf("type (%v) not available in %v type information", kind.String(), self.Name()))
 
 }
 
@@ -60,8 +63,6 @@ func (self *idlNativeTypeInformation) DefaultDecls() ([]interfaces.IDefinitionDe
 func (self *idlNativeTypeInformation) Name() interfaces.BaseTypeDescription {
 	return interfaces.IDlBaseType_Native
 }
-
-
 
 func NewIdlNativeTypeInformation() *idlNativeTypeInformation {
 	result := &idlNativeTypeInformation{

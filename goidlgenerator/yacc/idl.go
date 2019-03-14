@@ -12,7 +12,7 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-//line yacc/idl.y:69
+//line yacc/idl.y:70
 type IdlExprSymType struct {
 	yys          int
 	Identifier   string
@@ -81,6 +81,7 @@ const RwMitchUInt08 = 57394
 const RwMitchUInt16 = 57395
 const RwMitchUInt32 = 57396
 const RwMitchUInt64 = 57397
+const RwMitchMessageNumberType = 57398
 
 var IdlExprToknames = [...]string{
 	"$end",
@@ -138,6 +139,7 @@ var IdlExprToknames = [...]string{
 	"RwMitchUInt16",
 	"RwMitchUInt32",
 	"RwMitchUInt64",
+	"RwMitchMessageNumberType",
 	"';'",
 	"'{'",
 	"'}'",
@@ -166,7 +168,7 @@ const IdlExprEofCode = 1
 const IdlExprErrCode = 2
 const IdlExprInitialStackSize = 16
 
-//line yacc/idl.y:991
+//line yacc/idl.y:1099
 
 //line yacctab:1
 var IdlExprExca = [...]int{
@@ -177,115 +179,117 @@ var IdlExprExca = [...]int{
 
 const IdlExprPrivate = 57344
 
-const IdlExprLast = 456
+const IdlExprLast = 463
 
 var IdlExprAct = [...]int{
 
-	159, 158, 133, 120, 228, 230, 134, 162, 126, 157,
-	124, 39, 127, 104, 123, 119, 61, 129, 122, 69,
-	89, 150, 125, 212, 193, 3, 85, 87, 24, 35,
-	2, 151, 244, 240, 219, 30, 33, 52, 136, 188,
-	251, 137, 138, 139, 140, 142, 143, 186, 185, 249,
-	247, 190, 190, 245, 189, 52, 136, 233, 145, 137,
-	138, 139, 140, 142, 143, 105, 105, 105, 189, 221,
-	144, 148, 187, 184, 253, 223, 145, 222, 183, 108,
-	109, 179, 166, 113, 112, 111, 110, 101, 144, 100,
-	220, 211, 174, 175, 176, 131, 130, 163, 172, 173,
-	132, 135, 169, 168, 167, 191, 118, 234, 224, 115,
-	114, 96, 153, 242, 27, 69, 26, 146, 69, 135,
-	154, 25, 165, 116, 99, 103, 152, 117, 147, 156,
-	102, 9, 98, 8, 149, 231, 21, 99, 232, 178,
-	160, 7, 15, 24, 171, 170, 177, 22, 66, 105,
-	16, 8, 23, 62, 21, 38, 37, 155, 107, 7,
-	15, 97, 180, 69, 194, 22, 199, 182, 16, 164,
-	23, 181, 72, 71, 64, 95, 94, 93, 28, 106,
-	203, 206, 207, 202, 198, 213, 201, 208, 209, 210,
-	196, 197, 217, 204, 205, 90, 69, 236, 218, 216,
-	229, 214, 227, 215, 36, 226, 136, 88, 86, 137,
-	138, 139, 140, 142, 143, 195, 34, 31, 20, 19,
-	13, 11, 225, 63, 14, 17, 145, 18, 12, 5,
-	6, 4, 69, 235, 241, 239, 238, 237, 144, 243,
-	52, 1, 73, 65, 70, 32, 246, 29, 248, 41,
-	250, 55, 252, 40, 48, 57, 46, 58, 56, 43,
-	21, 53, 92, 42, 44, 67, 68, 49, 91, 59,
-	50, 22, 54, 141, 128, 60, 23, 52, 47, 51,
-	74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
-	84, 48, 121, 46, 10, 0, 43, 0, 0, 0,
-	42, 44, 0, 0, 49, 0, 59, 0, 0, 0,
-	0, 0, 60, 0, 0, 47, 0, 74, 75, 76,
-	77, 78, 79, 80, 81, 82, 83, 84, 52, 52,
-	192, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 48, 48, 46, 46, 0, 43, 0, 0,
-	0, 42, 44, 200, 0, 49, 0, 59, 59, 0,
-	0, 0, 0, 60, 60, 0, 47, 0, 74, 75,
-	76, 77, 78, 79, 80, 81, 82, 83, 84, 52,
-	0, 161, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 48, 0, 46, 0, 0, 43, 0,
-	0, 0, 42, 44, 0, 0, 49, 0, 59, 0,
-	0, 0, 0, 0, 60, 0, 52, 47, 0, 74,
-	75, 76, 77, 78, 79, 80, 81, 82, 83, 84,
-	48, 0, 46, 0, 0, 43, 0, 0, 45, 42,
-	44, 0, 0, 49, 0, 59, 50, 0, 0, 0,
-	0, 60, 0, 0, 47, 51,
+	163, 162, 235, 233, 123, 136, 137, 166, 130, 128,
+	161, 125, 127, 129, 39, 106, 61, 122, 153, 126,
+	3, 132, 69, 24, 2, 198, 90, 86, 88, 217,
+	154, 249, 245, 224, 193, 35, 30, 33, 190, 189,
+	256, 254, 252, 195, 250, 238, 194, 228, 151, 194,
+	195, 192, 191, 258, 227, 226, 52, 188, 187, 183,
+	170, 116, 115, 114, 113, 107, 107, 107, 112, 103,
+	48, 102, 46, 225, 216, 43, 21, 167, 93, 42,
+	44, 110, 111, 49, 92, 59, 50, 22, 178, 179,
+	180, 60, 23, 173, 47, 51, 75, 94, 76, 77,
+	78, 79, 80, 81, 82, 83, 84, 85, 176, 177,
+	172, 171, 196, 121, 239, 229, 118, 160, 117, 98,
+	69, 149, 157, 120, 69, 247, 169, 27, 26, 25,
+	155, 156, 119, 159, 52, 101, 150, 8, 175, 174,
+	21, 24, 105, 182, 164, 7, 15, 104, 48, 9,
+	46, 22, 107, 181, 16, 100, 23, 62, 205, 236,
+	101, 38, 237, 59, 37, 158, 66, 184, 199, 60,
+	69, 185, 186, 204, 168, 109, 99, 97, 72, 96,
+	95, 71, 64, 206, 209, 210, 208, 213, 214, 215,
+	211, 212, 207, 220, 203, 201, 202, 222, 28, 91,
+	152, 108, 241, 223, 69, 221, 234, 218, 36, 219,
+	52, 139, 89, 87, 140, 141, 142, 143, 145, 146,
+	232, 34, 31, 231, 200, 20, 19, 13, 11, 230,
+	63, 148, 14, 17, 18, 12, 5, 240, 243, 246,
+	69, 244, 242, 147, 248, 6, 4, 1, 73, 52,
+	65, 251, 74, 253, 70, 255, 32, 257, 29, 41,
+	55, 40, 57, 48, 58, 46, 56, 53, 43, 134,
+	133, 67, 42, 44, 135, 138, 49, 68, 59, 54,
+	144, 131, 124, 10, 60, 0, 0, 47, 0, 75,
+	0, 76, 77, 78, 79, 80, 81, 82, 83, 84,
+	85, 52, 139, 197, 52, 140, 141, 142, 143, 145,
+	146, 0, 0, 0, 0, 0, 0, 0, 48, 0,
+	46, 0, 148, 43, 0, 0, 0, 42, 44, 0,
+	0, 49, 0, 59, 147, 0, 0, 0, 0, 60,
+	0, 0, 47, 0, 75, 52, 76, 77, 78, 79,
+	80, 81, 82, 83, 84, 85, 0, 0, 165, 48,
+	0, 46, 0, 0, 43, 0, 138, 0, 42, 44,
+	0, 0, 49, 0, 59, 0, 0, 0, 0, 0,
+	60, 0, 0, 47, 52, 75, 0, 76, 77, 78,
+	79, 80, 81, 82, 83, 84, 85, 0, 48, 0,
+	46, 0, 0, 43, 0, 0, 45, 42, 44, 0,
+	0, 49, 8, 59, 50, 21, 0, 0, 0, 60,
+	7, 15, 47, 51, 0, 0, 22, 0, 0, 16,
+	139, 23, 0, 140, 141, 142, 143, 145, 146, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	148, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 147,
 }
 var IdlExprPact = [...]int{
 
-	129, -1000, 129, -1000, 65, 60, 58, 173, 411, -1000,
-	-1000, -1000, -1000, -1000, -1000, 148, 235, -1000, -1000, -1000,
-	-1000, 172, 171, 170, -1000, -1000, -1000, -1000, 54, 156,
+	390, -1000, 390, -1000, 72, 71, 70, 193, 379, -1000,
+	-1000, -1000, -1000, -1000, -1000, 152, 51, -1000, -1000, -1000,
+	-1000, 175, 174, 172, -1000, -1000, -1000, -1000, 61, 171,
 	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, 108, -1000, -1000, -1000, -1000, -1000,
-	18, 16, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	96, -1000, -1000, -1000, 153, 153, 153, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, 15, 14, -1000, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	-1000, 13, 12, 53, 52, 86, 129, 47, -1000, -1000,
-	32, 32, -1000, 99, -2, -1000, -1000, -44, -2, -2,
-	32, 148, 374, 32, 148, 323, 28, 111, 32, 10,
-	-1000, 44, 42, 40, 128, 35, 27, -1000, 50, -1000,
-	-1000, -1000, -1000, -1000, -1000, 32, -1000, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, -1000, -1000, 9, -1000, 153, -44,
-	-1000, 32, 6, 0, -25, -1000, -1, -19, -21, 46,
-	272, -1000, 148, 324, -1000, -1000, -1000, 32, 32, 32,
-	32, 32, 32, 32, 32, 32, 32, -1000, 21, -1000,
-	-2, -1000, -53, -1000, 148, 32, -1000, 32, -1000, 148,
-	148, 200, -1000, 374, -22, 20, -1000, -1000, -1000, -1000,
-	95, 42, 40, 128, 35, 35, 27, 27, -1000, -1000,
-	-1000, -1000, -1000, -4, 5, 3, -5, -21, -1000, -1000,
-	51, 148, -1000, -1000, 115, -16, 49, -1000, 115, 374,
-	115, 32, -41, 148, -1000, -1000, 57, 148, -1000, -42,
-	-1000, -20, -1000, -21, -1000, 148, -23, 148, -24, 148,
-	-33, 148, 2, -1000,
+	-1000, -1000, -1000, -1000, 131, -1000, -1000, -1000, -1000, -1000,
+	-1, -3, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
+	113, -1000, -1000, -1000, 170, 170, 170, -1000, -1000, -1000,
+	-1000, -1000, -1000, -1000, -1000, -4, -1000, -1000, -1000, -1000,
+	-1000, -1000, -1000, -1000, -1000, -8, -1000, -1000, -1000, -1000,
+	-1000, -1000, -9, -10, -11, 60, 58, 95, 390, 53,
+	-1000, -1000, 205, 205, -1000, 107, -26, -1000, -1000, -46,
+	-26, -26, 205, 205, 340, 205, 152, 152, 299, 7,
+	115, 205, -13, -1000, 50, 48, 30, 122, 44, 22,
+	-1000, 296, -1000, -1000, -1000, -1000, -1000, -1000, 205, -1000,
+	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -14,
+	-1000, 170, -46, -1000, 205, -15, -16, -35, -1000, -22,
+	-23, -25, -31, 52, 244, -1000, 152, 129, -1000, -1000,
+	-1000, 205, 205, 205, 205, 205, 205, 205, 205, 205,
+	205, -1000, 3, -1000, -26, -1000, -48, -1000, -1000, 205,
+	-1000, 205, 152, -1000, 152, 152, 424, -1000, 340, -24,
+	2, -1000, -1000, -1000, -1000, 106, 48, 30, 122, 44,
+	44, 22, 22, -1000, -1000, -1000, -1000, -1000, -18, -19,
+	-27, -28, -31, -1000, -1000, 57, -1000, -1000, 152, 139,
+	-29, 55, -1000, 139, 340, 139, 205, -43, 152, -1000,
+	-1000, 68, 152, -1000, -44, -1000, -30, -1000, -31, -1000,
+	152, -32, 152, -33, 152, -34, 152, -20, -1000,
 }
 var IdlExprPgo = [...]int{
 
-	0, 0, 294, 6, 17, 15, 3, 292, 18, 14,
-	10, 22, 8, 12, 274, 273, 24, 7, 272, 157,
-	208, 266, 265, 261, 27, 207, 26, 20, 195, 258,
-	257, 255, 253, 251, 249, 2, 247, 245, 244, 243,
-	156, 155, 242, 241, 25, 30, 231, 230, 229, 228,
-	227, 225, 131, 224, 223, 221, 1, 13, 9, 220,
-	219, 218, 215, 205, 202, 4, 200, 197, 5, 179,
-	134, 21,
+	0, 0, 283, 6, 21, 17, 4, 282, 11, 19,
+	12, 9, 13, 8, 281, 280, 25, 7, 279, 165,
+	213, 277, 271, 267, 28, 212, 27, 26, 199, 266,
+	264, 262, 261, 260, 259, 5, 258, 256, 254, 252,
+	250, 164, 161, 248, 247, 20, 24, 246, 245, 236,
+	235, 234, 233, 149, 232, 230, 228, 1, 15, 10,
+	227, 226, 225, 224, 223, 220, 3, 206, 202, 2,
+	201, 200, 18,
 }
 var IdlExprR1 = [...]int{
 
-	0, 43, 45, 45, 44, 44, 44, 46, 35, 48,
+	0, 44, 46, 46, 45, 45, 45, 47, 35, 49,
 	36, 36, 36, 36, 36, 36, 36, 36, 36, 36,
 	6, 7, 7, 8, 8, 9, 9, 10, 10, 10,
 	11, 11, 11, 12, 12, 12, 12, 13, 13, 14,
 	14, 14, 4, 4, 4, 3, 3, 3, 3, 3,
-	3, 3, 3, 15, 15, 5, 47, 47, 47, 17,
+	3, 3, 3, 15, 15, 5, 48, 48, 48, 17,
 	22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
 	22, 19, 19, 19, 21, 21, 21, 21, 21, 21,
 	20, 20, 20, 26, 26, 32, 32, 32, 23, 18,
 	33, 34, 34, 34, 29, 31, 30, 24, 25, 27,
-	28, 39, 39, 39, 39, 38, 38, 40, 40, 41,
-	41, 42, 37, 52, 52, 52, 49, 49, 51, 51,
-	16, 16, 50, 59, 59, 60, 62, 62, 62, 62,
-	63, 64, 64, 65, 66, 66, 68, 68, 67, 61,
-	53, 58, 58, 69, 70, 70, 71, 2, 1, 55,
-	54, 54, 54, 57, 57, 57, 56, 56, 56,
+	28, 40, 40, 40, 40, 40, 39, 38, 38, 41,
+	41, 42, 42, 43, 37, 53, 53, 53, 50, 50,
+	52, 52, 16, 16, 51, 60, 60, 61, 63, 63,
+	63, 63, 64, 65, 65, 66, 67, 67, 69, 69,
+	68, 62, 54, 59, 59, 70, 71, 71, 72, 2,
+	1, 56, 55, 55, 55, 58, 58, 58, 57, 57,
+	57,
 }
 var IdlExprR2 = [...]int{
 
@@ -295,90 +299,91 @@ var IdlExprR2 = [...]int{
 	1, 3, 3, 1, 3, 3, 3, 2, 1, 1,
 	1, 1, 1, 1, 3, 1, 1, 1, 1, 1,
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	4, 18, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	4, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	4, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	1, 1, 2, 1, 1, 1, 1, 1, 1, 1,
 	2, 1, 1, 1, 2, 2, 3, 1, 1, 1,
-	1, 1, 1, 1, 1, 6, 4, 4, 1, 4,
-	1, 6, 1, 1, 1, 1, 1, 1, 5, 4,
-	3, 2, 2, 1, 1, 9, 1, 1, 1, 1,
-	1, 1, 2, 3, 1, 2, 3, 2, 2, 2,
-	5, 1, 3, 2, 1, 2, 3, 2, 1, 2,
-	2, 2, 2, 1, 1, 3, 3, 1, 3,
+	1, 1, 1, 1, 1, 1, 18, 6, 4, 4,
+	1, 4, 1, 6, 1, 1, 1, 1, 1, 1,
+	5, 4, 3, 2, 2, 1, 1, 9, 1, 1,
+	1, 1, 1, 1, 2, 3, 1, 2, 3, 2,
+	2, 2, 5, 1, 3, 2, 1, 2, 3, 2,
+	1, 2, 2, 2, 2, 1, 1, 3, 3, 1,
+	3,
 }
 var IdlExprChk = [...]int{
 
-	-1000, -43, -45, -44, -46, -48, -47, 30, 22, -52,
-	-2, -55, -49, -59, -53, 31, 39, -51, -50, -60,
-	-61, 25, 36, 41, -44, 56, 56, 56, 5, -36,
-	-26, -20, -37, -24, -25, -27, -28, -40, -41, -35,
+	-1000, -44, -46, -45, -47, -49, -48, 30, 22, -53,
+	-2, -56, -50, -60, -54, 31, 39, -52, -51, -61,
+	-62, 25, 36, 41, -45, 57, 57, 57, 5, -36,
+	-26, -20, -37, -24, -25, -27, -28, -41, -42, -35,
 	-32, -34, 28, 24, 29, 27, 21, 43, 19, 32,
 	35, 44, 5, -23, -18, -33, -29, -31, -30, 34,
-	40, -1, 5, -54, -19, -39, -52, -22, -21, -35,
-	-38, -40, -41, -42, 45, 46, 47, 48, 49, 50,
-	51, 52, 53, 54, 55, -26, -20, -24, -25, -27,
-	-28, 33, 27, 5, 5, 5, 57, 5, 24, 29,
-	71, 71, 34, 29, -57, -1, -69, 5, -57, -57,
-	71, 71, 71, 71, 57, 57, 37, -45, 59, -5,
-	-6, -7, -8, -9, -10, -11, -12, -13, -14, -4,
-	64, 63, 68, -35, -3, 69, 6, 9, 10, 11,
-	12, -15, 13, 14, 38, 26, -5, 29, 73, -70,
-	-71, 75, -5, -1, -17, -19, -5, -58, -56, -1,
-	-16, 58, -17, 69, 58, -6, 72, 60, 61, 62,
-	17, 16, 63, 64, 65, 66, 67, -4, -6, 72,
-	-57, -71, -5, 72, 73, 73, 72, 73, 58, 73,
-	73, 59, 58, -16, -56, -62, -26, -24, -27, -35,
-	29, -8, -9, -10, -11, -11, -12, -12, -13, -13,
-	-13, 70, 76, -1, -5, -5, -58, -56, -3, 56,
-	70, 73, 72, 72, 57, -1, -63, -64, -65, -66,
-	-68, 20, 23, 73, 58, -65, -67, -17, -68, -6,
-	74, -1, 56, -56, 74, 73, -1, 73, -1, 73,
-	-1, 73, -1, 72,
+	40, -1, 5, -55, -19, -40, -53, -22, -21, -35,
+	-38, -41, -42, -43, -39, 45, 47, 48, 49, 50,
+	51, 52, 53, 54, 55, 56, -26, -20, -24, -25,
+	-27, -28, 33, 27, 46, 5, 5, 5, 58, 5,
+	24, 29, 72, 72, 34, 29, -58, -1, -70, 5,
+	-58, -58, 72, 72, 72, 72, 72, 58, 58, 37,
+	-46, 60, -5, -6, -7, -8, -9, -10, -11, -12,
+	-13, -14, -4, 65, 64, 69, -35, -3, 70, 6,
+	9, 10, 11, 12, -15, 13, 14, 38, 26, -5,
+	29, 74, -71, -72, 76, -5, -5, -17, -19, -5,
+	-1, -59, -57, -1, -16, 59, -17, 70, 59, -6,
+	73, 61, 62, 63, 17, 16, 64, 65, 66, 67,
+	68, -4, -6, 73, -58, -72, -5, 73, 73, 74,
+	73, 74, 74, 59, 74, 74, 60, 59, -16, -57,
+	-63, -26, -24, -27, -35, 29, -8, -9, -10, -11,
+	-11, -12, -12, -13, -13, -13, 71, 77, -5, -5,
+	-1, -59, -57, -3, 57, 71, 73, 73, 74, 58,
+	-1, -64, -65, -66, -67, -69, 20, 23, 74, 59,
+	-66, -68, -17, -69, -6, 75, -1, 57, -57, 75,
+	74, -1, 74, -1, 74, -1, 74, -1, 73,
 }
 var IdlExprDef = [...]int{
 
 	0, -2, 1, 2, 0, 0, 0, 0, 0, 56,
-	57, 58, 113, 114, 115, 0, 0, 116, 117, 123,
-	124, 0, 0, 0, 3, 4, 5, 6, 0, 0,
+	57, 58, 115, 116, 117, 0, 0, 118, 119, 125,
+	126, 0, 0, 0, 3, 4, 5, 6, 0, 0,
 	10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-	83, 84, 80, 81, 89, 112, 97, 98, 99, 100,
-	108, 110, 8, 85, 86, 87, 91, 92, 93, 88,
-	0, 147, 148, 149, 0, 0, 0, 71, 72, 73,
-	101, 102, 103, 104, 0, 0, 62, 63, 64, 65,
-	66, 67, 68, 69, 70, 74, 75, 76, 77, 78,
-	79, 0, 0, 0, 122, 139, 0, 0, 82, 90,
-	0, 0, 94, 95, 150, 153, 154, 148, 151, 152,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	55, 20, 21, 23, 25, 27, 30, 33, 0, 38,
-	39, 40, 41, 42, 43, 0, 45, 46, 47, 48,
-	49, 50, 51, 52, 53, 54, 0, 96, 0, 143,
-	144, 0, 0, 0, 0, 59, 0, 0, 141, 157,
-	0, 119, 0, 0, 7, 9, 107, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 37, 0, 109,
-	155, 145, 0, 60, 0, 0, 106, 0, 140, 0,
-	0, 0, 118, 121, 0, 0, 126, 127, 128, 129,
-	89, 22, 24, 26, 28, 29, 31, 32, 34, 35,
-	36, 44, 146, 0, 0, 0, 142, 158, 156, 120,
-	0, 0, 105, 111, 0, 0, 0, 130, 131, 0,
-	134, 0, 0, 0, 125, 132, 0, 0, 135, 0,
-	137, 0, 133, 138, 136, 0, 0, 0, 0, 0,
-	0, 0, 0, 61,
+	83, 84, 80, 81, 89, 114, 97, 98, 99, 100,
+	110, 112, 8, 85, 86, 87, 91, 92, 93, 88,
+	0, 149, 150, 151, 0, 0, 0, 71, 72, 73,
+	101, 102, 103, 104, 105, 0, 61, 62, 63, 64,
+	65, 66, 67, 68, 69, 0, 74, 75, 76, 77,
+	78, 79, 0, 0, 0, 0, 124, 141, 0, 0,
+	82, 90, 0, 0, 94, 95, 152, 155, 156, 150,
+	153, 154, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 55, 20, 21, 23, 25, 27, 30,
+	33, 0, 38, 39, 40, 41, 42, 43, 0, 45,
+	46, 47, 48, 49, 50, 51, 52, 53, 54, 0,
+	96, 0, 145, 146, 0, 0, 0, 0, 59, 0,
+	0, 0, 143, 159, 0, 121, 0, 0, 7, 9,
+	109, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 37, 0, 111, 157, 147, 0, 60, 70, 0,
+	108, 0, 0, 142, 0, 0, 0, 120, 123, 0,
+	0, 128, 129, 130, 131, 89, 22, 24, 26, 28,
+	29, 31, 32, 34, 35, 36, 44, 148, 0, 0,
+	0, 144, 160, 158, 122, 0, 107, 113, 0, 0,
+	0, 0, 132, 133, 0, 136, 0, 0, 0, 127,
+	134, 0, 0, 137, 0, 139, 0, 135, 140, 138,
+	0, 0, 0, 0, 0, 0, 0, 0, 106,
 }
 var IdlExprTok1 = [...]int{
 
 	1, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 67, 62, 3,
-	69, 70, 65, 63, 73, 64, 3, 66, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 74, 56,
-	71, 59, 72, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 68, 63, 3,
+	70, 71, 66, 64, 74, 65, 3, 67, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 75, 57,
+	72, 60, 73, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 75, 3, 76, 61, 3, 3, 3, 3, 3,
+	3, 76, 3, 77, 62, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 57, 60, 58, 68,
+	3, 3, 3, 58, 61, 59, 69,
 }
 var IdlExprTok2 = [...]int{
 
@@ -387,7 +392,7 @@ var IdlExprTok2 = [...]int{
 	22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
 	32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
 	42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
-	52, 53, 54, 55,
+	52, 53, 54, 55, 56,
 }
 var IdlExprTok3 = [...]int{
 	0,
@@ -732,7 +737,7 @@ IdlExprdefault:
 
 	case 1:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:155
+//line yacc/idl.y:156
 		{
 			IdlExprVAL.Specification = AddDefinitions(IdlExprDollar[1].DefinitionDeclaration)
 			context, _ := GetIdlExprContext(IdlExprlex)
@@ -740,32 +745,32 @@ IdlExprdefault:
 		}
 	case 2:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:162
+//line yacc/idl.y:163
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
 		}
 	case 3:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:165
+//line yacc/idl.y:166
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
 			GetLast(IdlExprVAL.DefinitionDeclaration).SetNext(IdlExprDollar[2].DefinitionDeclaration)
 		}
 	case 4:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:171
+//line yacc/idl.y:172
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
 		}
 	case 5:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:174
+//line yacc/idl.y:175
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
 		}
 	case 6:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:177
+//line yacc/idl.y:178
 		{
 			err := AddTypeDclToContext(IdlExprlex, IdlExprDollar[1].DefinitionDeclaration)
 			if err != nil {
@@ -777,13 +782,13 @@ IdlExprdefault:
 		}
 	case 7:
 		IdlExprDollar = IdlExprS[IdlExprpt-5 : IdlExprpt+1]
-//line yacc/idl.y:187
+//line yacc/idl.y:188
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[4].DefinitionDeclaration
 		}
 	case 8:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:191
+//line yacc/idl.y:192
 		{
 			lex, err := GetIdlExprContext(IdlExprlex)
 			if err == nil {
@@ -801,175 +806,175 @@ IdlExprdefault:
 		}
 	case 9:
 		IdlExprDollar = IdlExprS[IdlExprpt-5 : IdlExprpt+1]
-//line yacc/idl.y:225
+//line yacc/idl.y:226
 		{
 			IdlExprVAL.DefinitionDeclaration = Newconst_dcl()
 		}
 	case 10:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:229
+//line yacc/idl.y:230
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 11:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:232
+//line yacc/idl.y:233
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 12:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:235
+//line yacc/idl.y:236
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 13:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:238
+//line yacc/idl.y:239
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 14:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:241
+//line yacc/idl.y:242
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 15:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:244
+//line yacc/idl.y:245
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 16:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:247
+//line yacc/idl.y:248
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 17:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:250
+//line yacc/idl.y:251
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 18:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:253
+//line yacc/idl.y:254
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 19:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:256
+//line yacc/idl.y:257
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 20:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:262
+//line yacc/idl.y:263
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 21:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:267
+//line yacc/idl.y:268
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 22:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:271
+//line yacc/idl.y:272
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 23:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:276
+//line yacc/idl.y:277
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 24:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:279
+//line yacc/idl.y:280
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 25:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:284
+//line yacc/idl.y:285
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 26:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:287
+//line yacc/idl.y:288
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 27:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:293
+//line yacc/idl.y:294
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 28:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:296
+//line yacc/idl.y:297
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 29:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:299
+//line yacc/idl.y:300
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 30:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:304
+//line yacc/idl.y:305
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 31:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:307
+//line yacc/idl.y:308
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue + IdlExprDollar[3].IntegerValue
 		}
 	case 32:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:310
+//line yacc/idl.y:311
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue - IdlExprDollar[3].IntegerValue
 		}
 	case 33:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:315
+//line yacc/idl.y:316
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue
 		}
 	case 34:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:318
+//line yacc/idl.y:319
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue * IdlExprDollar[3].IntegerValue
 		}
 	case 35:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:321
+//line yacc/idl.y:322
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue / IdlExprDollar[3].IntegerValue
 		}
 	case 36:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:324
+//line yacc/idl.y:325
 		{
 			IdlExprVAL.IntegerValue = IdlExprDollar[1].IntegerValue % IdlExprDollar[3].IntegerValue
 		}
 	case 37:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:329
+//line yacc/idl.y:330
 		{
 			value, ok := IdlExprDollar[2].ConstValue.Value().(int64)
 			if ok {
@@ -981,7 +986,7 @@ IdlExprdefault:
 		}
 	case 38:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:338
+//line yacc/idl.y:339
 		{
 			value, ok := IdlExprDollar[1].ConstValue.Value().(int64)
 			if ok {
@@ -993,25 +998,25 @@ IdlExprdefault:
 		}
 	case 39:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:349
+//line yacc/idl.y:350
 		{
 			IdlExprVAL.IntegerValue = -1
 		}
 	case 40:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:352
+//line yacc/idl.y:353
 		{
 			IdlExprVAL.IntegerValue = 0
 		}
 	case 41:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:356
+//line yacc/idl.y:357
 		{
 			IdlExprVAL.IntegerValue = 99
 		}
 	case 42:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:361
+//line yacc/idl.y:362
 		{
 			lex, err := GetIdlExprContext(IdlExprlex)
 			if err == nil {
@@ -1027,94 +1032,98 @@ IdlExprdefault:
 		}
 	case 43:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:374
+//line yacc/idl.y:375
 		{
 			IdlExprVAL.ConstValue = IdlExprDollar[1].ConstValue
 		}
 	case 44:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:377
+//line yacc/idl.y:378
 		{
 			IdlExprVAL.ConstValue = newConstantValueWithNoLength(IdlExprDollar[2].IntegerValue, interfaces.Int64)
 		}
 	case 45:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:382
+//line yacc/idl.y:383
 		{
 			IdlExprVAL.ConstValue = newConstantValueWithNoLength(IdlExprDollar[1].IntegerValue, interfaces.Int64)
 		}
 	case 46:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:385
+//line yacc/idl.y:386
 		{
 			IdlExprVAL.ConstValue = nil
 		}
 	case 47:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:388
+//line yacc/idl.y:389
 		{
 			IdlExprVAL.ConstValue = nil
 		}
 	case 48:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:391
+//line yacc/idl.y:392
 		{
 			IdlExprVAL.ConstValue = newConstantValue(IdlExprDollar[1].StringValue, interfaces.Char, 1)
 		}
 	case 49:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:394
+//line yacc/idl.y:395
 		{
 			IdlExprVAL.ConstValue = newConstantValue(IdlExprDollar[1].StringValue, interfaces.WChar, 1)
 		}
 	case 50:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:397
+//line yacc/idl.y:398
 		{
 			IdlExprVAL.ConstValue = newConstantValueWithNoLength(IdlExprDollar[1].BoolValue, interfaces.Bool)
 		}
 	case 51:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:400
+//line yacc/idl.y:401
 		{
 			IdlExprVAL.ConstValue = newConstantValueWithNoLength(IdlExprDollar[1].StringValue, interfaces.String)
 		}
 	case 52:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:403
+//line yacc/idl.y:404
 		{
 			IdlExprVAL.ConstValue = newConstantValueWithNoLength(IdlExprDollar[1].StringValue, interfaces.WideString)
 		}
 	case 53:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:408
+//line yacc/idl.y:409
 		{
 			IdlExprVAL.BoolValue = true
 		}
 	case 54:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:411
+//line yacc/idl.y:412
 		{
 			IdlExprVAL.BoolValue = false
 		}
 	case 56:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:418
+//line yacc/idl.y:419
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
 		}
 	case 57:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:421
+//line yacc/idl.y:422
 		{
 			nativeDecl := NewNativeDeclaration(IdlExprDollar[1].Identifier)
 			IdlExprVAL.DefinitionDeclaration = nativeDecl
 		}
 	case 58:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:425
+//line yacc/idl.y:426
 		{
+			if IdlExprDollar[1].DefinitionDeclaration == nil {
+				SendError(IdlExprlex, "AddTypedefDcl error")
+				return ErrorOnAddTypedefDcl
 
+			}
 			if typeDecl, ok := IdlExprDollar[1].DefinitionDeclaration.(interfaces.ITypeDeclaration); ok {
 				err := AddTypedefDcl(IdlExprlex, typeDecl)
 				if err != nil {
@@ -1129,85 +1138,71 @@ IdlExprdefault:
 		}
 	case 59:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:440
+//line yacc/idl.y:445
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 60:
 		IdlExprDollar = IdlExprS[IdlExprpt-4 : IdlExprpt+1]
-//line yacc/idl.y:445
+//line yacc/idl.y:450
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchAlpha, IdlExprDollar[3].IntegerValue)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchAlpha, IdlExprDollar[3].IntegerValue)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 61:
-		IdlExprDollar = IdlExprS[IdlExprpt-18 : IdlExprpt+1]
-//line yacc/idl.y:453
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:462
 		{
-			IdlExprVAL.DefinedType = NewBitField(IdlExprDollar[3].Identifier, IdlExprDollar[5].Identifier, IdlExprDollar[7].Identifier, IdlExprDollar[9].Identifier, IdlExprDollar[11].Identifier, IdlExprDollar[13].Identifier, IdlExprDollar[15].Identifier, IdlExprDollar[17].Identifier)
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchByte, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 62:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:456
+//line yacc/idl.y:474
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchByte, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchDate, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 63:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:464
+//line yacc/idl.y:486
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchDate, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchTime, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 64:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:472
-		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchTime, 0)
-
-		}
-	case 65:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:481
-		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchPrice04, 0)
-
-		}
-	case 66:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:490
-		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchPrice08, 0)
-		}
-	case 67:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
 //line yacc/idl.y:498
 		{
@@ -1216,31 +1211,28 @@ IdlExprdefault:
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchUInt08, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchPrice04, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
-	case 68:
+	case 65:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:506
+//line yacc/idl.y:510
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchUInt16, 0)
-		}
-	case 69:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:514
-		{
-			context, err := GetIdlExprLex(IdlExprlex)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchPrice08, 0)
 			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchUInt32, 0)
 		}
-	case 70:
+	case 66:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
 //line yacc/idl.y:522
 		{
@@ -1249,423 +1241,552 @@ IdlExprdefault:
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.MitchUInt64, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchUInt08, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
-	case 71:
+	case 67:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:532
+//line yacc/idl.y:534
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			if context.IDlBaseType.Name() != interfaces.IDlBaseType_Mitch {
-				IdlExprlex.Error(__yyfmt__.Sprintf("IDlBaseType not set to IDlBaseType_Micth. %v is an invalid token", IdlExprDollar[1].DefinedType.GetName()))
-				return NoLex
-
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchUInt16, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
 			}
+		}
+	case 68:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:546
+		{
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchUInt32, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
+		}
+	case 69:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:558
+		{
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchUInt64, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
+		}
+	case 70:
+		IdlExprDollar = IdlExprS[IdlExprpt-4 : IdlExprpt+1]
+//line yacc/idl.y:569
+		{
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchMessageNumber, IdlExprDollar[3].IntegerValue)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
+
+		}
+	case 71:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:584
+		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 72:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:547
+//line yacc/idl.y:587
 		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-
-			if context.IDlBaseType.Name() != interfaces.IDlBaseType_Native {
-				IdlExprlex.Error(__yyfmt__.Sprintf("IDlBaseType not set to IDlBaseType_Native. %v is an invalid token", IdlExprDollar[1].DefinedType))
-				return NoLex
-
-			}
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 73:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:561
+//line yacc/idl.y:590
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-
-			if !context.IDlBaseType.CanScope(IdlExprDollar[1].DefinedType) {
-				IdlExprlex.Error(__yyfmt__.Sprintf("No scoping allowed. %v is an invalid token", IdlExprDollar[1].DefinedType.GetName()))
-				return ErrorNoScopingAllowed
-			}
-			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
-
 		}
 	case 74:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:579
-		{
-			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
-		}
-	case 75:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:582
-		{
-			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
-		}
-	case 76:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:585
-		{
-			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
-		}
-	case 77:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:588
-		{
-			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
-		}
-	case 78:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:591
-		{
-			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
-		}
-	case 79:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
 //line yacc/idl.y:594
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
-	case 80:
+	case 75:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:598
+//line yacc/idl.y:597
 		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Float, 0)
+			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
-	case 81:
+	case 76:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:600
+		{
+			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
+		}
+	case 77:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:603
+		{
+			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
+		}
+	case 78:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
 //line yacc/idl.y:606
 		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Double, 0)
+			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
-	case 82:
-		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:614
+	case 79:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:609
+		{
+			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
+		}
+	case 80:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:613
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.LongDouble, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Float, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
+		}
+	case 81:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:625
+		{
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Double, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
+		}
+	case 82:
+		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
+//line yacc/idl.y:637
+		{
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.LongDouble, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 83:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:623
+//line yacc/idl.y:650
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 84:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:626
+//line yacc/idl.y:653
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 85:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:630
+//line yacc/idl.y:657
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 86:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:633
+//line yacc/idl.y:660
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 87:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:636
+//line yacc/idl.y:663
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 88:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:640
+//line yacc/idl.y:667
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Int16, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Int16, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 89:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:649
+//line yacc/idl.y:680
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Int32, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Int32, 0)
+			if IdlExprVAL.DefinedType == nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 90:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:658
+//line yacc/idl.y:693
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Int64, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Int64, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 91:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:668
+//line yacc/idl.y:707
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 92:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:671
+//line yacc/idl.y:710
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 93:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:674
+//line yacc/idl.y:713
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 94:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:679
+//line yacc/idl.y:718
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Uint16, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Uint16, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 95:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:688
+//line yacc/idl.y:731
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Uint32, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Uint32, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 96:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:697
+//line yacc/idl.y:744
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Uint64, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Uint64, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 97:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:707
+//line yacc/idl.y:758
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Char, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Char, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 98:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:717
+//line yacc/idl.y:772
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.WChar, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.WChar, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 99:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:726
+//line yacc/idl.y:785
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Bool, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Bool, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 100:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:736
+//line yacc/idl.y:799
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Octet, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Octet, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 101:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:746
+//line yacc/idl.y:813
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 102:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:749
+//line yacc/idl.y:816
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 103:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:752
+//line yacc/idl.y:819
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 104:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:755
+//line yacc/idl.y:822
 		{
 			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
 		}
 	case 105:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:825
+		{
+			IdlExprVAL.DefinedType = IdlExprDollar[1].DefinedType
+		}
+	case 106:
+		IdlExprDollar = IdlExprS[IdlExprpt-18 : IdlExprpt+1]
+//line yacc/idl.y:830
+		{
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.MitchBitField, []string{IdlExprDollar[3].Identifier, IdlExprDollar[5].Identifier, IdlExprDollar[7].Identifier, IdlExprDollar[9].Identifier, IdlExprDollar[11].Identifier, IdlExprDollar[13].Identifier, IdlExprDollar[15].Identifier, IdlExprDollar[17].Identifier})
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
+		}
+	case 107:
 		IdlExprDollar = IdlExprS[IdlExprpt-6 : IdlExprpt+1]
-//line yacc/idl.y:760
+//line yacc/idl.y:847
 		{
 			IdlExprVAL.DefinedType = TempleteTypes.NewSequenceType(IdlExprDollar[3].DefinedType, IdlExprDollar[5].IntegerValue)
 		}
-	case 106:
+	case 108:
 		IdlExprDollar = IdlExprS[IdlExprpt-4 : IdlExprpt+1]
-//line yacc/idl.y:763
+//line yacc/idl.y:850
 		{
 			IdlExprVAL.DefinedType = TempleteTypes.NewSequenceType(IdlExprDollar[3].DefinedType, -1)
 		}
-	case 107:
-		IdlExprDollar = IdlExprS[IdlExprpt-4 : IdlExprpt+1]
-//line yacc/idl.y:768
-		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.String, 0)
-		}
-	case 108:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:777
-		{
-			context, err := GetIdlExprLex(IdlExprlex)
-			if err != nil {
-				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
-				return NoLex
-			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.String, 0)
-		}
 	case 109:
 		IdlExprDollar = IdlExprS[IdlExprpt-4 : IdlExprpt+1]
-//line yacc/idl.y:787
+//line yacc/idl.y:855
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.WideString, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.String, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 110:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:795
+//line yacc/idl.y:868
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.WideString, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.String, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 111:
-		IdlExprDollar = IdlExprS[IdlExprpt-6 : IdlExprpt+1]
-//line yacc/idl.y:806
+		IdlExprDollar = IdlExprS[IdlExprpt-4 : IdlExprpt+1]
+//line yacc/idl.y:882
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Fixed, 0)
-
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.WideString, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 112:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:819
+//line yacc/idl.y:894
 		{
 			context, err := GetIdlExprLex(IdlExprlex)
 			if err != nil {
 				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 				return NoLex
 			}
-			IdlExprVAL.DefinedType = context.IDlBaseType.CreateType(interfaces.Fixed, 0)
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.WideString, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 113:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:829
+		IdlExprDollar = IdlExprS[IdlExprpt-6 : IdlExprpt+1]
+//line yacc/idl.y:909
 		{
-			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Fixed, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 114:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:832
+//line yacc/idl.y:923
 		{
-			IdlExprVAL.DefinitionDeclaration = Newunion_dcl()
+			context, err := GetIdlExprLex(IdlExprlex)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+				return NoLex
+			}
+			IdlExprVAL.DefinedType, err = context.IDlBaseType.CreateType(interfaces.Fixed, 0)
+			if err != nil {
+				IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+				return TypeNotAvailable
+			}
 		}
 	case 115:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:835
+//line yacc/idl.y:937
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
 		}
 	case 116:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:843
+//line yacc/idl.y:940
 		{
-			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
-
+			IdlExprVAL.DefinitionDeclaration = Newunion_dcl()
 		}
 	case 117:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:847
+//line yacc/idl.y:943
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
 		}
 	case 118:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:951
+		{
+			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
+
+		}
+	case 119:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:955
+		{
+			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[1].DefinitionDeclaration
+		}
+	case 120:
 		IdlExprDollar = IdlExprS[IdlExprpt-5 : IdlExprpt+1]
-//line yacc/idl.y:853
+//line yacc/idl.y:961
 		{
 			def := NewStructDefinition(IdlExprDollar[2].Identifier)
 			member := IdlExprDollar[4].Member
@@ -1679,34 +1800,34 @@ IdlExprdefault:
 			}
 			IdlExprVAL.DefinitionDeclaration = def
 		}
-	case 119:
+	case 121:
 		IdlExprDollar = IdlExprS[IdlExprpt-4 : IdlExprpt+1]
-//line yacc/idl.y:866
+//line yacc/idl.y:974
 		{
 			def := NewStructDefinition(IdlExprDollar[2].Identifier)
 			IdlExprVAL.DefinitionDeclaration = def
 		}
-	case 120:
+	case 122:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:873
+//line yacc/idl.y:981
 		{
 			IdlExprVAL.Member = NewMember(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator, nil)
 		}
-	case 121:
+	case 123:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:876
+//line yacc/idl.y:984
 		{
 			IdlExprVAL.Member = NewMember(IdlExprDollar[1].Member.DefinedType, IdlExprDollar[1].Member.Declarator, IdlExprDollar[2].Member)
 		}
-	case 122:
+	case 124:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:883
+//line yacc/idl.y:991
 		{
 			IdlExprVAL.DefinitionDeclaration = Newstruct_forward_dcl()
 		}
-	case 140:
+	case 142:
 		IdlExprDollar = IdlExprS[IdlExprpt-5 : IdlExprpt+1]
-//line yacc/idl.y:898
+//line yacc/idl.y:1006
 		{
 			def := NewEnumDcl(IdlExprDollar[2].Identifier)
 			decl := IdlExprDollar[4].Declarator
@@ -1716,110 +1837,110 @@ IdlExprdefault:
 			}
 			IdlExprVAL.DefinitionDeclaration = def
 		}
-	case 141:
+	case 143:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:908
+//line yacc/idl.y:1016
 		{
 		}
-	case 142:
+	case 144:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:909
+//line yacc/idl.y:1017
 		{
 			IdlExprDollar[1].Declarator.SetNext(IdlExprDollar[3].Declarator)
 		}
-	case 143:
-		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:915
-		{
-
-		}
-	case 144:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:920
-		{
-
-		}
 	case 145:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:923
+//line yacc/idl.y:1023
 		{
 
 		}
 	case 146:
-		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:928
-		{
-		}
-	case 147:
-		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:932
-		{
-			IdlExprVAL.Identifier = IdlExprDollar[2].Identifier
-		}
-	case 148:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:937
-		{
-			IdlExprVAL.Identifier = IdlExprDollar[1].Identifier
-		}
-	case 149:
-		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:942
-		{
-			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[2].DefinitionDeclaration
-		}
-	case 150:
-		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:951
-		{
-			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator)
-		}
-	case 151:
-		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:954
-		{
-			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator)
-		}
-	case 152:
-		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:957
-		{
-			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinitionDeclaration, IdlExprDollar[2].Declarator)
-		}
-	case 153:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:966
-		{
-			IdlExprVAL.Declarator = NewDeclarator(IdlExprDollar[1].Identifier, nil)
-		}
-	case 154:
-		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:969
+//line yacc/idl.y:1028
 		{
 
 		}
-	case 155:
+	case 147:
+		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
+//line yacc/idl.y:1031
+		{
+
+		}
+	case 148:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:972
+//line yacc/idl.y:1036
+		{
+		}
+	case 149:
+		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
+//line yacc/idl.y:1040
+		{
+			IdlExprVAL.Identifier = IdlExprDollar[2].Identifier
+		}
+	case 150:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:1045
+		{
+			IdlExprVAL.Identifier = IdlExprDollar[1].Identifier
+		}
+	case 151:
+		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
+//line yacc/idl.y:1050
+		{
+			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[2].DefinitionDeclaration
+		}
+	case 152:
+		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
+//line yacc/idl.y:1059
+		{
+			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator)
+		}
+	case 153:
+		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
+//line yacc/idl.y:1062
+		{
+			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator)
+		}
+	case 154:
+		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
+//line yacc/idl.y:1065
+		{
+			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinitionDeclaration, IdlExprDollar[2].Declarator)
+		}
+	case 155:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:1074
+		{
+			IdlExprVAL.Declarator = NewDeclarator(IdlExprDollar[1].Identifier, nil)
+		}
+	case 156:
+		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
+//line yacc/idl.y:1077
+		{
+
+		}
+	case 157:
+		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
+//line yacc/idl.y:1080
 		{
 			IdlExprDollar[1].Declarator.SetNext(IdlExprDollar[3].Declarator)
 			IdlExprVAL.Declarator = IdlExprDollar[1].Declarator
 		}
-	case 156:
+	case 158:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:981
+//line yacc/idl.y:1089
 		{
 			IdlExprVAL.Declarator = NewDeclarator(IdlExprDollar[1].Identifier, IdlExprDollar[3].ConstValue)
 		}
-	case 157:
+	case 159:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:984
+//line yacc/idl.y:1092
 		{
 			IdlExprVAL.Declarator = NewDeclarator(IdlExprDollar[1].Identifier, nil)
 		}
-	case 158:
+	case 160:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:987
+//line yacc/idl.y:1095
 		{
 			IdlExprDollar[1].Declarator.SetNext(IdlExprDollar[3].Declarator)
 			IdlExprVAL.Declarator = IdlExprDollar[1].Declarator

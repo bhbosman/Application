@@ -6,6 +6,7 @@ import (
 	. "github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 	"io"
+	"strconv"
 )
 
 type publishStruct struct {
@@ -23,9 +24,10 @@ func (self *publishStruct) Export(writer io.StringWriter, TypeInformation IBaseT
 	self.GenerateWriteFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 	self.GenerateReadFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 
+	returnType := Extansions.TypeValueForDefinedType(self.data)
 	GenerateMessageWriteFunction(
 		writer,
-		self.data,
+		returnType,
 		GenerateMessageWriteFunctionParams{
 			TypeInformation: TypeInformation,
 			kind:            Struct,
@@ -34,7 +36,7 @@ func (self *publishStruct) Export(writer io.StringWriter, TypeInformation IBaseT
 		})
 	GenerateMessageReadFunction(
 		writer,
-		self.data,
+		returnType,
 		GenerateMessageReadFunctionParams{
 			TypeInformation: TypeInformation,
 			kind:            Struct,
@@ -85,18 +87,50 @@ func (self *publishStruct) GenerateReadFunction(writer io.StringWriter, TypeInfo
 	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\tvalue = New%v()\n", typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("\tvar n int \n"))
-	for _, item := range self.data.Members {
-		switch item.DefinedType.Kind() {
-		case Enum:
-			_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v, n, err = Read_%v(stream)\n", item.Declarator.Identifier(), item.DefinedType.GetName()))
-			break
-		default:
-			_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v, n, err = stream.Read_%v()\n", item.Declarator.Identifier(), item.DefinedType.Kind().String()))
+	for index, item := range self.data.Members {
+		errorCheckFunc := func() {
+			_, _ = writer.WriteString(fmt.Sprintf("\tif err != nil {\n"))
+			_, _ = writer.WriteString(fmt.Sprintf("\t\treturn nil, 0, err\n"))
+			_, _ = writer.WriteString(fmt.Sprintf("\t}\n"))
+			_, _ = writer.WriteString(fmt.Sprintf("\tbyteCount += n\n"))
 		}
-		_, _ = writer.WriteString(fmt.Sprintf("\tif err != nil {\n"))
-		_, _ = writer.WriteString(fmt.Sprintf("\t\treturn nil, 0, err\n"))
-		_, _ = writer.WriteString(fmt.Sprintf("\t}\n"))
-		_, _ = writer.WriteString(fmt.Sprintf("\tbyteCount += n\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\t// Index: %v, Member Name: %v, Type: %v \n", index, item.Declarator.Identifier(), item.DefinedType.GetName()))
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
+		switch item.DefinedType.Kind() {
+		case MitchAlpha:
+			_, seqCount := item.DefinedType.GetSequenceCount()
+			_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v, n, err = stream.Read_%v(%v)\n", item.Declarator.Identifier(), item.DefinedType.GetStreamFunctionName(), seqCount))
+			errorCheckFunc()
+			break
+		case MitchMessageNumber:
+			_, _ = writer.WriteString(fmt.Sprintf("\tb, n, err := stream.Read_byte()\n"))
+			i, _ := strconv.Atoi(item.DefinedType.DefaultValue())
+			_, _ = writer.WriteString(fmt.Sprintf("\tif b != 0x%x {\n", i))
+			_, _ = writer.WriteString(fmt.Sprintf("\t\treturn nil, 0, errors.New(fmt.Sprintf(\"Message type numbers does not match up. For Message %v was expected 0x%x, but 0x%%x was found.)\", b))\n", self.data.Identifier, i))
+			_, _ = writer.WriteString(fmt.Sprintf("\t}\n"))
+			errorCheckFunc()
+			_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v = b\n", item.Declarator.Identifier()))
+			break
+		case Enum:
+			_, _ = writer.WriteString(fmt.Sprintf("\ttemp_%v, n, err := stream.Read_byte()\n", item.Declarator.Identifier()))
+			_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v = %v(temp_%v)\n", item.Declarator.Identifier(), item.DefinedType.GetName(), item.Declarator.Identifier()))
+			errorCheckFunc()
+			break
+		case MitchBitField:
+			if typeDecl, ok := item.DefinedType.(ITypeDeclaration); ok {
+				_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v, n, err = Read_%v(stream)\n", item.Declarator.Identifier(), typeDecl.GetDeclarator().Identifier()))
+				errorCheckFunc()
+			} else {
+				panic("DDDD")
+			}
+		default:
+			_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v, n, err = stream.Read_%v()\n", item.Declarator.Identifier(), item.DefinedType.GetStreamFunctionName()))
+			errorCheckFunc()
+		}
+
 	}
 	_, _ = writer.WriteString(fmt.Sprintf("\treturn value, byteCount, nil\n"))
 	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
@@ -108,13 +142,30 @@ func (self *publishStruct) GenerateWriteFunction(writer io.StringWriter, TypeInf
 	_, _ = writer.WriteString(fmt.Sprintf("// %v writer \n", typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\tvar n int \n"))
-	for _, item := range self.data.Members {
+	for index, item := range self.data.Members {
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\t// Index: %v, Member Name: %v, Type: %v \n", index, item.Declarator.Identifier(), item.DefinedType.GetName()))
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
 		switch item.DefinedType.Kind() {
-		case Enum:
-			_, _ = writer.WriteString(fmt.Sprintf("\tn, err = Write_%v(stream, value.%v)\n", item.DefinedType.GetName(), item.Declarator.Identifier()))
+		case MitchAlpha:
+			_, seqCount := item.DefinedType.GetSequenceCount()
+			_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_%v(value.%v, %v)\n", item.DefinedType.GetStreamFunctionName(), item.Declarator.Identifier(), seqCount))
+		case MitchMessageNumber:
+			_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_byte(%v)\n", item.DefinedType.DefaultValue()))
 			break
+		case Enum:
+			_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_byte(byte(value.%v))\n", item.Declarator.Identifier()))
+			break
+		case MitchBitField:
+			if typeDecl, ok := item.DefinedType.(ITypeDeclaration); ok {
+				_, _ = writer.WriteString(fmt.Sprintf("\tn, err = Write_%v(stream, value.%v)\n", typeDecl.GetDeclarator().Identifier(), item.Declarator.Identifier()))
+			} else {
+				panic("DDDD")
+			}
 		default:
-			_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_%v(value.%v)\n", item.DefinedType.Kind().String(), item.Declarator.Identifier()))
+			_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_%v(value.%v)\n", item.DefinedType.GetStreamFunctionName(), item.Declarator.Identifier()))
 		}
 		_, _ = writer.WriteString(fmt.Sprintf("\tif err != nil {\n"))
 		_, _ = writer.WriteString(fmt.Sprintf("\t\treturn 0, err\n"))

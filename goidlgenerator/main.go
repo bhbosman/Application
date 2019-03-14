@@ -85,11 +85,12 @@ func main() {
 		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
 		os.Exit(5)
 	}
-	err = publisher.Export(Publish.ExportParams{
-		OutputStream:    outStream,
-		TypeInformation: typesInUse,
-		PackageName:     *packageName,
-		DeclaredTypes:   definitionDeclarations})
+	err = publisher.Export(
+		typesInUse,
+		Publish.ExportParams{
+			OutputStream:  outStream,
+			PackageName:   *packageName,
+			DeclaredTypes: definitionDeclarations})
 	if err != nil {
 		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
 		os.Exit(6)

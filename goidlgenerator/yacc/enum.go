@@ -13,8 +13,12 @@ type EnumDecl struct {
 	Decls      []interfaces.IDeclarator
 }
 
-func (self *EnumDecl) GetPackageName() (bool, string) {
-	return false, ""
+func (self *EnumDecl) GetStreamFunctionName() string {
+	return "byte"
+}
+
+func (self *EnumDecl) GetPackageName() (bool, string, string) {
+	return true, "", self.Identifier
 }
 
 func (self *EnumDecl) GetSequenceCount() (bool, int) {

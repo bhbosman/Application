@@ -11,8 +11,12 @@ type SequenceType struct {
 	next         interfaces.IDefinitionDeclaration
 }
 
-func (self *SequenceType) GetPackageName() (bool, string) {
-	return false, ""
+func (self *SequenceType) GetStreamFunctionName() string {
+	return "(seq oops)"
+}
+
+func (self *SequenceType) GetPackageName() (bool, string, string) {
+	return false, "", ""
 }
 
 func (self *SequenceType) GetSequenceCount() (bool, int) {

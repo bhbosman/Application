@@ -49,9 +49,10 @@ func (self publishEnum) Export(writer io.StringWriter, TypeInformation interface
 
 	self.ExportDefaultConstructor(writer, TypeInformation)
 
+	returnType := Extansions.TypeValueForDefinedType(self.data)
 	GenerateMessageWriteFunction(
 		writer,
-		self.data,
+		returnType,
 		GenerateMessageWriteFunctionParams{
 			TypeInformation: TypeInformation,
 			kind:            interfaces.Enum,
@@ -60,7 +61,7 @@ func (self publishEnum) Export(writer io.StringWriter, TypeInformation interface
 		})
 	GenerateMessageReadFunction(
 		writer,
-		self.data,
+		returnType,
 		GenerateMessageReadFunctionParams{
 			TypeInformation: TypeInformation,
 			kind:            interfaces.Enum,
@@ -84,12 +85,8 @@ func (self publishEnum) GenerateReadFunction(writer io.StringWriter, TypeInforma
 	returnType := Extansions.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
-
-	_, _ = writer.WriteString(fmt.Sprintf("\tvalue = New%v()\n", typeNamePrefix))
-
-	_, _ = writer.WriteString(fmt.Sprintf("\tvar n int \n"))
-
-	_, _ = writer.WriteString(fmt.Sprintf("\treturn value, byteCount, nil\n"))
+	_, _ = writer.WriteString(fmt.Sprintf("\tv, b, e :=  stream.Read_byte()\n"))
+	_, _ = writer.WriteString(fmt.Sprintf("\treturn %v(v), b, e\n", typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))
 }
@@ -97,10 +94,8 @@ func (self publishEnum) GenerateReadFunction(writer io.StringWriter, TypeInforma
 func (self publishEnum) GenerateWriteFunction(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation, typeNamePrefix string, typeCode uint32) {
 	returnType := Extansions.TypeValueForDefinedType(self.data)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v writer \n", typeNamePrefix))
-	_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
-	_, _ = writer.WriteString(fmt.Sprintf("\tvar n int \n"))
-
-	_, _ = writer.WriteString(fmt.Sprintf("\treturn byteCount, nil\n"))
+	_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (int, error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
+	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Write_byte(byte(value))\n"))
 	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))
 }

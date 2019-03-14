@@ -13,24 +13,28 @@ type TypeDeclarator struct {
 	next         interfaces.IDefinitionDeclaration
 }
 
-func (self *TypeDeclarator) GetPackageName() (bool, string) {
-	return false, ""
+func (self *TypeDeclarator) GetStreamFunctionName() string {
+	return "Aasdasdasas"
+}
+
+func (self *TypeDeclarator) GetPackageName() (bool, string, string) {
+	return self.DefinedTyped.GetPackageName()
 }
 
 func (self *TypeDeclarator) GetSequenceCount() (bool, int) {
-	return false, 0
+	return self.DefinedTyped.GetSequenceCount()
 }
 
 func (self *TypeDeclarator) Kind() interfaces.Kind {
-	return interfaces.TypeDeclarator
+	return self.DefinedTyped.Kind()
 }
 
 func (self *TypeDeclarator) DefaultValue() string {
-	return "nil"
+	return self.DefinedTyped.DefaultValue()
 }
 
 func (self *TypeDeclarator) Predefined() bool {
-	return false
+	return self.DefinedTyped.Predefined()
 }
 
 func (self *TypeDeclarator) GetScopeName() string {

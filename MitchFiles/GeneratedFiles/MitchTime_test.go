@@ -6,6 +6,6 @@ import (
 )
 
 func TestReadMessage_MitchMessage_Time(t *testing.T) {
-	msg := NewMitchMessage_Time()
+	msg := NewTimeMessage()
 	assert.NotNil(t, msg)
 }

@@ -2,35 +2,35 @@ package publishGo
 
 import (
 	"bufio"
-	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
+	"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
-	_ "github.com/bhbosman/Application/goidlgenerator/Publish/json"
-	"os"
-
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"strings"
 	"testing"
 )
 
 func TestPublishOfStructDefinition(t *testing.T) {
 	verbose := false
-
+	typeInformation := MitchDefinedTypes.NewMitchTypeInformation()
 	t.Run("", func(t *testing.T) {
 		data := `
-			typedef bitfield
-    		<
-        		InverseOrderBook,
-        		b1,
-        		b2,
-        		b3,
-        		b4,
-        		b5,
-        		b6,
-        		b7
-			> SymbolDirectoryFlags, A, B;
-		
+			typedef MitchBitField
+			<
+				InverseOrderBook,
+				b1,
+				b2,
+				b3,
+				b4,
+				b5,
+				b6,
+				b7
+			> SymbolDirectoryFlags;
+
+			struct A{SymbolDirectoryFlags B;};
 		`
+
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()
 
@@ -38,8 +38,7 @@ func TestPublishOfStructDefinition(t *testing.T) {
 			IdlExprContext: IdlExprContext,
 			Verbose:        verbose,
 		}
-
-		idlExprLex, _ := yacc.NewIdlExprLex(reader, IdlDefinedTypes.NewIdlNativeTypeInformation(),lexParams)
+		idlExprLex, _ := yacc.NewIdlExprLex(reader, typeInformation, lexParams)
 		assert.Equal(t, 0, yacc.IdlExprParse(idlExprLex))
 		DeclaredTypes := IdlExprContext.GetSpecification()
 		if !assert.NotNil(t, DeclaredTypes) {
@@ -47,11 +46,11 @@ func TestPublishOfStructDefinition(t *testing.T) {
 		}
 
 		params := Publish.ExportParams{
-			OutputStream:    os.Stdout,
-			PackageName:     "ddd",
-			DeclaredTypes:   DeclaredTypes,
+			OutputStream:  os.Stdout,
+			PackageName:   "ddd",
+			DeclaredTypes: DeclaredTypes,
 		}
-		err := newPublishGolang().Export(IdlDefinedTypes.NewIdlNativeTypeInformation(), params)
+		err := newPublishGolang().Export(typeInformation, params)
 		assert.NoError(t, err)
 	})
 

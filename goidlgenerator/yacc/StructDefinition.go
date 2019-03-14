@@ -14,8 +14,12 @@ type StructDefinition struct {
 	Next       interfaces.IDefinitionDeclaration `json:"-"`
 }
 
-func (self *StructDefinition) GetPackageName() (bool, string) {
-	return false, ""
+func (self *StructDefinition) GetStreamFunctionName() string {
+	return self.Identifier
+}
+
+func (self *StructDefinition) GetPackageName() (bool, string, string) {
+	return true, "", self.Identifier
 }
 
 func (self *StructDefinition) GetSequenceCount() (bool, int) {

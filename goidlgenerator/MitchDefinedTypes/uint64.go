@@ -7,8 +7,12 @@ import (
 type mitchUInt64 struct {
 }
 
-func (self *mitchUInt64) GetPackageName() (bool, string) {
-	return true, "Streams"
+func (self *mitchUInt64) GetStreamFunctionName() string {
+	return self.Kind().String()
+}
+
+func (self *mitchUInt64) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
 }
 
 func (self *mitchUInt64) GetSequenceCount() (bool, int) {
@@ -16,7 +20,7 @@ func (self *mitchUInt64) GetSequenceCount() (bool, int) {
 }
 
 func (self *mitchUInt64) DefaultValue() string {
-	return "false"
+	return "0"
 }
 
 func (self *mitchUInt64) Kind() interfaces.Kind {
@@ -27,6 +31,6 @@ func (self *mitchUInt64) Predefined() bool {
 	return true
 }
 
-func (*mitchUInt64) GetName() string {
-	return "MitchUInt64"
+func (self *mitchUInt64) GetName() string {
+	return self.Kind().String()
 }

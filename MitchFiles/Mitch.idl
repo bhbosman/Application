@@ -1,6 +1,3 @@
-
-
-
 //Time
 //Sent by the server for every second for which at least one application message is generated. This message is not transmitted during periods where no other application messages are generated.
 //√
@@ -9,11 +6,11 @@
 //
 
 
-struct MitchMessage_Time
+struct TimeMessage
 {
-    MitchUInt16 Length;
-    MitchByte   MessageType = 0x54;
-    MitchUInt32 Seconds;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x54>    MessageType;
+    MitchUInt32                     Seconds;
 };
 
 //System Event
@@ -30,12 +27,12 @@ enum TEventCode
     StartOfDay = 'O'
 };
 
-struct MitchMessage_SystemEvent
+struct SystemEventMessage
 {
-    MitchUInt16 Length;
-    MitchByte   MessageType = 0x53;
-    MitchUInt32 Nanosecond;
-    TEventCode   EventCode;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x53>    MessageType;
+    MitchUInt32                     Nanosecond;
+    TEventCode                      EventCode;
 };
 
 
@@ -60,7 +57,7 @@ enum SymbolDirectoryOptionType{
     PutOption = 'P'
 };
 
-typedef bitfield
+typedef MitchBitField
     <
         InverseOrderBook,
         b1,
@@ -72,7 +69,7 @@ typedef bitfield
         b7
     > SymbolDirectoryFlags;
 
-typedef bitfield
+typedef  MitchBitField
     <
         Regular,
         OffBook,
@@ -90,10 +87,10 @@ enum SymbolDirectorySettlementMethod{
     Physical ='P'
 };
 
-struct MitchMessage_SymbolDirectory
+struct SymbolDirectoryMessage
 {
     MitchUInt16                     Length;
-    MitchByte                       MessageType = 0x52;
+    MitchMessageNumberType<0x52>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     InstrumentID;
     MitchByte                       Reserved01;
@@ -174,16 +171,28 @@ enum SymbolStatusBookType
     NegotiatedTrades = 11
 };
 
-struct MitchMessage_SymbolStatus
+typedef  MitchBitField
+    <
+        b0,
+        b1,
+        b2,
+        b3,
+        b4,
+        b5,
+        b6,
+        b7
+    > SymbolStatusMessageFlags;
+
+struct SymbolStatusMessage
 {
     MitchUInt16                     Length;
-    MitchByte                       MessageType = 0x48;
+    MitchMessageNumberType<0x48>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     InstrumentID;
     MitchByte                       Reserved01;
     MitchByte                       Reserved02;
     SymbolStatusTradingStatus       TradingStatus;
-    MitchBitField                   Flags;
+    SymbolStatusMessageFlags        Flags;
     MitchAlpha<4>                   Reason;
     SymbolStatusSessionChangeReason SessionChangeReason;
     MitchTime                       NewEndTime;
@@ -205,7 +214,7 @@ enum OrderSide
 };
 
 
-typedef bitfield
+typedef MitchBitField
     <
         b0,
         b1,
@@ -220,19 +229,19 @@ typedef bitfield
 
 
 
-struct MitchMessage_AddOrder
+struct AddOrderMessage
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType = 0x41;
-    MitchUInt32     Nanosecond;
-    MitchUInt64     OrderId;
-    OrderSide       Side;
-    MitchUInt32     Quantity;
-    MitchUInt32     InstrumentID;
-    MitchByte       Reserved01;
-    MitchByte       Reserved02;
-    MitchPrice08    Price;
-    AddOrderFlags   Flags;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x41>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt64                     OrderId;
+    OrderSide                       Side;
+    MitchUInt32                     Quantity;
+    MitchUInt32                     InstrumentID;
+    MitchByte                       Reserved01;
+    MitchByte                       Reserved02;
+    MitchPrice08                    Price;
+    AddOrderFlags                   Flags;
 };
 
 //Add Attributed Order
@@ -246,7 +255,7 @@ struct MitchMessage_AddOrder
 
 
 
-typedef bitfield
+typedef MitchBitField
     <
         Regular,
         b1,
@@ -261,18 +270,18 @@ typedef bitfield
 
 
 
-struct MitchMessage_AddAttributedOrder
+struct AddAttributedOrderMessage
 {
-    MitchUInt16                 Length;
-    MitchByte                   MessageType = 0x46;
-    MitchUInt32                 Nanosecond;
-    MitchUInt64                 OrderID;
-    OrderSide                   Side;
-    MitchUInt32                 Quantity;
-    MitchUInt32                 InstrumentID;
-    MitchPrice08                Price;
-    MitchAlpha<11>               Attribution;
-    AddAttributedOrderFlags    Flags;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x46>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt64                     OrderID;
+    OrderSide                       Side;
+    MitchUInt32                     Quantity;
+    MitchUInt32                     InstrumentID;
+    MitchPrice08                    Price;
+    MitchAlpha<11>                  Attribution;
+    AddAttributedOrderFlags         Flags;
 };
 
 //Order Deleted
@@ -281,12 +290,12 @@ struct MitchMessage_AddAttributedOrder
 //×
 //√
 //
-struct MitchMessage_OrderDeleted
+struct OrderDeletedMessage
 {
-    MitchUInt16 Length;
-    MitchByte MessageType = 0x44;
-    MitchUInt32 Nanosecond;
-    MitchUInt64 OrderID;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x44>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt64                     OrderID;
 };
 
 
@@ -298,7 +307,7 @@ struct MitchMessage_OrderDeleted
 //
 
 
-typedef bitfield
+typedef MitchBitField
     <
         PriorityFlag,
         b1,
@@ -310,19 +319,19 @@ typedef bitfield
         b7
     > OrderModifiedFlags;
 
-struct MitchMessage_OrderModified
+struct OrderModifiedMessage
 {
-    MitchUInt16         Length;
-    MitchByte           MessageType = 0x55;
-    MitchUInt32         Nanosecond;
-    MitchUInt64         OrderID;
-    MitchUInt32         NewQuantity;
-    MitchPrice08        NewPrice;
-    OrderModifiedFlags  Flags;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x55>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt64                     OrderID;
+    MitchUInt32                     NewQuantity;
+    MitchPrice08                    NewPrice;
+    OrderModifiedFlags              Flags;
 };
 
 //Order Book Clear
-//Sent to instruct MitchMessage_Recipients to remove all orders from the order book for the specified instrument.
+//Sent to instruct Recipients to remove all orders from the order book for the specified instrument.
 //√
 //×
 //√
@@ -351,19 +360,14 @@ enum OrderBookClearBookType
 };
 
 
-
-
-
-
-
-struct MitchMessage_OrderBookClear
+struct OrderBookClearMessage
 {
-    MitchUInt16             Length;
-    MitchByte               MessageType = 0x79;
-    MitchUInt32             Nanosecond;
-    MitchUInt32             InstrumentID;
-    OrderBookClearSubBook   SubBook;
-    OrderBookClearBookType  BookType;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x79>    MessageType = 0x79;
+    MitchUInt32                     Nanosecond;
+    MitchUInt32                     InstrumentID;
+    OrderBookClearSubBook           SubBook;
+    OrderBookClearBookType          BookType;
 };
 
 //Order Executed
@@ -374,17 +378,17 @@ struct MitchMessage_OrderBookClear
 //√
 //
 
-struct MitchMessage_OrderExecuted
+struct OrderExecutedMessage
 {
-    MitchUInt16 Length;
-    MitchByte   MessageType;
-    MitchUInt32 Nanosecond;
-    MitchUInt64 OrderID;
-    MitchUInt32 ExecutedQuantity;
-    MitchUInt64 TradeID;
-    MitchPrice08  LastOptPx;
-    MitchPrice08  Volatility;
-    MitchPrice08  UnderlyingReferencePrice;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x45>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt64                     OrderID;
+    MitchUInt32                     ExecutedQuantity;
+    MitchUInt64                     TradeID;
+    MitchPrice08                    LastOptPx;
+    MitchPrice08                    Volatility;
+    MitchPrice08                    UnderlyingReferencePrice;
 };
 
 //Order Executed With Price/ Size
@@ -398,20 +402,20 @@ struct MitchMessage_OrderExecuted
 
 
 
-struct MitchMessage_OrderExecutedWithPriceSize
+struct OrderExecutedWithPriceSizeMessage
 {
-    MitchUInt16 Length;
-    MitchByte   MessageType;
-    MitchUInt32 Nanosecond;
-    MitchUInt64 OrderID;
-    MitchUInt32 ExecutedQuantity;
-    MitchUInt32 DisplayQuantity;
-    MitchUInt64 TradeID;
-    MitchByte   Printable;
-    MitchPrice08  Price;
-    MitchPrice08  LastOptPx;
-    MitchPrice08  Volatility;
-    MitchPrice08  UnderlyingReferencePrice;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x43>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt64                     OrderID;
+    MitchUInt32                     ExecutedQuantity;
+    MitchUInt32                     DisplayQuantity;
+    MitchUInt64                     TradeID;
+    MitchByte                       Printable;
+    MitchPrice08                    Price;
+    MitchPrice08                    LastOptPx;
+    MitchPrice08                    Volatility;
+    MitchPrice08                    UnderlyingReferencePrice;
 };
 
 //Trade
@@ -426,24 +430,46 @@ struct MitchMessage_OrderExecutedWithPriceSize
 
 
 
+typedef MitchBitField
+    <
+        b0,
+        b1,
+        b2,
+        b3,
+        b4,
+        b5,
+        b6,
+        b7
+    > TradeMessageFlags;
 
-struct MitchMessage_Trade
+
+
+enum TradeMessageSubBook
 {
-    MitchUInt16 Length;
-    MitchByte   MessageType;
-    MitchUInt32 Nanosecond;
-    MitchUInt32 ExecutedQuantity;
-    MitchUInt32 InstrumentID;
-    MitchByte   Reserved01;
-    MitchByte   Reserved02;
-    MitchPrice08  Price;
-    MitchUInt64 TradeID;
-    MitchUInt08  SubBook;
-    MitchBitField  Flags;
-    MitchAlpha<6>  TradeSubType;
-    MitchPrice08  LastOptPx;
-    MitchPrice08  Volatility;
-    MitchPrice08  UnderlyingReferencePrice;
+    Regular = 1,
+    NegotiatedTrades = 11
+};
+
+
+
+
+struct TradeMessage
+{
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x50>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt32                     ExecutedQuantity;
+    MitchUInt32                     InstrumentID;
+    MitchByte                       Reserved01;
+    MitchByte                       Reserved02;
+    MitchPrice08                    Price;
+    MitchUInt64                     TradeID;
+    TradeMessageSubBook             SubBook;
+    TradeMessageFlags               Flags;
+    MitchAlpha<4>                   TradeSubType;
+    MitchPrice08                    LastOptPx;
+    MitchPrice08                    Volatility;
+    MitchPrice08                    UnderlyingReferencePrice;
 };
 
 
@@ -460,21 +486,21 @@ struct MitchMessage_Trade
 
 
 
-struct MitchMessage_AuctionTrade
+struct AuctionTradeMessage
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
-    MitchUInt32     Quantity;
-    MitchUInt32     InstrumentID;
-    MitchByte       Reserved01;
-    MitchByte       Reserved02;
-    MitchPrice08    Price;
-    MitchUInt64     TradeID;
-    MitchByte       AuctionType;
-    MitchPrice08    LastOptPx;
-    MitchPrice08    Volatility;
-    MitchPrice08    UnderlyingReferencePrice;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x51>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt32                     Quantity;
+    MitchUInt32                     InstrumentID;
+    MitchByte                       Reserved01;
+    MitchByte                       Reserved02;
+    MitchPrice08                    Price;
+    MitchUInt64                     TradeID;
+    MitchByte                       AuctionType;
+    MitchPrice08                    LastOptPx;
+    MitchPrice08                    Volatility;
+    MitchPrice08                    UnderlyingReferencePrice;
 };
 
 //Off Book Trade
@@ -490,24 +516,24 @@ struct MitchMessage_AuctionTrade
 
 
 
-struct MitchMessage_OffBookTrade
+struct OffBookTradeMessage
 {
 
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
-    MitchUInt32     ExecutedQuantity;
-    MitchUInt32     InstrumentID;
-    MitchByte       Reserved01;
-    MitchByte       Reserved02;
-    MitchPrice08    Price;
-    MitchUInt64     TradeID;
-    MitchAlpha<6>   OffBookTradeType;
-    MitchTime       TradeTime;
-    MitchDate       TradeDate;
-    MitchPrice08    LastOptPx;
-    MitchPrice08    Volatility;
-    MitchPrice08    UnderlyingReferencePrice;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x78>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt32                     ExecutedQuantity;
+    MitchUInt32                     InstrumentID;
+    MitchByte                       Reserved01;
+    MitchByte                       Reserved02;
+    MitchPrice08                    Price;
+    MitchUInt64                     TradeID;
+    MitchAlpha<6>                   OffBookTradeType;
+    MitchTime                       TradeTime;
+    MitchDate                       TradeDate;
+    MitchPrice08                    LastOptPx;
+    MitchPrice08                    Volatility;
+    MitchPrice08                    UnderlyingReferencePrice;
 };
 
 //Trade Break
@@ -518,10 +544,10 @@ struct MitchMessage_OffBookTrade
 //
 
 
-struct MitchMessage_TradeBreak
+struct TradeBreakMessage
 {
     MitchUInt16 Length;
-    MitchByte   MessageType;
+    MitchMessageNumberType<0x42>   MessageType;
     MitchUInt32 Nanosecond;
     MitchUInt64 TradeID;
     MitchByte   TradeType;
@@ -535,28 +561,51 @@ struct MitchMessage_TradeBreak
 //
 
 
+typedef MitchBitField
+    <
+        b0,
+        b1,
+        b2,
+        b3,
+        b4,
+        b5,
+        b6,
+        b7
+    > RecoveryTradeMessageFlags;
 
-struct MitchMessage_RecoveryTrade
+
+
+
+enum RecoveryTradeMessageSubBook
 {
-    MitchUInt16     Length;
-    MitchByte       MessageType;
-    MitchUInt32     Nanosecond;
-    MitchUInt32     ExecutedQuantity;
-    MitchUInt32     InstrumentID;
-    MitchByte       Reserved01;
-    MitchByte       Reserved02;
-    MitchPrice08    Price;
-    MitchUInt64     TradeID;
-    MitchByte       AuctionType;
-    MitchAlpha<6>   OffBookRFQTradeType;
-    MitchTime       TradeTime;
-    MitchDate       TradeDate;
-    MitchByte       ActionType;
-    MitchUInt08     SubBook;
-    MitchBitField   Flags;
-    MitchPrice08    LastOptPx;
-    MitchPrice08    Volatility;
-    MitchPrice08    UnderlyingReferencePrice;
+    Regular = 1,
+    NegotiatedTrades = 11
+};
+
+
+
+
+struct RecoveryTradeMessage
+{
+    MitchUInt16                 Length;
+    MitchMessageNumberType<0x76>                   MessageType;
+    MitchUInt32                 Nanosecond;
+    MitchUInt32                 ExecutedQuantity;
+    MitchUInt32                 InstrumentID;
+    MitchByte                   Reserved01;
+    MitchByte                   Reserved02;
+    MitchPrice08                Price;
+    MitchUInt64                 TradeID;
+    MitchByte                   AuctionType;
+    MitchAlpha<6>               OffBookRFQTradeType;
+    MitchTime                   TradeTime;
+    MitchDate                   TradeDate;
+    MitchByte                   ActionType;
+    RecoveryTradeMessageSubBook SubBook;
+    RecoveryTradeMessageFlags   Flags;
+    MitchPrice08                LastOptPx;
+    MitchPrice08                Volatility;
+    MitchPrice08                UnderlyingReferencePrice;
 };
 
 
@@ -574,10 +623,10 @@ struct MitchMessage_RecoveryTrade
 
 
 
-struct MitchMessage_AuctionInfo
+struct AuctionInfoMessage
 {
     MitchUInt16     Length;
-    MitchByte       MessageType;
+    MitchMessageNumberType<0x49>       MessageType;
     MitchUInt32     Nanosecond;
     MitchUInt32     PairedQuantity;
     MitchUInt32     Reserved01;
@@ -597,18 +646,46 @@ struct MitchMessage_AuctionInfo
 //
 
 
-struct MitchMessage_Statistics
+
+
+
+enum TStatisticsMessageOpenCloseIndicator{
+    UT = 'A',
+    AT = 'B',
+    MidofBBO = 'C',
+    LastAT = 'D',
+    LastUT = 'E',
+    Manual = 'F',
+    VWAP = 'H',
+    PreviousClose = 'I',
+    Zero = 'J',
+    BestBid = 'U',
+    BestOffer = 'V',
+    ReferencePrice = 'Y'
+};
+
+
+enum TStatisticsMessageSubBook{
+    Regular =1,
+    OffBook =2,
+    BulletinBoard=9
+};
+
+
+
+
+struct StatisticsMessage
 {
     MitchUInt16     Length;
-    MitchByte       MessageType;
+    MitchMessageNumberType<0x77>       MessageType;
     MitchUInt32     Nanosecond;
     MitchUInt32     InstrumentID;
     MitchByte       Reserved01;
     MitchByte       Reserved02;
     MitchAlpha<6>   StatisticType;
     MitchPrice08    Price;
-    MitchAlpha<6>   OpenCloseIndicator;
-    MitchUInt08      SubBook;
+    TStatisticsMessageOpenCloseIndicator   OpenCloseIndicator;
+    TStatisticsMessageSubBook SubBook;
 };
 
 //Extended Statistics
@@ -620,10 +697,10 @@ struct MitchMessage_Statistics
 
 
 
-struct MitchMessage_ExtendedStatistics
+struct ExtendedStatisticsMessage
 {
     MitchUInt16     Length;
-    MitchByte       MessageType;
+    MitchMessageNumberType<0x80>       MessageType;
     MitchUInt32     Nanosecond;
     MitchUInt32     InstrumentID;
     MitchPrice08    HighPrice;
@@ -633,7 +710,7 @@ struct MitchMessage_ExtendedStatistics
     MitchPrice04    Turnover;
     MitchUInt32     NumberofTrades;
     MitchAlpha<1>   Reserved01;
-    MitchUInt08      SubBook;
+    TStatisticsMessageSubBook      SubBook;
     MitchPrice08    NotionalExposure;
     MitchPrice08    NotionalDeltaExposure;
     MitchPrice08    OpenInterest;
@@ -648,10 +725,10 @@ struct MitchMessage_ExtendedStatistics
 
 
 
-struct MitchMessage_News
+struct NewsMessage
 {
     MitchUInt16 Length;
-    MitchByte   MessageType;
+    MitchMessageNumberType<0x75>   MessageType;
     MitchUInt32 Nanosecond;
     MitchTime   Time;
     MitchByte   Urgency;
@@ -668,23 +745,35 @@ struct MitchMessage_News
 //×
 
 
+typedef MitchBitField
+    <
+        b0,
+        b1,
+        b2,
+        b3,
+        b4,
+        b5,
+        b6,
+        b7
+    > TopOfBookMessageSubBook;
 
 
 
 
-struct MitchMessage_TopOfBook
+
+struct TopOfBookMessage
 {
-    MitchUInt16    Length;
-    MitchByte      MessageType;
-    MitchUInt32    Nanosecond;
-    MitchUInt32    instrumentID;
-    MitchUInt16    ReserveField;
-    MitchBitField SubBook;
-    MitchByte      Action;
-    MitchByte      Side;
-    MitchPrice08     Price;
-    MitchUInt32    Quantity;
-    MitchUInt32    MarketOrderQuantity;
-    MitchUInt32   Reserved01;
-    MitchUInt32   Reserved02;
+    MitchUInt16                     Length;
+    MitchMessageNumberType<0x71>    MessageType;
+    MitchUInt32                     Nanosecond;
+    MitchUInt32                     instrumentID;
+    MitchUInt16                     ReserveField;
+    TopOfBookMessageSubBook         SubBook;
+    MitchByte                       Action;
+    MitchByte                       Side;
+    MitchPrice08                    Price;
+    MitchUInt32                     Quantity;
+    MitchUInt32                     MarketOrderQuantity;
+    MitchUInt32                     Reserved01;
+    MitchUInt32                     Reserved02;
 };

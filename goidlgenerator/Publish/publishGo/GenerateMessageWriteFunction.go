@@ -2,7 +2,6 @@ package publishGo
 
 import (
 	"fmt"
-	"github.com/bhbosman/Application/goidlgenerator/Extansions"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"io"
 )
@@ -14,8 +13,7 @@ type GenerateMessageWriteFunctionParams struct {
 	typeCode        uint32
 }
 
-func GenerateMessageWriteFunction(writer io.StringWriter, definedType interfaces.IDefinedType, params GenerateMessageWriteFunctionParams) {
-	returnType := Extansions.TypeValueForDefinedType(definedType)
+func GenerateMessageWriteFunction(writer io.StringWriter, returnType string, params GenerateMessageWriteFunctionParams) {
 	_, _ = writer.WriteString(fmt.Sprintf("// %v WriteMessage \n", params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func WriteMessage_%v(stream Streams.I%vWriter, value %v) (int, error) {\n", params.typeNamePrefix, params.TypeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\tbyteCount := 0\n"))

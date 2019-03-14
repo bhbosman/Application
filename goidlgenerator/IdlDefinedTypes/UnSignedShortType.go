@@ -12,8 +12,12 @@ func (self *UnSignedShortType) GetSequenceCount() (bool, int) {
 	return false, 0
 }
 
-func (self *UnSignedShortType) GetPackageName() (bool, string) {
-	return false, "Streams"
+func (self *UnSignedShortType) GetStreamFunctionName() string {
+	return self.Kind().String()
+}
+
+func (self *UnSignedShortType) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
 }
 
 func (self *UnSignedShortType) DefaultValue() string {
@@ -38,4 +42,3 @@ func (self *UnSignedShortType) MarshalJSON() ([]byte, error) {
 		Type: self.GetName(),
 	})
 }
-

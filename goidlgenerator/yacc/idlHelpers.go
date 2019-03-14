@@ -16,6 +16,7 @@ const ErrorOnAddTypedefDcl = 10006
 const ErrorTypeisNull = 10007
 const ErrorMustbeAnInt = 10008
 const ErrorNoScopingAllowed = 10009
+const TypeNotAvailable = 10010
 
 func GetIdlExprLex(item IdlExprLexer) (*IdlExprLex, error) {
 	if item == nil {

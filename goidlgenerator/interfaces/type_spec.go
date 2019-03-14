@@ -1,7 +1,5 @@
 package interfaces
 
-
-
 type IDeclarator interface {
 	Identifier() string
 	Next() IDeclarator
@@ -12,12 +10,13 @@ type IDeclarator interface {
 }
 
 type IDefinedType interface {
-	GetPackageName() (bool, string)
+	GetPackageName() (bool, string, string)
 	GetSequenceCount() (bool, int)
 	GetName() string
 	Kind() Kind
 	DefaultValue() string
 	Predefined() bool
+	GetStreamFunctionName() string
 }
 
 type IDefinitionDeclaration interface {

@@ -7,9 +7,9 @@ import (
 
 func TypeValueForDefinedType(DefinedType interfaces.IDefinedType) string {
 	value := func() string {
-		b, s := DefinedType.GetPackageName()
-		if b {
-			return fmt.Sprintf("%v.%v", s, DefinedType.GetName())
+		_, packageName, typeName := DefinedType.GetPackageName()
+		if packageName != "" {
+			return fmt.Sprintf("%v.%v", packageName, typeName)
 		}
 		return DefinedType.GetName()
 	}()

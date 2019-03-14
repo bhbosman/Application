@@ -1,14 +1,19 @@
 package MitchDefinedTypes
 
 import (
+	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
 type mitchDate struct {
 }
 
-func (self *mitchDate) GetPackageName() (bool, string) {
-	return true, "Streams"
+func (self *mitchDate) GetStreamFunctionName() string {
+	return "mitch_date"
+}
+
+func (self *mitchDate) GetPackageName() (bool, string, string) {
+	return true, "time", self.Kind().String()
 }
 
 func (self *mitchDate) GetSequenceCount() (bool, int) {
@@ -16,7 +21,9 @@ func (self *mitchDate) GetSequenceCount() (bool, int) {
 }
 
 func (self *mitchDate) DefaultValue() string {
-	return "false"
+	_, s, _ := self.GetPackageName()
+	name := self.GetName()
+	return fmt.Sprintf("%v.%v{}", s, name)
 }
 
 func (self *mitchDate) Kind() interfaces.Kind {
@@ -27,6 +34,6 @@ func (self *mitchDate) Predefined() bool {
 	return true
 }
 
-func (*mitchDate) GetName() string {
-	return "MitchDate"
+func (self *mitchDate) GetName() string {
+	return "date"
 }

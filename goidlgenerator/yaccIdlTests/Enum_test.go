@@ -25,7 +25,7 @@ func TestEnums(t *testing.T) {
 			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
-				Verbose: verbose})
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -44,7 +44,7 @@ func TestEnums(t *testing.T) {
 			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
-				Verbose: verbose})
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -63,7 +63,7 @@ func TestEnums(t *testing.T) {
 			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
-				Verbose: verbose})
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -83,7 +83,7 @@ func TestEnums(t *testing.T) {
 			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
-				Verbose: verbose})
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -102,7 +102,7 @@ func TestEnums(t *testing.T) {
 			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
-				Verbose: verbose})
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}
@@ -123,7 +123,7 @@ func TestEnums(t *testing.T) {
 			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
-				Verbose: verbose})
+				Verbose:        verbose})
 		if !assert.Equal(t, 0, IdlExprParse(idlExprLex)) {
 			return
 		}

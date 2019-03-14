@@ -154,9 +154,8 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 	reservedWords["void"] = Rwvoid
 	reservedWords["wchar"] = Rwwchar
 	reservedWords["wstring"] = Rwwstring
-	//reservedWords["bitfield"] = Rwbitfield
 	reservedWords["MitchAlpha"] = RwMitchAlpha
-	//reservedWords["MitchBitField"] = RwMitchBitField
+	reservedWords["MitchBitField"] = RwMitchBitField
 	reservedWords["MitchByte"] = RwMitchByte
 	reservedWords["MitchDate"] = RwMitchDate
 	reservedWords["MitchTime"] = RwMitchTime
@@ -166,6 +165,7 @@ func CreateIdlTokens() ([]DFA.IDFA, error) {
 	reservedWords["MitchUInt16"] = RwMitchUInt16
 	reservedWords["MitchUInt32"] = RwMitchUInt32
 	reservedWords["MitchUInt64"] = RwMitchUInt64
+	reservedWords["MitchMessageNumberType"] = RwMitchMessageNumberType
 
 	collDfaFunctions := []func() (DFA.IDFA, error){
 		func() (DFA.IDFA, error) {
@@ -236,7 +236,7 @@ type NewIdlExprLexParams struct {
 }
 
 func NewIdlExprLex(
-	inputStream    io.ByteScanner,
+	inputStream io.ByteScanner,
 	IDlBaseType interfaces.IBaseTypeInformation,
 	params NewIdlExprLexParams) (*IdlExprLex, error) {
 

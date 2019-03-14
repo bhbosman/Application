@@ -27,9 +27,10 @@ func (self *publishPredefined) Export(writer io.StringWriter, typeInformation in
 
 		_, _ = writer.WriteString(fmt.Sprintf("// %v Declaration TypeCode: 0x%08x\n", typeNamePrefix, typeCode))
 
+		returnType := Extansions.TypeValueForDefinedType(self.data)
 		GenerateMessageWriteFunction(
 			writer,
-			self.data,
+			returnType,
 			GenerateMessageWriteFunctionParams{
 				TypeInformation: typeInformation,
 				kind:            self.data.Kind(),
@@ -38,7 +39,7 @@ func (self *publishPredefined) Export(writer io.StringWriter, typeInformation in
 			})
 		GenerateMessageReadFunction(
 			writer,
-			self.data,
+			returnType,
 			GenerateMessageReadFunctionParams{
 				TypeInformation: typeInformation,
 				kind:            self.data.Kind(),

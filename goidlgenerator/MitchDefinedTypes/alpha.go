@@ -8,8 +8,12 @@ type mitchAlpha struct {
 	length int64
 }
 
-func (self *mitchAlpha) GetPackageName() (bool, string) {
-	return true, "Streams"
+func (self *mitchAlpha) GetStreamFunctionName() string {
+	return self.Kind().String()
+}
+
+func (self *mitchAlpha) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
 }
 
 func (self *mitchAlpha) GetSequenceCount() (bool, int) {
@@ -31,6 +35,6 @@ func (self *mitchAlpha) Predefined() bool {
 	return true
 }
 
-func (*mitchAlpha) GetName() string {
-	return "MitchAlpha"
+func (self *mitchAlpha) GetName() string {
+	return self.Kind().String()
 }

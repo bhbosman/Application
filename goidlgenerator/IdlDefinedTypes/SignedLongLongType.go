@@ -12,8 +12,12 @@ func (self *SignedLongLongType) GetSequenceCount() (bool, int) {
 	return false, 0
 }
 
-func (self *SignedLongLongType) GetPackageName() (bool, string) {
-	return false, "Streams"
+func (self *SignedLongLongType) GetStreamFunctionName() string {
+	return self.Kind().String()
+}
+
+func (self *SignedLongLongType) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
 }
 
 func (self *SignedLongLongType) DefaultValue() string {
@@ -38,4 +42,3 @@ func (self *SignedLongLongType) MarshalJSON() ([]byte, error) {
 		Type: self.GetName(),
 	})
 }
-

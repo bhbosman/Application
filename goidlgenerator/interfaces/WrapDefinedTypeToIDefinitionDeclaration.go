@@ -4,11 +4,15 @@ type WrapDefinedTypeToIDefinitionDeclaration struct {
 	inner IDefinedType
 }
 
+func (self *WrapDefinedTypeToIDefinitionDeclaration) GetStreamFunctionName() string {
+	return self.inner.GetStreamFunctionName()
+}
+
 func NewWrapDefinedTypeToIDefinitionDeclaration(inner IDefinedType) *WrapDefinedTypeToIDefinitionDeclaration {
 	return &WrapDefinedTypeToIDefinitionDeclaration{inner: inner}
 }
 
-func (self *WrapDefinedTypeToIDefinitionDeclaration) GetPackageName() (bool, string) {
+func (self *WrapDefinedTypeToIDefinitionDeclaration) GetPackageName() (bool, string, string) {
 	return self.inner.GetPackageName()
 }
 

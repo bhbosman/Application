@@ -26,9 +26,9 @@ func ToOutputType(s string) OutputType {
 }
 
 type ExportParams struct {
-	OutputStream    io.Writer
-	PackageName     string
-	DeclaredTypes   []interfaces.IDefinitionDeclaration
+	OutputStream  io.Writer
+	PackageName   string
+	DeclaredTypes []interfaces.IDefinitionDeclaration
 }
 
 type IPublish interface {
@@ -62,9 +62,9 @@ func PublishOutputType(
 	result, ok := registrations[outputType]
 	if ok {
 		err := result.Export(information, ExportParams{
-			OutputStream:    writer,
-			PackageName:     packageName,
-			DeclaredTypes:   declaredTypes})
+			OutputStream:  writer,
+			PackageName:   packageName,
+			DeclaredTypes: declaredTypes})
 		if err != nil {
 			return err
 		}

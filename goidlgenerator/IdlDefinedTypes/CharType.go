@@ -12,8 +12,12 @@ func (self *CharType) GetSequenceCount() (bool, int) {
 	return false, 0
 }
 
-func (self *CharType) GetPackageName() (bool, string) {
-	return false, "Streams"
+func (self *CharType) GetStreamFunctionName() string {
+	return self.Kind().String()
+}
+
+func (self *CharType) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
 }
 
 func (self *CharType) DefaultValue() string {

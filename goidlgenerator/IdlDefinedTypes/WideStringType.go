@@ -13,8 +13,12 @@ func (self *WideStringType) GetSequenceCount() (bool, int) {
 	return false, 0
 }
 
-func (self *WideStringType) GetPackageName() (bool, string) {
-	return false, "Streams"
+func (self *WideStringType) GetStreamFunctionName() string {
+	return self.Kind().String()
+}
+
+func (self *WideStringType) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
 }
 
 func (self *WideStringType) DefaultValue() string {
@@ -38,4 +42,3 @@ func (self *WideStringType) MarshalJSON() ([]byte, error) {
 		Type: self.GetName(),
 	})
 }
-

@@ -2,7 +2,6 @@ package publishGo
 
 import (
 	"fmt"
-	"github.com/bhbosman/Application/goidlgenerator/Extansions"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"io"
 )
@@ -15,8 +14,7 @@ type GenerateMessageReadFunctionParams struct {
 	defaultValue    string
 }
 
-func GenerateMessageReadFunction(writer io.StringWriter, definedType interfaces.IDefinedType, params GenerateMessageReadFunctionParams) {
-	returnType := Extansions.TypeValueForDefinedType(definedType)
+func GenerateMessageReadFunction(writer io.StringWriter, returnType string, params GenerateMessageReadFunctionParams) {
 	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", params.typeNamePrefix))
 	_, _ = writer.WriteString(fmt.Sprintf("func ReadMessage_%v(stream Streams.I%vReader) (%v, int, error) {\n", params.typeNamePrefix, params.TypeInformation.Name(), returnType))
 	_, _ = writer.WriteString(fmt.Sprintf("\tbyteCount := 0\n"))

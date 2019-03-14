@@ -12,8 +12,12 @@ func (self *OctetType) GetSequenceCount() (bool, int) {
 	return false, 0
 }
 
-func (self *OctetType) GetPackageName() (bool, string) {
-	return false, "Streams"
+func (self *OctetType) GetStreamFunctionName() string {
+	return self.Kind().String()
+}
+
+func (self *OctetType) GetPackageName() (bool, string, string) {
+	return true, "", self.Kind().String()
 }
 
 func (self *OctetType) DefaultValue() string {
@@ -38,4 +42,3 @@ func (self *OctetType) MarshalJSON() ([]byte, error) {
 		Type: self.GetName(),
 	})
 }
-
