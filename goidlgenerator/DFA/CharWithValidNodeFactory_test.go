@@ -5,7 +5,6 @@ import (
 	"testing"
 )
 
-
 func TestCharNodeWithNodeFactory(t *testing.T) {
 
 	t.Run("Check lexem", func(t *testing.T) {

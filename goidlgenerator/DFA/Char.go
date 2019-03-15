@@ -1,7 +1,7 @@
 package DFA
 
 import (
-	"github.com/bhbosman/Application/Generic"
+	"github.com/bhbosman/Application/Common"
 )
 
 type CharNode struct {
@@ -28,7 +28,7 @@ func NewCharNode(tokenValue int) (*CharNode, error) {
 	charNode := NewPlainNode("charNode_harNode", false)
 	escapeNode := NewPlainNode("charNode_escapeNode", false)
 	secondQuoteNode := NewPlainNode("charNode_secondQuoteNode", true)
-	err := Generic.ErrorListFactory.NewErrorListFunc(func(errorList Generic.IErrorList) {
+	err := Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		errorList.Add(NodeFactory.PlainNodeLink('\'', startNode, firstQuoteNode))
 		errorList.Add(NodeFactory.PlainNodeLink('\'', charNode, secondQuoteNode))
 		errorList.Add(NodeFactory.PlainNodeLink('\\', firstQuoteNode, escapeNode))

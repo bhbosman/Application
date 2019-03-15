@@ -2,13 +2,12 @@ package DFA
 
 import (
 	"errors"
-	"github.com/bhbosman/Application/Generic"
+	"github.com/bhbosman/Application/Common"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 type errorListWhichWillReturnError struct {
-	
 }
 
 func (self *errorListWhichWillReturnError) Add(err error) {
@@ -20,11 +19,11 @@ func (self *errorListWhichWillReturnError) Error() error {
 }
 
 func TestNegativeHex(t *testing.T) {
-	Generic.ErrorListFactory.Replace(func() Generic.IErrorList {
+	Common.ErrorListFactory.Replace(func() Common.IErrorList {
 		return &errorListWhichWillReturnError{}
 	})
 	defer func() {
-		Generic.ErrorListFactory.Reset()
+		Common.ErrorListFactory.Reset()
 	}()
 	t.Run("Error on construction", func(t *testing.T) {
 

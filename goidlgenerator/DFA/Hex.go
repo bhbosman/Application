@@ -1,6 +1,6 @@
 package DFA
 
-import "github.com/bhbosman/Application/Generic"
+import "github.com/bhbosman/Application/Common"
 
 type Hex struct {
 	tokenValue   int
@@ -25,8 +25,8 @@ func NewHexDfa(tokenValue int) (*Hex, error) {
 	zeroNode := NewPlainNode("HexZeroNode", false)
 	xNode := NewPlainNode("HexHexNode", false)
 	terminalNode := NewPlainNode("HexTerminalNode", true)
-	err := Generic.ErrorListFactory.NewErrorListFunc(
-		func(errorList Generic.IErrorList) {
+	err := Common.ErrorListFactory.NewErrorListFunc(
+		func(errorList Common.IErrorList) {
 			errorList.Add(NodeFactory.PlainNodeLink('0', startNode, zeroNode))
 			errorList.Add(NodeFactory.PlainNodeLink('X', zeroNode, xNode))
 			errorList.Add(NodeFactory.PlainNodeLink('x', zeroNode, xNode))

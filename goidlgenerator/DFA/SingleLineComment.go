@@ -1,6 +1,6 @@
 package DFA
 
-import "github.com/bhbosman/Application/Generic"
+import "github.com/bhbosman/Application/Common"
 
 type SingleLineComment struct {
 	tokenValue   int
@@ -26,7 +26,7 @@ func NewSingleLineComment(tokenValue int) (*SingleLineComment, error) {
 	secondNode := NewPlainNode("NewSingleLineCommentSecond", false)
 	otherChars := NewPlainNode("NewSingleLineOthersChars", false)
 	terminalNode := NewPlainNode("IntegerTerminalNode", true)
-	err := Generic.ErrorListFactory.NewErrorListFunc(func(errorList Generic.IErrorList) {
+	err := Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 
 		errorList.Add(NodeFactory.PlainNodeLink('/', startNode, secondNode))
 		errorList.Add(NodeFactory.PlainNodeLink('/', secondNode, otherChars))

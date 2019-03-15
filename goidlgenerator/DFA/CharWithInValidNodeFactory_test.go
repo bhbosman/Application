@@ -28,4 +28,3 @@ func TestCharNodeWithInvalidNodeFactory(t *testing.T) {
 
 	})
 }
-

@@ -7,22 +7,19 @@ import (
 )
 
 func TestCreateIdlTokens(t *testing.T) {
+	// Some constant that may change in future
 	currentLength := 16
-	dfamap := make(map[int]DFA.IDfa)
-	if !t.Run(
-		"Create Tokens",
-		func(t *testing.T) {
 
-			dfas, err := CreateIdlTokens()
-			assert.NoError(t, err)
-			assert.Equal(t, currentLength, len(dfas))
-			for _, dfa := range dfas {
-				tokenValue, _ := dfa.Token("(some arb value)")
-				dfamap[tokenValue] = dfa
-			}
-		}) {
-		return
+	dfas, err := CreateIdlTokens()
+	assert.NoError(t, err)
+	assert.Equal(t, currentLength, len(dfas))
+
+	dfamap := make(map[int]DFA.IDfa)
+	for _, dfa := range dfas {
+		tokenValue, _ := dfa.Token("(some arb value)")
+		dfamap[tokenValue] = dfa
 	}
+
 	assert.Equal(t, currentLength, len(dfamap))
 	t.Run("Check Identifier Token and reserved words", func(t *testing.T) {
 		dfa, ok := dfamap[Identifier]
@@ -74,6 +71,13 @@ func TestCreateIdlTokens(t *testing.T) {
 		assert.Equal(t, RwMitchUInt32, identifierDfa.GetMapValue("MitchUInt32"))
 		assert.Equal(t, RwMitchUInt64, identifierDfa.GetMapValue("MitchUInt64"))
 		assert.Equal(t, RwMitchMessageNumberType, identifierDfa.GetMapValue("MitchMessageNumberType"))
+	})
 
+	t.Run("Check Integer Token", func(t *testing.T) {
+		dfa, ok := dfamap[Integer_literal]
+		if !ok {
+			assert.Fail(t, "Could not find integer literal")
+			return
+		}
 	})
 }

@@ -11,6 +11,6 @@ func TestGenericSingleCharToken(t *testing.T) {
 		charNode, _ := NewGenericSingleCharToken("A", 'A', 'A')
 		nodeWalker := NewNodeWalker(charNode)
 		tokenReceived, _ := nodeWalker.Token(`'A'`)
-		assert.Equal(t,  int(byte('A')), tokenReceived)
+		assert.Equal(t, int(byte('A')), tokenReceived)
 	})
 }

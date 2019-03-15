@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/bhbosman/Application/Generic"
+	"github.com/bhbosman/Application/Common"
 	"github.com/bhbosman/Application/goidlgenerator/DFA"
 	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
@@ -169,58 +169,26 @@ func CreateIdlTokens() ([]DFA.IDfa, error) {
 	reservedWords["MitchMessageNumberType"] = RwMitchMessageNumberType
 
 	collDfaFunctions := []func() (DFA.IDfa, error){
-		func() (DFA.IDfa, error) {
-			return DFA.NewIdentifier(Identifier, reservedWords), nil
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewDfaInteger(Integer_literal), nil
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewHexDfa(Hex_literal)
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewDfaWhiteSpace(Whitespace), nil
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewSingleLineComment(SingleLineComment)
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewStringNode(String_literal), nil
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewCharNode(Character_literal)
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken("{", '{', '{')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken("}", '}', '}')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken("<", '<', '<')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken(">", '>', '>')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken("[", '[', '[')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken("]", ']', ']')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken("=", '=', '=')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken(";", ';', ';')
-		},
-		func() (DFA.IDfa, error) {
-			return DFA.NewGenericSingleCharToken(",", ',', ',')
-		},
+		func() (DFA.IDfa, error) { return DFA.NewIdentifier(Identifier, reservedWords), nil },
+		func() (DFA.IDfa, error) { return DFA.NewDfaInteger(Integer_literal), nil },
+		func() (DFA.IDfa, error) { return DFA.NewHexDfa(Hex_literal) },
+		func() (DFA.IDfa, error) { return DFA.NewDfaWhiteSpace(Whitespace), nil },
+		func() (DFA.IDfa, error) { return DFA.NewSingleLineComment(SingleLineComment) },
+		func() (DFA.IDfa, error) { return DFA.NewStringNode(String_literal), nil },
+		func() (DFA.IDfa, error) { return DFA.NewCharNode(Character_literal) },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("{", '{', '{') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("}", '}', '}') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("<", '<', '<') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken(">", '>', '>') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("[", '[', '[') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("]", ']', ']') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("=", '=', '=') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken(";", ';', ';') },
+		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken(",", ',', ',') },
 	}
 
 	collDfa := make([]DFA.IDfa, len(collDfaFunctions), len(collDfaFunctions))
-	err := Generic.ErrorListFactory.NewErrorListFunc(func(errorList Generic.IErrorList) {
+	err := Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		for i, f := range collDfaFunctions {
 			dfa, err := f()
 			if err != nil {
@@ -232,8 +200,6 @@ func CreateIdlTokens() ([]DFA.IDfa, error) {
 	if err != nil {
 		return nil, err
 	}
-
-
 
 	return collDfa, nil
 }
