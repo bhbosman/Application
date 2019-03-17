@@ -169,8 +169,8 @@ func CreateIdlTokens() ([]DFA.IDfa, error) {
 	reservedWords["MitchMessageNumberType"] = RwMitchMessageNumberType
 
 	collDfaFunctions := []func() (DFA.IDfa, error){
-		func() (DFA.IDfa, error) { return DFA.NewIdentifier(Identifier, reservedWords), nil },
-		func() (DFA.IDfa, error) { return DFA.NewDfaInteger(Integer_literal), nil },
+		func() (DFA.IDfa, error) { return DFA.NewIdentifier(Identifier, reservedWords) },
+		func() (DFA.IDfa, error) { return DFA.NewDfaInteger(Integer_literal) },
 		func() (DFA.IDfa, error) { return DFA.NewHexDfa(Hex_literal) },
 		func() (DFA.IDfa, error) { return DFA.NewDfaWhiteSpace(Whitespace), nil },
 		func() (DFA.IDfa, error) { return DFA.NewSingleLineComment(SingleLineComment) },

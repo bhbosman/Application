@@ -7,6 +7,52 @@ import (
 import "fmt"
 import "github.com/bhbosman/Application/Streams"
 
+// Declared typed
+// TimeMessage
+// TEventCode
+// SystemEventMessage
+// SymbolDirectorySymbolStatus
+// SymbolDirectoryOptionType
+// SymbolDirectoryFlags
+// SymbolDirectorySubBook
+// SymbolDirectorySettlementMethod
+// SymbolDirectoryMessage
+// SymbolStatusTradingStatus
+// SymbolStatusSessionChangeReason
+// SymbolStatusBookType
+// SymbolStatusMessageFlags
+// SymbolStatusMessage
+// OrderSide
+// AddOrderFlags
+// AddOrderMessage
+// AddAttributedOrderFlags
+// AddAttributedOrderMessage
+// OrderDeletedMessage
+// OrderModifiedFlags
+// OrderModifiedMessage
+// OrderBookClearSubBook
+// OrderBookClearBookType
+// OrderBookClearMessage
+// OrderExecutedMessage
+// OrderExecutedWithPriceSizeMessage
+// TradeMessageFlags
+// TradeMessageSubBook
+// TradeMessage
+// AuctionTradeMessage
+// OffBookTradeMessage
+// TradeBreakMessage
+// RecoveryTradeMessageFlags
+// RecoveryTradeMessageSubBook
+// RecoveryTradeMessage
+// AuctionInfoMessage
+// TStatisticsMessageOpenCloseIndicator
+// TStatisticsMessageSubBook
+// StatisticsMessage
+// ExtendedStatisticsMessage
+// NewsMessage
+// TopOfBookMessageSubBook
+// TopOfBookMessage
+//
 // TimeMessage Declaration TypeCode: 0xafbd7a0e
 type TimeMessage struct {
 	Length      uint16

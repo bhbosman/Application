@@ -52,7 +52,7 @@ func (k Kind) String() string {
 }
 
 var kindNames = []string{
-	Invalid:            "Invalid",
+	Invalid:            "invalid",
 	Sequence:           "Sequence",
 	Native:             "Native",
 	Struct:             "Struct",

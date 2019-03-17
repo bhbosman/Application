@@ -33,7 +33,7 @@ func (self *Collection) Walk(c byte) (bool, error) {
 func (self *Collection) IsValid() bool {
 	result := len(self.coll) > 0
 	for _, r := range self.coll {
-		result = result && r.IsValid()
+		result = result && r.Terminal()
 	}
 	return result
 }

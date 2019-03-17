@@ -41,11 +41,16 @@ func (self *publishGolang) Export(
 	_, _ = sb.WriteString(fmt.Sprintf("import \"errors\"\n"))
 	_, _ = sb.WriteString(fmt.Sprintf("import \"fmt\"\n"))
 	_, _ = sb.WriteString(fmt.Sprintf("import \"github.com/bhbosman/Application/Streams\"\n"))
-
 	_, _ = sb.WriteString(fmt.Sprintf("\n"))
 
+	_, _ = sb.WriteString(fmt.Sprintf("// Declared typed\n"))
 	for _, declaredType := range params.DeclaredTypes {
+		_, _ = sb.WriteString(fmt.Sprintf("// %v\n", declaredType.GetName()))
+	}
+	_, _ = sb.WriteString(fmt.Sprintf("// \n"))
 
+	for _, declaredType := range params.DeclaredTypes {
+		declaredType.GetName()
 		if declaredType.Predefined() {
 			publish := NewPublishPredefined(declaredType)
 			publish.Export(sb, TypeInformation, typeValueHelper)

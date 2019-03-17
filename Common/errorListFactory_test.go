@@ -6,9 +6,6 @@ import (
 	"testing"
 )
 
-
-
-
 func TestErrorListFactory(t *testing.T) {
 	ErrorListFactory.Reset()
 	assert.Nil(t, ErrorListFactory.other)
@@ -46,7 +43,6 @@ func TestErrorListFactory(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 
-
 	t.Run("Use other implementation of IErrorList", func(t *testing.T) {
 		mockList := newMockErrorList()
 		ErrorListFactory.Replace(func() IErrorList {
@@ -64,7 +60,6 @@ func TestErrorListFactory(t *testing.T) {
 	})
 }
 
-
 type mockErrorList struct {
 	l []string
 }
@@ -80,9 +75,8 @@ func (self *mockErrorList) Add(err error) {
 }
 
 func (self *mockErrorList) Error() error {
-	if len(self.l) == 0{
+	if len(self.l) == 0 {
 		return nil
 	}
 	return fmt.Errorf("some error with %v items", len(self.l))
 }
-

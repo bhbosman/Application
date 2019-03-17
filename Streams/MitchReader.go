@@ -10,6 +10,10 @@ type MitchReader struct {
 	reader io.Reader
 }
 
+func NewMitchReader(reader io.Reader) *MitchReader {
+	return &MitchReader{reader: reader}
+}
+
 func (self *MitchReader) Read_string(length int) (value string, n int, err error) {
 	byteArray := make([]byte, length)
 	err = binary.Read(self.reader, binary.LittleEndian, byteArray)

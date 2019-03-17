@@ -1,5 +1,7 @@
 package DFA
 
+import "github.com/bhbosman/Application/Common"
+
 type IIdentifierDfa interface {
 	IDfa
 	GetMapCount() int
@@ -36,25 +38,30 @@ func (identifier *Identifier) StartNode() *PlainNode {
 	return identifier.start
 }
 
-func NewIdentifier(tokenValue int, reservedWords map[string]int) *Identifier {
+func NewIdentifier(tokenValue int, reservedWords map[string]int) (*Identifier, error) {
 	startNode := NewPlainNode("IdentifierStartNode", false)
 	terminalNode := NewPlainNode("IdentifierTerminalNode", true)
-
-	_ = NodeFactory.PlainNodeLink('_', startNode, terminalNode)
-	_ = NodeFactory.PlainNodeMultiLink('a', 'z', startNode, terminalNode)
-	_ = NodeFactory.PlainNodeMultiLink('A', 'Z', startNode, terminalNode)
-
-	_ = NodeFactory.PlainNodeLink('_', terminalNode, terminalNode)
-	_ = NodeFactory.PlainNodeMultiLink('a', 'z', terminalNode, terminalNode)
-	_ = NodeFactory.PlainNodeMultiLink('A', 'Z', terminalNode, terminalNode)
-	_ = NodeFactory.PlainNodeMultiLink('0', '9', terminalNode, terminalNode)
-
 	local_reservedWords := make(map[string]int)
+	err := Common.ErrorListFactory.NewErrorListFunc(
+		func(errorList Common.IErrorList) {
 
-	if reservedWords != nil {
-		for k, v := range reservedWords {
-			local_reservedWords[k] = v
-		}
+			errorList.Add(NodeFactory.PlainNodeLink('_', startNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('a', 'z', startNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('A', 'Z', startNode, terminalNode))
+
+			errorList.Add(NodeFactory.PlainNodeLink('_', terminalNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('a', 'z', terminalNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('A', 'Z', terminalNode, terminalNode))
+			errorList.Add(NodeFactory.PlainNodeMultiLink('0', '9', terminalNode, terminalNode))
+			if reservedWords != nil {
+				for k, v := range reservedWords {
+					local_reservedWords[k] = v
+				}
+			}
+		})
+
+	if err != nil {
+		return nil, err
 	}
 
 	return &Identifier{
@@ -62,5 +69,5 @@ func NewIdentifier(tokenValue int, reservedWords map[string]int) *Identifier {
 		start:         startNode,
 		terminalNode:  terminalNode,
 		reservedWords: local_reservedWords,
-	}
+	}, nil
 }

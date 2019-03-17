@@ -13,3 +13,6 @@ func TestStringNode(t *testing.T) {
 		assert.True(t, WalkString(nodeWalker, []byte(`"ABCD"`)))
 	})
 }
+
+
+// Todo: Write more test cases for DFA

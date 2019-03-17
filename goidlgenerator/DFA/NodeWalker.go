@@ -1,41 +1,35 @@
 package DFA
 
-type INodeWalker interface {
-	WalkNode(c byte) (bool, error)
-	IsValid() bool
-}
-
 type NodeWalker struct {
-	Dfa         IDfa
+	dfa         IDfa
 	currentNode IPlainNode
-	Invalid     bool
+	invalid     bool
 	name        string
 }
 
 func (self *NodeWalker) WalkNode(c byte) (bool, error) {
-	if self.Invalid == false {
+	if !self.invalid {
 		node, _ := self.Walk(c)
 		if node == nil {
-			self.Invalid = true
+			self.invalid = true
 			return false, nil
 		}
 		self.currentNode = node
 
 		return true, nil
 	}
-
 	return false, nil
 }
 
 func (self *NodeWalker) Reset() {
-	self.currentNode = self.Dfa.StartNode()
+	self.currentNode = self.dfa.StartNode()
 }
 
 func (self *NodeWalker) Token(lexem string) (int, string) {
-	return self.Dfa.Token(lexem)
+	return self.dfa.Token(lexem)
 }
 
-func (self *NodeWalker) IsValid() bool {
+func (self *NodeWalker) Terminal() bool {
 	return self.currentNode.Terminal()
 }
 
@@ -44,7 +38,7 @@ func (self *NodeWalker) Walk(b byte) (IPlainNode, error) {
 	if ok {
 		return node, nil
 	}
-	if self.currentNode.HasExitNodes() {
+	if self.currentNode.NextNodeCount() == 0 && self.currentNode.HasExitNodes() {
 		node, ok := self.currentNode.ExitNode(b)
 		if ok {
 			return node, nil
@@ -52,16 +46,14 @@ func (self *NodeWalker) Walk(b byte) (IPlainNode, error) {
 			return self.currentNode, nil
 		}
 	}
-
 	return nil, nil
-
 }
 
 func NewNodeWalker(dfa IDfa) *NodeWalker {
 	return &NodeWalker{
-		Dfa:         dfa,
+		dfa:         dfa,
 		currentNode: dfa.StartNode(),
-		Invalid:     false,
+		invalid:     false,
 		name:        dfa.Name(),
 	}
 }

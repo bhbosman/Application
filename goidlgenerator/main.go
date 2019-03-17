@@ -65,7 +65,7 @@ func main() {
 
 	typesInUse, err := yacc.StringToIDlBaseType(*typesToUseAsString)
 	if err != nil {
-		_, _ = os.Stderr.WriteString(fmt.Sprintf("Invalid type in use (%v).", typesToUseAsString))
+		_, _ = os.Stderr.WriteString(fmt.Sprintf("invalid type in use (%v).", typesToUseAsString))
 		os.Exit(7)
 	}
 

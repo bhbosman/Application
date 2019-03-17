@@ -10,5 +10,5 @@ func WalkString(walker INodeWalker, s []byte) bool {
 			return false
 		}
 	}
-	return walker.IsValid()
+	return walker.Terminal()
 }
