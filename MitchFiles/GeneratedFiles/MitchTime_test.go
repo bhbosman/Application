@@ -37,10 +37,7 @@ func BenchmarkNewTimeMessage(b *testing.B) {
 
 	})
 
-
 }
-
-
 
 func TestTimeMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
@@ -96,5 +93,3 @@ func TestTimeMessage(t *testing.T) {
 		}
 	})
 }
-
-

@@ -447,9 +447,6 @@ func TestMitchWriter(t *testing.T) {
 		})
 	})
 
-
-
-
 	t.Run("Write price08", func(t *testing.T) {
 		t.Run("Write price08 on valid buffer.", func(t *testing.T) {
 			value := 1234.56789012
@@ -486,13 +483,5 @@ func TestMitchWriter(t *testing.T) {
 			assert.Equal(t, 0, n)
 		})
 	})
-
-
-
-
-
-
-
-
 
 }

@@ -14,5 +14,4 @@ func TestStringNode(t *testing.T) {
 	})
 }
 
-
 // Todo: Write more test cases for DFA

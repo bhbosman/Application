@@ -22,7 +22,6 @@ func (self *publishStruct) Export(writer io.StringWriter, TypeInformation IBaseT
 	self.ExportDefinition(writer, TypeInformation, typeValueHelper)
 	self.ExportDefaultConstructor(writer, TypeInformation)
 
-
 	self.GenerateWriteFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 	self.GenerateReadFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 

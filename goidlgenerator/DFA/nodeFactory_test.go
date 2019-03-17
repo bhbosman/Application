@@ -122,9 +122,9 @@ func TestNodeFactory(t *testing.T) {
 		t.Run("Exit node", func(t *testing.T) {
 			nodeA := NewPlainNode("A", false)
 			nodeB := NewPlainNode("B", false)
-			err := NodeFactory.PlainExitNodeLink('a', nodeA,nodeB)
+			err := NodeFactory.PlainExitNodeLink('a', nodeA, nodeB)
 			assert.NoError(t, err)
-			err = NodeFactory.PlainExitNodeLink('a', nodeA,nodeB)
+			err = NodeFactory.PlainExitNodeLink('a', nodeA, nodeB)
 			assert.Error(t, err)
 
 		})

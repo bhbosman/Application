@@ -7,4 +7,3 @@ type IWriter interface {
 	Write_uint64(u uint64) (int, error)
 	Write_string(s string, i int) (int, error)
 }
-

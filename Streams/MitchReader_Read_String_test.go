@@ -11,7 +11,7 @@ import (
 func TestMitchReader(t *testing.T) {
 	t.Run("Check Interface", func(t *testing.T) {
 		var reader IMitchReader
-		reader =&MitchReader{}
+		reader = &MitchReader{}
 		assert.NotNil(t, reader)
 	})
 	t.Run("Read String Method", func(t *testing.T) {
@@ -146,7 +146,6 @@ func TestMitchReader(t *testing.T) {
 		})
 	})
 
-
 	t.Run("Read uint16 method", func(t *testing.T) {
 		t.Run("Test Read Mitch Uint16", func(t *testing.T) {
 			initValue := uint16(0x1234)
@@ -208,8 +207,3 @@ func TestMitchReader(t *testing.T) {
 
 	})
 }
-
-
-
-
-
