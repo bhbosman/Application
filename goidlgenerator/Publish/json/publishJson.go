@@ -3,7 +3,6 @@ package json
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
@@ -11,7 +10,7 @@ import (
 type publishJson struct {
 }
 
-func (self *publishJson) Export(TypeInformation interfaces.IBaseTypeInformation, typeValueHelper Extensions.ITypeValueHelper, params Publish.ExportParams) error {
+func (self *publishJson) Export(TypeInformation interfaces.IBaseTypeInformation, params Publish.ExportParams) error {
 	fmt.Println(len(params.DeclaredTypes))
 	bytes, err := json.MarshalIndent(params.DeclaredTypes, "", "\t")
 	if err != nil {

@@ -1,6 +1,7 @@
 package yacc
 
 import (
+	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
@@ -10,6 +11,26 @@ type constantValue struct {
 	value     interface{}
 	valueKind interfaces.Kind
 	maxLength int
+}
+
+func GetExportValue(value interfaces.IConstantValue) string {
+	if value.ValueKind() == interfaces.String {
+		if value.MaxLength() == 1 {
+			return fmt.Sprintf("'%v'", value.Value())
+		}
+		return fmt.Sprintf("\"%v\"", value.Value())
+	}
+
+	if value.ValueKind() == interfaces.Char {
+		return fmt.Sprintf("'%v'", value.Value())
+	}
+
+	return fmt.Sprintf("%v", value.Value())
+}
+
+
+func (self *constantValue) GetExportValue() string {
+	return GetExportValue(self)
 }
 
 func newConstantValue(value interface{}, valueKind interfaces.Kind, maxLength int) interfaces.IConstantValue {

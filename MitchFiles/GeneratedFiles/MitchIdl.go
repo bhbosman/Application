@@ -1,9 +1,6 @@
 package GeneratedFiles
 
-import (
-	"errors"
-	"time"
-)
+import "errors"
 import "fmt"
 import "github.com/bhbosman/Application/Streams"
 

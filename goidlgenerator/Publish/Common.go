@@ -2,7 +2,6 @@ package Publish
 
 import (
 	"errors"
-	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"io"
 )
@@ -33,7 +32,7 @@ type ExportParams struct {
 }
 
 type IPublish interface {
-	Export(TypeInformation interfaces.IBaseTypeInformation, typeValueHelper Extensions.ITypeValueHelper, params ExportParams) error
+	Export(TypeInformation interfaces.IBaseTypeInformation, params ExportParams) error
 }
 
 var registrations map[OutputType]IPublish
@@ -58,14 +57,12 @@ func PublishOutputType(
 	outputType OutputType,
 	writer io.Writer,
 	information interfaces.IBaseTypeInformation,
-	typeValueHelper Extensions.ITypeValueHelper,
 	packageName string,
 	declaredTypes []interfaces.IDefinitionDeclaration) error {
 	result, ok := registrations[outputType]
 	if ok {
 		err := result.Export(
 			information,
-			typeValueHelper,
 			ExportParams{
 				OutputStream:  writer,
 				PackageName:   packageName,

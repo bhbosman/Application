@@ -5,12 +5,10 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-type ITypeValueHelper interface {
-	TypeValueForDefinedType(DefinedType interfaces.IDefinedType) string
-}
-
 type typeValueHelper struct {
 }
+
+var TypeValueHelper *typeValueHelper
 
 func (self *typeValueHelper) TypeValueForDefinedType(DefinedType interfaces.IDefinedType) string {
 	value := func() string {
@@ -26,8 +24,4 @@ func (self *typeValueHelper) TypeValueForDefinedType(DefinedType interfaces.IDef
 		}
 		return value
 	}(value)
-}
-
-func DefaultTypeValueHelper() ITypeValueHelper {
-	return &typeValueHelper{}
 }

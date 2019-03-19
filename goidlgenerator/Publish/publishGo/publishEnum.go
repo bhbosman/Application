@@ -2,6 +2,7 @@ package publishGo
 
 import (
 	"fmt"
+	"github.com/bhbosman/Application/Common"
 	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
@@ -32,8 +33,8 @@ func (self publishEnum) ExportDefinition(writer io.StringWriter) {
 				"\t%v_%v  = %v // default value: byte(%v)\n ",
 				self.data.Identifier,
 				decl.Identifier(),
-				GetExportValue(defaultValue),
-				GetExportValue(defaultValue)))
+				defaultValue.GetExportValue(),
+				defaultValue.GetExportValue()))
 		}
 	}
 	_, _ = writer.WriteString(fmt.Sprintf(")\n"))
@@ -42,8 +43,7 @@ func (self publishEnum) ExportDefinition(writer io.StringWriter) {
 
 func (self publishEnum) Export(
 	writer io.StringWriter,
-	TypeInformation interfaces.IBaseTypeInformation,
-	typeValueHelper Extensions.ITypeValueHelper) {
+	TypeInformation interfaces.IBaseTypeInformation) {
 	self.ExportDefinition(writer)
 
 	typeNamePrefix := self.data.Identifier
@@ -52,8 +52,8 @@ func (self publishEnum) Export(
 
 	self.ExportDefaultConstructor(writer, TypeInformation)
 
-	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
-	GenerateMessageWriteFunction(
+	returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)
+	_= GenerateMessageWriteFunction(
 		writer,
 		returnType,
 		GenerateMessageWriteFunctionParams{
@@ -62,7 +62,7 @@ func (self publishEnum) Export(
 			typeNamePrefix:  typeNamePrefix,
 			typeCode:        typeCode,
 		})
-	GenerateMessageReadFunction(
+	_ = GenerateMessageReadFunction(
 		writer,
 		returnType,
 		GenerateMessageReadFunctionParams{
@@ -73,8 +73,8 @@ func (self publishEnum) Export(
 			defaultValue:    "0",
 		})
 
-	self.GenerateWriteFunction(writer, TypeInformation, typeValueHelper, typeNamePrefix, typeCode)
-	self.GenerateReadFunction(writer, TypeInformation, typeValueHelper, typeNamePrefix, typeCode)
+	_ = self.GenerateWriteFunction(writer, TypeInformation, typeNamePrefix, typeCode)
+	_ = self.GenerateReadFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 }
 
 func (self *publishEnum) ExportDefaultConstructor(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation) {
@@ -87,30 +87,32 @@ func (self *publishEnum) ExportDefaultConstructor(writer io.StringWriter, TypeIn
 func (self publishEnum) GenerateReadFunction(
 	writer io.StringWriter,
 	TypeInformation interfaces.IBaseTypeInformation,
-	typeValueHelper Extensions.ITypeValueHelper,
-	typeNamePrefix string, typeCode uint32) {
+	typeNamePrefix string, typeCode uint32) error{
 
-	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
-	_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", typeNamePrefix))
-	_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
-	_, _ = writer.WriteString(fmt.Sprintf("\tv, b, e :=  stream.Read_byte()\n"))
-	_, _ = writer.WriteString(fmt.Sprintf("\treturn %v(v), b, e\n", typeNamePrefix))
-	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
-	_, _ = writer.WriteString(fmt.Sprintf("\n"))
+	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
+		returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)
+		_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", typeNamePrefix))
+		_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
+		_, _ = writer.WriteString(fmt.Sprintf("\tv, b, e :=  stream.Read_byte()\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\treturn %v(v), b, e\n", typeNamePrefix))
+		_, _ = writer.WriteString(fmt.Sprintf("}\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\n"))
+	})
 }
 
 func (self publishEnum) GenerateWriteFunction(
 	writer io.StringWriter,
 	TypeInformation interfaces.IBaseTypeInformation,
-	typeValueHelper Extensions.ITypeValueHelper,
-	typeNamePrefix string, typeCode uint32) {
+	typeNamePrefix string, typeCode uint32) error{
 
-	returnType := typeValueHelper.TypeValueForDefinedType(self.data)
-	_, _ = writer.WriteString(fmt.Sprintf("// %v writer \n", typeNamePrefix))
-	_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (int, error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
-	_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Write_byte(byte(value))\n"))
-	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
-	_, _ = writer.WriteString(fmt.Sprintf("\n"))
+	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
+		returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)
+		_, _ = writer.WriteString(fmt.Sprintf("// %v writer \n", typeNamePrefix))
+		_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (int, error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
+		_, _ = writer.WriteString(fmt.Sprintf("\treturn stream.Write_byte(byte(value))\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("}\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\n"))
+	})
 }
 
 func NewPublishEnum(data *yacc.EnumDecl, typeInformation interfaces.IBaseTypeInformation) *publishEnum {
