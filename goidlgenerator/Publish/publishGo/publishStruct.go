@@ -21,7 +21,7 @@ type LineWriter struct {
 }
 
 func (receiver LineWriter) Write(format string, a ...interface{})  {
-	_, e := receiver.writer.WriteString(fmt.Sprintf(format, a))
+	_, e := receiver.writer.WriteString(fmt.Sprintf(format, a...))
 	receiver.errorList.Add(e)
 }
 
