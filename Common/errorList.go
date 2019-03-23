@@ -21,10 +21,11 @@ func (self *errorList) Error() error {
 }
 
 // Add: Add an error to the list
-func (self *errorList) Add(err error) {
+func (self *errorList) Add(err error) error{
 	if err != nil {
 		self.list = append(self.list, err.Error())
 	}
+	return err
 }
 
 // An internal constructor used to create this error list
