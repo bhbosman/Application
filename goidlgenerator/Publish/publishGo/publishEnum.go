@@ -53,7 +53,7 @@ func (self publishEnum) Export(
 	self.ExportDefaultConstructor(writer, TypeInformation)
 
 	returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)
-	_= GenerateMessageWriteFunction(
+	_ = GenerateMessageWriteFunction(
 		writer,
 		returnType,
 		GenerateMessageWriteFunctionParams{
@@ -87,7 +87,7 @@ func (self *publishEnum) ExportDefaultConstructor(writer io.StringWriter, TypeIn
 func (self publishEnum) GenerateReadFunction(
 	writer io.StringWriter,
 	TypeInformation interfaces.IBaseTypeInformation,
-	typeNamePrefix string, typeCode uint32) error{
+	typeNamePrefix string, typeCode uint32) error {
 
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)
@@ -103,7 +103,7 @@ func (self publishEnum) GenerateReadFunction(
 func (self publishEnum) GenerateWriteFunction(
 	writer io.StringWriter,
 	TypeInformation interfaces.IBaseTypeInformation,
-	typeNamePrefix string, typeCode uint32) error{
+	typeNamePrefix string, typeCode uint32) error {
 
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)

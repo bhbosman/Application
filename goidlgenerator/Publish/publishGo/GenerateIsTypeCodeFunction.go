@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-func GenerateIsTypeCodeFunction(writer io.StringWriter, typeNamePrefix string, typeCode uint32) error{
+func GenerateIsTypeCodeFunction(writer io.StringWriter, typeNamePrefix string, typeCode uint32) error {
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		_, _ = writer.WriteString(fmt.Sprintf("// %v IsTypeCode\n", typeNamePrefix))
 		_, _ = writer.WriteString(fmt.Sprintf("func IsTypeCode_%v(typeCode uint32) bool {\n", typeNamePrefix))

@@ -13,9 +13,10 @@ import (
 
 func main() {
 	flag.Parse()
-	readers, err := GetInput(flag.Args())
+	args := flag.Args()
+	readers, err := GetInput(args)
 	if err != nil {
-		os.Exit(10101)
+		os.Exit(101)
 	}
 	if len(readers) > 0 {
 		xmlDecoder := xml.NewDecoder(readers[0])
@@ -41,7 +42,6 @@ func Exists(name string) bool {
 }
 
 func GetInput(args []string) ([]io.ReadCloser, error) {
-
 	if len(args) > 0 {
 		list := make([]io.ReadCloser, 0, len(args))
 		for _, item := range args {

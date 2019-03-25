@@ -54,4 +54,3 @@ func (self *Components) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 	}
 	return nil
 }
-

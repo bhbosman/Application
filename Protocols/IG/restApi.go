@@ -2,7 +2,7 @@ package IG
 
 import (
 	"bytes"
-	 "container/list"
+	"container/list"
 	"encoding/json"
 	"fmt"
 	"github.com/bhbosman/Application/Common"
@@ -23,14 +23,15 @@ const LiveAPIURL = "https://api.ig.com"
 
 type Api struct {
 	sync.RWMutex
-	APIURL     string
-	APIKey     string
-	AccountID  string
-	Identifier string
-	Password   string
-	OAuthToken OAuthToken
-	httpClient *http.Client
-	timerCb    *TimerCallback
+	APIURL                string
+	APIKey                string
+	AccountID             string
+	Identifier            string
+	Password              string
+	LightstreamerEndpoint string
+	OAuthToken            OAuthToken
+	httpClient            *http.Client
+	timerCb               *TimerCallback
 }
 
 func (self *Api) Open() error {
@@ -85,6 +86,7 @@ func (self *Api) Login() error {
 	self.Lock()
 	self.OAuthToken = authResponse.OAuthToken
 	self.AccountID = authResponse.AccountID
+	self.LightstreamerEndpoint = authResponse.LightstreamerEndpoint
 	self.timerCb = newTimerCallback(time.Duration(expiry-15)*time.Second, self.refreshCallback, nil)
 	self.Unlock()
 	return nil
@@ -232,7 +234,7 @@ func (self *Api) Markets(key string, recursive bool) ([]MarketNavigationMarket, 
 							}
 							data, err := internalMarkets(key)
 							if err != nil {
-								_ = errorList.Add(err)
+								errorList.Add(err)
 								canContinue = false
 								return
 							}
@@ -288,10 +290,9 @@ func (self *Api) Markets(key string, recursive bool) ([]MarketNavigationMarket, 
 		add(key, wg)
 		wg.Wait()
 	})
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
-
 
 	result := make([]MarketNavigationMarket, marketList.Len(), marketList.Len())
 	i := 0

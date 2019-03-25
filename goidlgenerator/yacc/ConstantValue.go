@@ -28,7 +28,6 @@ func GetExportValue(value interfaces.IConstantValue) string {
 	return fmt.Sprintf("%v", value.Value())
 }
 
-
 func (self *constantValue) GetExportValue() string {
 	return GetExportValue(self)
 }

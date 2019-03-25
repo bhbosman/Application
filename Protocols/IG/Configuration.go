@@ -8,17 +8,15 @@ import (
 )
 
 type Configuration struct {
-	FileName string
-	ApiUrl     string `json:"ApiUrl"`
-	ApiKey     string `json:"ApiKey"`
-	Identifier string `json:"Identifier"`
-	Password   string `json:"Password"`
-	Markets		[]MarketNavigationMarket `json:"Markets"`
+	FileName   string
+	ApiUrl     string                   `json:"ApiUrl"`
+	ApiKey     string                   `json:"ApiKey"`
+	Identifier string                   `json:"Identifier"`
+	Password   string                   `json:"Password"`
+	Markets    []MarketNavigationMarket `json:"Markets"`
 }
 
-
-
-func (configuration *Configuration) Save() error{
+func (configuration *Configuration) Save() error {
 
 	f, e := os.Create(configuration.FileName)
 	if e != nil {
@@ -50,4 +48,3 @@ func NewConfiguration() (*Configuration, error) {
 	result.FileName = fileName
 	return result, nil
 }
-

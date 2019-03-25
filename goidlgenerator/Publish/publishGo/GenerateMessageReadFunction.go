@@ -15,7 +15,7 @@ type GenerateMessageReadFunctionParams struct {
 	defaultValue    string
 }
 
-func GenerateMessageReadFunction(writer io.StringWriter, returnType string, params GenerateMessageReadFunctionParams) error{
+func GenerateMessageReadFunction(writer io.StringWriter, returnType string, params GenerateMessageReadFunctionParams) error {
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", params.typeNamePrefix))
 		_, _ = writer.WriteString(fmt.Sprintf("func ReadMessage_%v(stream Streams.I%vReader) (%v, int, error) {\n", params.typeNamePrefix, params.TypeInformation.Name(), returnType))

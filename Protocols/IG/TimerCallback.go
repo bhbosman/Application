@@ -54,4 +54,3 @@ func newTimerCallback(
 
 	return result
 }
-

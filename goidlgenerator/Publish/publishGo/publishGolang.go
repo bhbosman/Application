@@ -9,8 +9,6 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 )
 
-
-
 type publishGolang struct {
 }
 

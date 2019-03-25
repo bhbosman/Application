@@ -6,7 +6,6 @@ type Component struct {
 	Fields []interface{}
 }
 
-
 func (self *Component) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for {
 		t, e := d.Token()
@@ -49,4 +48,3 @@ func (self *Component) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 	}
 	return nil
 }
-

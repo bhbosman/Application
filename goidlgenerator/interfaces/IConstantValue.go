@@ -6,6 +6,3 @@ type IConstantValue interface {
 	MaxLength() int
 	GetExportValue() string
 }
-
-
-

@@ -6,10 +6,9 @@ import (
 	"time"
 )
 
-
 func TestApi_Login(t *testing.T) {
 	igConfiguration, err := NewConfiguration()
-	if !assert.NoError(t, err){
+	if !assert.NoError(t, err) {
 		return
 	}
 	httpTimeout := time.Duration(5 * time.Second)

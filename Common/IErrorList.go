@@ -1,6 +1,6 @@
 package Common
 
 type IErrorList interface {
-	Add(err error) error
+	Add(err error)
 	Error() error
 }

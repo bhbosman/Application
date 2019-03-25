@@ -46,7 +46,7 @@ func (self publishBitField) Export(writer io.StringWriter, TypeInformation inter
 	_ = self.GenerateReadFunction(writer, TypeInformation, typeNamePrefix, typeCode)
 }
 
-func (self *publishBitField) ExportDefinition(writer io.StringWriter) error{
+func (self *publishBitField) ExportDefinition(writer io.StringWriter) error {
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		_, _ = writer.WriteString(fmt.Sprintf("type %s struct{\n", self.Identifier))
 		_, _ = writer.WriteString(fmt.Sprintf("\tFlags byte\n"))
@@ -80,7 +80,7 @@ func (self *publishBitField) ExportDefinition(writer io.StringWriter) error{
 	})
 }
 
-func (self *publishBitField) ExportDefaultConstructor(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation) error{
+func (self *publishBitField) ExportDefaultConstructor(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation) error {
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		_, _ = writer.WriteString(fmt.Sprintf("func New%v()%v {\n", self.Identifier, self.Identifier))
 		_, _ = writer.WriteString(fmt.Sprintf("\treturn %v{}\n", self.Identifier))
@@ -89,7 +89,7 @@ func (self *publishBitField) ExportDefaultConstructor(writer io.StringWriter, Ty
 	})
 }
 
-func (self publishBitField) GenerateReadFunction(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation, typeNamePrefix string, typeCode uint32) error{
+func (self publishBitField) GenerateReadFunction(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation, typeNamePrefix string, typeCode uint32) error {
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		_, _ = writer.WriteString(fmt.Sprintf("// %v reader\n", typeNamePrefix))
 		_, _ = writer.WriteString(fmt.Sprintf("func Read_%v(stream Streams.I%vReader) (value %v, byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), self.Identifier))
@@ -101,7 +101,7 @@ func (self publishBitField) GenerateReadFunction(writer io.StringWriter, TypeInf
 	})
 }
 
-func (self publishBitField) GenerateWriteFunction(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation, typeNamePrefix string, typeCode uint32) error{
+func (self publishBitField) GenerateWriteFunction(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation, typeNamePrefix string, typeCode uint32) error {
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		_, _ = writer.WriteString(fmt.Sprintf("// %v writer \n", typeNamePrefix))
 		_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), self.Identifier))
