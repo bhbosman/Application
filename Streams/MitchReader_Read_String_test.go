@@ -14,6 +14,7 @@ func TestMitchReader(t *testing.T) {
 		reader = &MitchReader{}
 		assert.NotNil(t, reader)
 	})
+
 	t.Run("Read String Method", func(t *testing.T) {
 		t.Run("Test Read Mitch Alpha", func(t *testing.T) {
 			reader := &MitchReader{
@@ -25,10 +26,23 @@ func TestMitchReader(t *testing.T) {
 			assert.Equal(t, "20190202", s)
 		})
 
-		t.Run("Test Read Mitch Alpha", func(t *testing.T) {
+		t.Run("Test Read Mitch Alpha. No Data", func(t *testing.T) {
 			reader := &MitchReader{reader: bytes.NewReader([]byte(""))}
 			_, _, e := reader.Read_string(8)
 			assert.Error(t, e)
+		})
+
+		t.Run("Random data", func(t *testing.T) {
+			data := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			dataLen := len(data)
+			reader := &MitchReader{
+				reader: bytes.NewReader([]byte(data)),
+			}
+			s, n, e := reader.Read_string(dataLen)
+			assert.NoError(t, e)
+			assert.Equal(t, dataLen, n)
+			assert.Equal(t, data, s)
+
 		})
 	})
 
@@ -118,6 +132,7 @@ func TestMitchReader(t *testing.T) {
 			assert.Error(t, e)
 		})
 	})
+
 	t.Run("Read Time Method", func(t *testing.T) {
 		t.Run("Test Read Mitch Time", func(t *testing.T) {
 			reader := &MitchReader{

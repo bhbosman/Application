@@ -7,38 +7,6 @@ import (
 	"testing"
 )
 
-func BenchmarkNewTimeMessage(b *testing.B) {
-
-	b.Run("Constructor", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			msg := NewTimeMessage()
-			assert.NotNil(b, msg)
-		}
-	})
-
-	b.Run("WriteMessage", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			msg := NewTimeMessage()
-			if !assert.NotNil(b, msg) {
-				return
-			}
-			buffer := bytes.NewBuffer(nil)
-			mitchWriter := Streams.NewMitchWriter(buffer)
-			if !assert.NotNil(b, mitchWriter) {
-				return
-			}
-			n, err := Write_TimeMessage(mitchWriter, msg)
-			assert.NoError(b, err)
-			assert.Equal(b, 7, n)
-
-			streamData := buffer.Bytes()
-			assert.Equal(b, byte(84), streamData[2])
-		}
-
-	})
-
-}
-
 func TestTimeMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
 		msg := NewTimeMessage()

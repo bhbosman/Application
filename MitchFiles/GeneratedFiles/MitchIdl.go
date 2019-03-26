@@ -1,8 +1,11 @@
 package GeneratedFiles
 
-import "errors"
+import (
+	"errors"
+)
 import "fmt"
 import "github.com/bhbosman/Application/Streams"
+import "time"
 
 // Declared typed
 // TimeMessage
