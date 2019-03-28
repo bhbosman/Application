@@ -133,5 +133,4 @@ func TestEnums(t *testing.T) {
 		}
 		assert.Len(t, DeclaredTypes, 1)
 	})
-
 }

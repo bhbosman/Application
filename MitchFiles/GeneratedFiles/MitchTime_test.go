@@ -28,7 +28,7 @@ func TestTimeMessage(t *testing.T) {
 		assert.Equal(t, 7, n)
 
 		streamData := buffer.Bytes()
-		assert.Equal(t, byte(84), streamData[2])
+		assert.Equal(t, byte(0x54), streamData[2])
 	})
 
 	t.Run("ReadMessage with correct message code", func(t *testing.T) {

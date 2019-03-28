@@ -1,11 +1,10 @@
 package GeneratedFiles
 
 import (
-	"errors"
+	"fmt"
+	"time"
 )
-import "fmt"
 import "github.com/bhbosman/Application/Streams"
-import "time"
 
 // Declared typed
 // TimeMessage
@@ -55,13 +54,16 @@ import "time"
 //
 // TimeMessage Declaration TypeCode: 0xafbd7a0e
 type TimeMessage struct {
-	Length      uint16
-	MessageType byte
-	Seconds     uint32
+	Length      uint16 `json:"Length" xml:"Length,attr"`
+	MessageType byte   `json:"MessageType" xml:"MessageType,attr"`
+	Seconds     uint32 `json:"Seconds" xml:"Seconds,attr"`
 }
 
 func NewTimeMessage() *TimeMessage {
-	return &TimeMessage{}
+	return &TimeMessage{
+		Length:      7,
+		MessageType: 84,
+	}
 }
 
 // TimeMessage writer
@@ -72,7 +74,7 @@ func Write_TimeMessage(stream Streams.IMitchWriter, value *TimeMessage) (byteCou
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(7)
 	if err != nil {
 		return 0, err
 	}
@@ -109,11 +111,12 @@ func Read_TimeMessage(stream Streams.IMitchReader) (value *TimeMessage, byteCoun
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 7
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -121,7 +124,7 @@ func Read_TimeMessage(stream Streams.IMitchReader) (value *TimeMessage, byteCoun
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x54 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message TimeMessage was expected 0x54, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message TimeMessage was expected 0x54, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -139,6 +142,20 @@ func Read_TimeMessage(stream Streams.IMitchReader) (value *TimeMessage, byteCoun
 	}
 	byteCount += n
 	return value, byteCount, nil
+}
+
+// TimeMessage reset
+func Reset_TimeMessage(value *TimeMessage) {
+	value.Length = 7
+	value.MessageType = 84
+	value.Seconds = 0
+}
+
+// TimeMessage clone
+func Clone_TimeMessage(value *TimeMessage) *TimeMessage {
+	result := NewTimeMessage()
+	result.Seconds = value.Seconds
+	return result
 }
 
 // TimeMessage WriteMessage
@@ -165,7 +182,7 @@ func ReadMessage_TimeMessage(stream Streams.IMitchReader) (*TimeMessage, int, er
 		return nil, 0, err
 	}
 	if typeCode != 0xafbd7a0e {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TimeMessage. Expected 0xafbd7a0e, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading TimeMessage. Expected 0xafbd7a0e, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TimeMessage, n, err := Read_TimeMessage(stream)
@@ -223,7 +240,7 @@ func ReadMessage_TEventCode(stream Streams.IMitchReader) (TEventCode, int, error
 		return 0, 0, err
 	}
 	if typeCode != 0x2ff833d1 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TEventCode. Expected 0x2ff833d1, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading TEventCode. Expected 0x2ff833d1, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TEventCode, n, err := Read_TEventCode(stream)
@@ -247,14 +264,17 @@ func Read_TEventCode(stream Streams.IMitchReader) (value TEventCode, byteCount i
 
 // SystemEventMessage Declaration TypeCode: 0x27b7b6f7
 type SystemEventMessage struct {
-	Length      uint16
-	MessageType byte
-	Nanosecond  uint32
-	EventCode   TEventCode
+	Length      uint16     `json:"Length" xml:"Length,attr"`
+	MessageType byte       `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond  uint32     `json:"Nanosecond" xml:"Nanosecond,attr"`
+	EventCode   TEventCode `json:"EventCode" xml:"EventCode,attr"`
 }
 
 func NewSystemEventMessage() *SystemEventMessage {
-	return &SystemEventMessage{}
+	return &SystemEventMessage{
+		Length:      8,
+		MessageType: 83,
+	}
 }
 
 // SystemEventMessage writer
@@ -265,7 +285,7 @@ func Write_SystemEventMessage(stream Streams.IMitchWriter, value *SystemEventMes
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(8)
 	if err != nil {
 		return 0, err
 	}
@@ -312,11 +332,12 @@ func Read_SystemEventMessage(stream Streams.IMitchReader) (value *SystemEventMes
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 8
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -324,7 +345,7 @@ func Read_SystemEventMessage(stream Streams.IMitchReader) (value *SystemEventMes
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x53 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message SystemEventMessage was expected 0x53, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message SystemEventMessage was expected 0x53, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -355,6 +376,22 @@ func Read_SystemEventMessage(stream Streams.IMitchReader) (value *SystemEventMes
 	return value, byteCount, nil
 }
 
+// SystemEventMessage reset
+func Reset_SystemEventMessage(value *SystemEventMessage) {
+	value.Length = 8
+	value.MessageType = 83
+	value.Nanosecond = 0
+	value.EventCode = 0
+}
+
+// SystemEventMessage clone
+func Clone_SystemEventMessage(value *SystemEventMessage) *SystemEventMessage {
+	result := NewSystemEventMessage()
+	result.Nanosecond = value.Nanosecond
+	result.EventCode = value.EventCode
+	return result
+}
+
 // SystemEventMessage WriteMessage
 func WriteMessage_SystemEventMessage(stream Streams.IMitchWriter, value *SystemEventMessage) (int, error) {
 	byteCount := 0
@@ -379,7 +416,7 @@ func ReadMessage_SystemEventMessage(stream Streams.IMitchReader) (*SystemEventMe
 		return nil, 0, err
 	}
 	if typeCode != 0x27b7b6f7 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SystemEventMessage. Expected 0x27b7b6f7, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading SystemEventMessage. Expected 0x27b7b6f7, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SystemEventMessage, n, err := Read_SystemEventMessage(stream)
@@ -438,7 +475,7 @@ func ReadMessage_SymbolDirectorySymbolStatus(stream Streams.IMitchReader) (Symbo
 		return 0, 0, err
 	}
 	if typeCode != 0x810d8fde {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolDirectorySymbolStatus. Expected 0x810d8fde, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading SymbolDirectorySymbolStatus. Expected 0x810d8fde, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolDirectorySymbolStatus, n, err := Read_SymbolDirectorySymbolStatus(stream)
@@ -497,7 +534,7 @@ func ReadMessage_SymbolDirectoryOptionType(stream Streams.IMitchReader) (SymbolD
 		return 0, 0, err
 	}
 	if typeCode != 0x8ca314f2 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolDirectoryOptionType. Expected 0x8ca314f2, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading SymbolDirectoryOptionType. Expected 0x8ca314f2, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolDirectoryOptionType, n, err := Read_SymbolDirectoryOptionType(stream)
@@ -552,7 +589,7 @@ func ReadMessage_SymbolDirectoryFlags(stream Streams.IMitchReader) (SymbolDirect
 		return SymbolDirectoryFlags{}, 0, err
 	}
 	if typeCode != 0xcc630022 {
-		return SymbolDirectoryFlags{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolDirectoryFlags. Expected 0xcc630022, got 0x%08x", typeCode))
+		return SymbolDirectoryFlags{}, 0, fmt.Errorf("typecode mismatch, while reading SymbolDirectoryFlags. Expected 0xcc630022, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolDirectoryFlags, n, err := Read_SymbolDirectoryFlags(stream)
@@ -608,7 +645,7 @@ func ReadMessage_SymbolDirectorySubBook(stream Streams.IMitchReader) (SymbolDire
 		return SymbolDirectorySubBook{}, 0, err
 	}
 	if typeCode != 0x03b3c050 {
-		return SymbolDirectorySubBook{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolDirectorySubBook. Expected 0x03b3c050, got 0x%08x", typeCode))
+		return SymbolDirectorySubBook{}, 0, fmt.Errorf("typecode mismatch, while reading SymbolDirectorySubBook. Expected 0x03b3c050, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolDirectorySubBook, n, err := Read_SymbolDirectorySubBook(stream)
@@ -668,7 +705,7 @@ func ReadMessage_SymbolDirectorySettlementMethod(stream Streams.IMitchReader) (S
 		return 0, 0, err
 	}
 	if typeCode != 0xc1ac87fd {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolDirectorySettlementMethod. Expected 0xc1ac87fd, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading SymbolDirectorySettlementMethod. Expected 0xc1ac87fd, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolDirectorySettlementMethod, n, err := Read_SymbolDirectorySettlementMethod(stream)
@@ -692,37 +729,40 @@ func Read_SymbolDirectorySettlementMethod(stream Streams.IMitchReader) (value Sy
 
 // SymbolDirectoryMessage Declaration TypeCode: 0xcd19edf6
 type SymbolDirectoryMessage struct {
-	Length                uint16
-	MessageType           byte
-	Nanosecond            uint32
-	InstrumentID          uint32
-	Reserved01            byte
-	Reserved02            byte
-	SymbolStatus          SymbolDirectorySymbolStatus
-	ISIN                  string
-	Symbol                string
-	TIDM                  string
-	Segment               string
-	PreviousClosePrice    float64
-	ExpirationDate        time.Time
-	Underlying            string
-	StrikePrice           float64
-	OptionType            SymbolDirectoryOptionType
-	Issuer                string
-	IssueDate             time.Time
-	Coupon                float64
-	Flags                 SymbolDirectoryFlags
-	SubBook               SymbolDirectorySubBook
-	CorporateAction       string
-	Leg1Symbol            string
-	Leg2Symbol            string
-	ContractMultiplier    float64
-	SettlementMethod      SymbolDirectorySettlementMethod
-	InstrumentSubCategory string
+	Length                uint16                          `json:"Length" xml:"Length,attr"`
+	MessageType           byte                            `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond            uint32                          `json:"Nanosecond" xml:"Nanosecond,attr"`
+	InstrumentID          uint32                          `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01            byte                            `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02            byte                            `json:"Reserved02" xml:"Reserved02,attr"`
+	SymbolStatus          SymbolDirectorySymbolStatus     `json:"SymbolStatus" xml:"SymbolStatus,attr"`
+	Isin                  string                          `json:"Isin" xml:"Isin,attr"`
+	Symbol                string                          `json:"Symbol" xml:"Symbol,attr"`
+	Tidm                  string                          `json:"Tidm" xml:"Tidm,attr"`
+	Segment               string                          `json:"Segment" xml:"Segment,attr"`
+	PreviousClosePrice    float64                         `json:"PreviousClosePrice" xml:"PreviousClosePrice,attr"`
+	ExpirationDate        time.Time                       `json:"ExpirationDate" xml:"ExpirationDate,attr"`
+	Underlying            string                          `json:"Underlying" xml:"Underlying,attr"`
+	StrikePrice           float64                         `json:"StrikePrice" xml:"StrikePrice,attr"`
+	OptionType            SymbolDirectoryOptionType       `json:"OptionType" xml:"OptionType,attr"`
+	Issuer                string                          `json:"Issuer" xml:"Issuer,attr"`
+	IssueDate             time.Time                       `json:"IssueDate" xml:"IssueDate,attr"`
+	Coupon                float64                         `json:"Coupon" xml:"Coupon,attr"`
+	Flags                 SymbolDirectoryFlags            `json:"Flags" xml:"Flags,attr"`
+	SubBook               SymbolDirectorySubBook          `json:"SubBook" xml:"SubBook,attr"`
+	CorporateAction       string                          `json:"CorporateAction" xml:"CorporateAction,attr"`
+	Leg1Symbol            string                          `json:"Leg1Symbol" xml:"Leg1Symbol,attr"`
+	Leg2Symbol            string                          `json:"Leg2Symbol" xml:"Leg2Symbol,attr"`
+	ContractMultiplier    float64                         `json:"ContractMultiplier" xml:"ContractMultiplier,attr"`
+	SettlementMethod      SymbolDirectorySettlementMethod `json:"SettlementMethod" xml:"SettlementMethod,attr"`
+	InstrumentSubCategory string                          `json:"InstrumentSubCategory" xml:"InstrumentSubCategory,attr"`
 }
 
 func NewSymbolDirectoryMessage() *SymbolDirectoryMessage {
-	return &SymbolDirectoryMessage{}
+	return &SymbolDirectoryMessage{
+		Length:      421,
+		MessageType: 82,
+	}
 }
 
 // SymbolDirectoryMessage writer
@@ -733,7 +773,7 @@ func Write_SymbolDirectoryMessage(stream Streams.IMitchWriter, value *SymbolDire
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(421)
 	if err != nil {
 		return 0, err
 	}
@@ -800,10 +840,10 @@ func Write_SymbolDirectoryMessage(stream Streams.IMitchWriter, value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 7, Member Name: ISIN, Type: string
+	// Index: 7, Member Name: Isin, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.ISIN, 12)
+	n, err = stream.Write_string(value.Isin, 12)
 	if err != nil {
 		return 0, err
 	}
@@ -820,10 +860,10 @@ func Write_SymbolDirectoryMessage(stream Streams.IMitchWriter, value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 9, Member Name: TIDM, Type: string
+	// Index: 9, Member Name: Tidm, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.TIDM, 12)
+	n, err = stream.Write_string(value.Tidm, 12)
 	if err != nil {
 		return 0, err
 	}
@@ -850,7 +890,7 @@ func Write_SymbolDirectoryMessage(stream Streams.IMitchWriter, value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 12, Member Name: ExpirationDate, Type: date
+	// Index: 12, Member Name: ExpirationDate, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_date(value.ExpirationDate)
@@ -900,7 +940,7 @@ func Write_SymbolDirectoryMessage(stream Streams.IMitchWriter, value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 17, Member Name: IssueDate, Type: date
+	// Index: 17, Member Name: IssueDate, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_date(value.IssueDate)
@@ -1010,11 +1050,12 @@ func Read_SymbolDirectoryMessage(stream Streams.IMitchReader) (value *SymbolDire
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 421
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -1022,7 +1063,7 @@ func Read_SymbolDirectoryMessage(stream Streams.IMitchReader) (value *SymbolDire
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x52 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message SymbolDirectoryMessage was expected 0x52, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message SymbolDirectoryMessage was expected 0x52, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -1082,10 +1123,10 @@ func Read_SymbolDirectoryMessage(stream Streams.IMitchReader) (value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 7, Member Name: ISIN, Type: string
+	// Index: 7, Member Name: Isin, Type: string
 	//
 	//
-	value.ISIN, n, err = stream.Read_string(12)
+	value.Isin, n, err = stream.Read_string(12)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -1102,10 +1143,10 @@ func Read_SymbolDirectoryMessage(stream Streams.IMitchReader) (value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 9, Member Name: TIDM, Type: string
+	// Index: 9, Member Name: Tidm, Type: string
 	//
 	//
-	value.TIDM, n, err = stream.Read_string(12)
+	value.Tidm, n, err = stream.Read_string(12)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -1132,7 +1173,7 @@ func Read_SymbolDirectoryMessage(stream Streams.IMitchReader) (value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 12, Member Name: ExpirationDate, Type: date
+	// Index: 12, Member Name: ExpirationDate, Type: Time
 	//
 	//
 	value.ExpirationDate, n, err = stream.Read_mitch_date()
@@ -1183,7 +1224,7 @@ func Read_SymbolDirectoryMessage(stream Streams.IMitchReader) (value *SymbolDire
 	byteCount += n
 	//
 	//
-	// Index: 17, Member Name: IssueDate, Type: date
+	// Index: 17, Member Name: IssueDate, Type: Time
 	//
 	//
 	value.IssueDate, n, err = stream.Read_mitch_date()
@@ -1285,6 +1326,68 @@ func Read_SymbolDirectoryMessage(stream Streams.IMitchReader) (value *SymbolDire
 	return value, byteCount, nil
 }
 
+// SymbolDirectoryMessage reset
+func Reset_SymbolDirectoryMessage(value *SymbolDirectoryMessage) {
+	value.Length = 421
+	value.MessageType = 82
+	value.Nanosecond = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.SymbolStatus = 0
+	value.Isin = ""
+	value.Symbol = ""
+	value.Tidm = ""
+	value.Segment = ""
+	value.PreviousClosePrice = 0.0
+	value.ExpirationDate = time.Time{}
+	value.Underlying = ""
+	value.StrikePrice = 0.0
+	value.OptionType = 0
+	value.Issuer = ""
+	value.IssueDate = time.Time{}
+	value.Coupon = 0.0
+	value.Flags = SymbolDirectoryFlags{}
+	value.SubBook = SymbolDirectorySubBook{}
+	value.CorporateAction = ""
+	value.Leg1Symbol = ""
+	value.Leg2Symbol = ""
+	value.ContractMultiplier = 0.0
+	value.SettlementMethod = 0
+	value.InstrumentSubCategory = ""
+}
+
+// SymbolDirectoryMessage clone
+func Clone_SymbolDirectoryMessage(value *SymbolDirectoryMessage) *SymbolDirectoryMessage {
+	result := NewSymbolDirectoryMessage()
+	result.Nanosecond = value.Nanosecond
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.SymbolStatus = value.SymbolStatus
+	result.Isin = value.Isin
+	result.Symbol = value.Symbol
+	result.Tidm = value.Tidm
+	result.Segment = value.Segment
+	result.PreviousClosePrice = value.PreviousClosePrice
+	result.ExpirationDate = value.ExpirationDate
+	result.Underlying = value.Underlying
+	result.StrikePrice = value.StrikePrice
+	result.OptionType = value.OptionType
+	result.Issuer = value.Issuer
+	result.IssueDate = value.IssueDate
+	result.Coupon = value.Coupon
+	result.Flags = value.Flags
+	result.SubBook = value.SubBook
+	result.CorporateAction = value.CorporateAction
+	result.Leg1Symbol = value.Leg1Symbol
+	result.Leg2Symbol = value.Leg2Symbol
+	result.ContractMultiplier = value.ContractMultiplier
+	result.SettlementMethod = value.SettlementMethod
+	result.InstrumentSubCategory = value.InstrumentSubCategory
+	return result
+}
+
 // SymbolDirectoryMessage WriteMessage
 func WriteMessage_SymbolDirectoryMessage(stream Streams.IMitchWriter, value *SymbolDirectoryMessage) (int, error) {
 	byteCount := 0
@@ -1309,7 +1412,7 @@ func ReadMessage_SymbolDirectoryMessage(stream Streams.IMitchReader) (*SymbolDir
 		return nil, 0, err
 	}
 	if typeCode != 0xcd19edf6 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolDirectoryMessage. Expected 0xcd19edf6, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading SymbolDirectoryMessage. Expected 0xcd19edf6, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolDirectoryMessage, n, err := Read_SymbolDirectoryMessage(stream)
@@ -1383,7 +1486,7 @@ func ReadMessage_SymbolStatusTradingStatus(stream Streams.IMitchReader) (SymbolS
 		return 0, 0, err
 	}
 	if typeCode != 0xdeb92876 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolStatusTradingStatus. Expected 0xdeb92876, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading SymbolStatusTradingStatus. Expected 0xdeb92876, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolStatusTradingStatus, n, err := Read_SymbolStatusTradingStatus(stream)
@@ -1447,7 +1550,7 @@ func ReadMessage_SymbolStatusSessionChangeReason(stream Streams.IMitchReader) (S
 		return 0, 0, err
 	}
 	if typeCode != 0xfee8af4f {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolStatusSessionChangeReason. Expected 0xfee8af4f, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading SymbolStatusSessionChangeReason. Expected 0xfee8af4f, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolStatusSessionChangeReason, n, err := Read_SymbolStatusSessionChangeReason(stream)
@@ -1508,7 +1611,7 @@ func ReadMessage_SymbolStatusBookType(stream Streams.IMitchReader) (SymbolStatus
 		return 0, 0, err
 	}
 	if typeCode != 0x0b2355a5 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolStatusBookType. Expected 0x0b2355a5, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading SymbolStatusBookType. Expected 0x0b2355a5, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolStatusBookType, n, err := Read_SymbolStatusBookType(stream)
@@ -1563,7 +1666,7 @@ func ReadMessage_SymbolStatusMessageFlags(stream Streams.IMitchReader) (SymbolSt
 		return SymbolStatusMessageFlags{}, 0, err
 	}
 	if typeCode != 0x5cadcb8d {
-		return SymbolStatusMessageFlags{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolStatusMessageFlags. Expected 0x5cadcb8d, got 0x%08x", typeCode))
+		return SymbolStatusMessageFlags{}, 0, fmt.Errorf("typecode mismatch, while reading SymbolStatusMessageFlags. Expected 0x5cadcb8d, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolStatusMessageFlags, n, err := Read_SymbolStatusMessageFlags(stream)
@@ -1588,22 +1691,25 @@ func Read_SymbolStatusMessageFlags(stream Streams.IMitchReader) (value SymbolSta
 
 // SymbolStatusMessage Declaration TypeCode: 0x5533b1cc
 type SymbolStatusMessage struct {
-	Length              uint16
-	MessageType         byte
-	Nanosecond          uint32
-	InstrumentID        uint32
-	Reserved01          byte
-	Reserved02          byte
-	TradingStatus       SymbolStatusTradingStatus
-	Flags               SymbolStatusMessageFlags
-	Reason              string
-	SessionChangeReason SymbolStatusSessionChangeReason
-	NewEndTime          time.Time
-	BookType            SymbolStatusBookType
+	Length              uint16                          `json:"Length" xml:"Length,attr"`
+	MessageType         byte                            `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond          uint32                          `json:"Nanosecond" xml:"Nanosecond,attr"`
+	InstrumentID        uint32                          `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01          byte                            `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02          byte                            `json:"Reserved02" xml:"Reserved02,attr"`
+	TradingStatus       SymbolStatusTradingStatus       `json:"TradingStatus" xml:"TradingStatus,attr"`
+	Flags               SymbolStatusMessageFlags        `json:"Flags" xml:"Flags,attr"`
+	Reason              string                          `json:"Reason" xml:"Reason,attr"`
+	SessionChangeReason SymbolStatusSessionChangeReason `json:"SessionChangeReason" xml:"SessionChangeReason,attr"`
+	NewEndTime          time.Time                       `json:"NewEndTime" xml:"NewEndTime,attr"`
+	BookType            SymbolStatusBookType            `json:"BookType" xml:"BookType,attr"`
 }
 
 func NewSymbolStatusMessage() *SymbolStatusMessage {
-	return &SymbolStatusMessage{}
+	return &SymbolStatusMessage{
+		Length:      29,
+		MessageType: 72,
+	}
 }
 
 // SymbolStatusMessage writer
@@ -1614,7 +1720,7 @@ func Write_SymbolStatusMessage(stream Streams.IMitchWriter, value *SymbolStatusM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(29)
 	if err != nil {
 		return 0, err
 	}
@@ -1711,7 +1817,7 @@ func Write_SymbolStatusMessage(stream Streams.IMitchWriter, value *SymbolStatusM
 	byteCount += n
 	//
 	//
-	// Index: 10, Member Name: NewEndTime, Type: time
+	// Index: 10, Member Name: NewEndTime, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_time(value.NewEndTime)
@@ -1741,11 +1847,12 @@ func Read_SymbolStatusMessage(stream Streams.IMitchReader) (value *SymbolStatusM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 29
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -1753,7 +1860,7 @@ func Read_SymbolStatusMessage(stream Streams.IMitchReader) (value *SymbolStatusM
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x48 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message SymbolStatusMessage was expected 0x48, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message SymbolStatusMessage was expected 0x48, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -1844,7 +1951,7 @@ func Read_SymbolStatusMessage(stream Streams.IMitchReader) (value *SymbolStatusM
 	byteCount += n
 	//
 	//
-	// Index: 10, Member Name: NewEndTime, Type: time
+	// Index: 10, Member Name: NewEndTime, Type: Time
 	//
 	//
 	value.NewEndTime, n, err = stream.Read_mitch_time()
@@ -1864,6 +1971,38 @@ func Read_SymbolStatusMessage(stream Streams.IMitchReader) (value *SymbolStatusM
 	}
 	byteCount += n
 	return value, byteCount, nil
+}
+
+// SymbolStatusMessage reset
+func Reset_SymbolStatusMessage(value *SymbolStatusMessage) {
+	value.Length = 29
+	value.MessageType = 72
+	value.Nanosecond = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.TradingStatus = 0
+	value.Flags = SymbolStatusMessageFlags{}
+	value.Reason = ""
+	value.SessionChangeReason = 0
+	value.NewEndTime = time.Time{}
+	value.BookType = 0
+}
+
+// SymbolStatusMessage clone
+func Clone_SymbolStatusMessage(value *SymbolStatusMessage) *SymbolStatusMessage {
+	result := NewSymbolStatusMessage()
+	result.Nanosecond = value.Nanosecond
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.TradingStatus = value.TradingStatus
+	result.Flags = value.Flags
+	result.Reason = value.Reason
+	result.SessionChangeReason = value.SessionChangeReason
+	result.NewEndTime = value.NewEndTime
+	result.BookType = value.BookType
+	return result
 }
 
 // SymbolStatusMessage WriteMessage
@@ -1890,7 +2029,7 @@ func ReadMessage_SymbolStatusMessage(stream Streams.IMitchReader) (*SymbolStatus
 		return nil, 0, err
 	}
 	if typeCode != 0x5533b1cc {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading SymbolStatusMessage. Expected 0x5533b1cc, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading SymbolStatusMessage. Expected 0x5533b1cc, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_SymbolStatusMessage, n, err := Read_SymbolStatusMessage(stream)
@@ -1948,7 +2087,7 @@ func ReadMessage_OrderSide(stream Streams.IMitchReader) (OrderSide, int, error) 
 		return 0, 0, err
 	}
 	if typeCode != 0x22a70cb8 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderSide. Expected 0x22a70cb8, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading OrderSide. Expected 0x22a70cb8, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderSide, n, err := Read_OrderSide(stream)
@@ -2003,7 +2142,7 @@ func ReadMessage_AddOrderFlags(stream Streams.IMitchReader) (AddOrderFlags, int,
 		return AddOrderFlags{}, 0, err
 	}
 	if typeCode != 0xf14d9a43 {
-		return AddOrderFlags{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading AddOrderFlags. Expected 0xf14d9a43, got 0x%08x", typeCode))
+		return AddOrderFlags{}, 0, fmt.Errorf("typecode mismatch, while reading AddOrderFlags. Expected 0xf14d9a43, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_AddOrderFlags, n, err := Read_AddOrderFlags(stream)
@@ -2028,21 +2167,24 @@ func Read_AddOrderFlags(stream Streams.IMitchReader) (value AddOrderFlags, byteC
 
 // AddOrderMessage Declaration TypeCode: 0x4ace6131
 type AddOrderMessage struct {
-	Length       uint16
-	MessageType  byte
-	Nanosecond   uint32
-	OrderId      uint64
-	Side         OrderSide
-	Quantity     uint32
-	InstrumentID uint32
-	Reserved01   byte
-	Reserved02   byte
-	Price        float64
-	Flags        AddOrderFlags
+	Length       uint16        `json:"Length" xml:"Length,attr"`
+	MessageType  byte          `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond   uint32        `json:"Nanosecond" xml:"Nanosecond,attr"`
+	OrderId      uint64        `json:"OrderId" xml:"OrderId,attr"`
+	Side         OrderSide     `json:"Side" xml:"Side,attr"`
+	Quantity     uint32        `json:"Quantity" xml:"Quantity,attr"`
+	InstrumentID uint32        `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01   byte          `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02   byte          `json:"Reserved02" xml:"Reserved02,attr"`
+	Price        float64       `json:"Price" xml:"Price,attr"`
+	Flags        AddOrderFlags `json:"Flags" xml:"Flags,attr"`
 }
 
 func NewAddOrderMessage() *AddOrderMessage {
-	return &AddOrderMessage{}
+	return &AddOrderMessage{
+		Length:      35,
+		MessageType: 65,
+	}
 }
 
 // AddOrderMessage writer
@@ -2053,7 +2195,7 @@ func Write_AddOrderMessage(stream Streams.IMitchWriter, value *AddOrderMessage) 
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(35)
 	if err != nil {
 		return 0, err
 	}
@@ -2170,11 +2312,12 @@ func Read_AddOrderMessage(stream Streams.IMitchReader) (value *AddOrderMessage, 
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 35
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -2182,7 +2325,7 @@ func Read_AddOrderMessage(stream Streams.IMitchReader) (value *AddOrderMessage, 
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x41 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message AddOrderMessage was expected 0x41, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message AddOrderMessage was expected 0x41, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -2283,6 +2426,36 @@ func Read_AddOrderMessage(stream Streams.IMitchReader) (value *AddOrderMessage, 
 	return value, byteCount, nil
 }
 
+// AddOrderMessage reset
+func Reset_AddOrderMessage(value *AddOrderMessage) {
+	value.Length = 35
+	value.MessageType = 65
+	value.Nanosecond = 0
+	value.OrderId = 0
+	value.Side = 0
+	value.Quantity = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.Price = 0.0
+	value.Flags = AddOrderFlags{}
+}
+
+// AddOrderMessage clone
+func Clone_AddOrderMessage(value *AddOrderMessage) *AddOrderMessage {
+	result := NewAddOrderMessage()
+	result.Nanosecond = value.Nanosecond
+	result.OrderId = value.OrderId
+	result.Side = value.Side
+	result.Quantity = value.Quantity
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.Price = value.Price
+	result.Flags = value.Flags
+	return result
+}
+
 // AddOrderMessage WriteMessage
 func WriteMessage_AddOrderMessage(stream Streams.IMitchWriter, value *AddOrderMessage) (int, error) {
 	byteCount := 0
@@ -2307,7 +2480,7 @@ func ReadMessage_AddOrderMessage(stream Streams.IMitchReader) (*AddOrderMessage,
 		return nil, 0, err
 	}
 	if typeCode != 0x4ace6131 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading AddOrderMessage. Expected 0x4ace6131, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading AddOrderMessage. Expected 0x4ace6131, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_AddOrderMessage, n, err := Read_AddOrderMessage(stream)
@@ -2361,7 +2534,7 @@ func ReadMessage_AddAttributedOrderFlags(stream Streams.IMitchReader) (AddAttrib
 		return AddAttributedOrderFlags{}, 0, err
 	}
 	if typeCode != 0xcf3c7356 {
-		return AddAttributedOrderFlags{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading AddAttributedOrderFlags. Expected 0xcf3c7356, got 0x%08x", typeCode))
+		return AddAttributedOrderFlags{}, 0, fmt.Errorf("typecode mismatch, while reading AddAttributedOrderFlags. Expected 0xcf3c7356, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_AddAttributedOrderFlags, n, err := Read_AddAttributedOrderFlags(stream)
@@ -2386,20 +2559,23 @@ func Read_AddAttributedOrderFlags(stream Streams.IMitchReader) (value AddAttribu
 
 // AddAttributedOrderMessage Declaration TypeCode: 0x2ac24905
 type AddAttributedOrderMessage struct {
-	Length       uint16
-	MessageType  byte
-	Nanosecond   uint32
-	OrderID      uint64
-	Side         OrderSide
-	Quantity     uint32
-	InstrumentID uint32
-	Price        float64
-	Attribution  string
-	Flags        AddAttributedOrderFlags
+	Length       uint16                  `json:"Length" xml:"Length,attr"`
+	MessageType  byte                    `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond   uint32                  `json:"Nanosecond" xml:"Nanosecond,attr"`
+	OrderID      uint64                  `json:"OrderID" xml:"OrderID,attr"`
+	Side         OrderSide               `json:"Side" xml:"Side,attr"`
+	Quantity     uint32                  `json:"Quantity" xml:"Quantity,attr"`
+	InstrumentID uint32                  `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Price        float64                 `json:"Price" xml:"Price,attr"`
+	Attribution  string                  `json:"Attribution" xml:"Attribution,attr"`
+	Flags        AddAttributedOrderFlags `json:"Flags" xml:"Flags,attr"`
 }
 
 func NewAddAttributedOrderMessage() *AddAttributedOrderMessage {
-	return &AddAttributedOrderMessage{}
+	return &AddAttributedOrderMessage{
+		Length:      44,
+		MessageType: 70,
+	}
 }
 
 // AddAttributedOrderMessage writer
@@ -2410,7 +2586,7 @@ func Write_AddAttributedOrderMessage(stream Streams.IMitchWriter, value *AddAttr
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(44)
 	if err != nil {
 		return 0, err
 	}
@@ -2517,11 +2693,12 @@ func Read_AddAttributedOrderMessage(stream Streams.IMitchReader) (value *AddAttr
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 44
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -2529,7 +2706,7 @@ func Read_AddAttributedOrderMessage(stream Streams.IMitchReader) (value *AddAttr
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x46 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message AddAttributedOrderMessage was expected 0x46, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message AddAttributedOrderMessage was expected 0x46, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -2620,6 +2797,34 @@ func Read_AddAttributedOrderMessage(stream Streams.IMitchReader) (value *AddAttr
 	return value, byteCount, nil
 }
 
+// AddAttributedOrderMessage reset
+func Reset_AddAttributedOrderMessage(value *AddAttributedOrderMessage) {
+	value.Length = 44
+	value.MessageType = 70
+	value.Nanosecond = 0
+	value.OrderID = 0
+	value.Side = 0
+	value.Quantity = 0
+	value.InstrumentID = 0
+	value.Price = 0.0
+	value.Attribution = ""
+	value.Flags = AddAttributedOrderFlags{}
+}
+
+// AddAttributedOrderMessage clone
+func Clone_AddAttributedOrderMessage(value *AddAttributedOrderMessage) *AddAttributedOrderMessage {
+	result := NewAddAttributedOrderMessage()
+	result.Nanosecond = value.Nanosecond
+	result.OrderID = value.OrderID
+	result.Side = value.Side
+	result.Quantity = value.Quantity
+	result.InstrumentID = value.InstrumentID
+	result.Price = value.Price
+	result.Attribution = value.Attribution
+	result.Flags = value.Flags
+	return result
+}
+
 // AddAttributedOrderMessage WriteMessage
 func WriteMessage_AddAttributedOrderMessage(stream Streams.IMitchWriter, value *AddAttributedOrderMessage) (int, error) {
 	byteCount := 0
@@ -2644,7 +2849,7 @@ func ReadMessage_AddAttributedOrderMessage(stream Streams.IMitchReader) (*AddAtt
 		return nil, 0, err
 	}
 	if typeCode != 0x2ac24905 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading AddAttributedOrderMessage. Expected 0x2ac24905, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading AddAttributedOrderMessage. Expected 0x2ac24905, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_AddAttributedOrderMessage, n, err := Read_AddAttributedOrderMessage(stream)
@@ -2667,14 +2872,17 @@ func IsTypeCode_AddAttributedOrderMessage(typeCode uint32) bool {
 
 // OrderDeletedMessage Declaration TypeCode: 0x71ebfeee
 type OrderDeletedMessage struct {
-	Length      uint16
-	MessageType byte
-	Nanosecond  uint32
-	OrderID     uint64
+	Length      uint16 `json:"Length" xml:"Length,attr"`
+	MessageType byte   `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond  uint32 `json:"Nanosecond" xml:"Nanosecond,attr"`
+	OrderID     uint64 `json:"OrderID" xml:"OrderID,attr"`
 }
 
 func NewOrderDeletedMessage() *OrderDeletedMessage {
-	return &OrderDeletedMessage{}
+	return &OrderDeletedMessage{
+		Length:      15,
+		MessageType: 68,
+	}
 }
 
 // OrderDeletedMessage writer
@@ -2685,7 +2893,7 @@ func Write_OrderDeletedMessage(stream Streams.IMitchWriter, value *OrderDeletedM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(15)
 	if err != nil {
 		return 0, err
 	}
@@ -2732,11 +2940,12 @@ func Read_OrderDeletedMessage(stream Streams.IMitchReader) (value *OrderDeletedM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 15
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -2744,7 +2953,7 @@ func Read_OrderDeletedMessage(stream Streams.IMitchReader) (value *OrderDeletedM
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x44 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message OrderDeletedMessage was expected 0x44, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message OrderDeletedMessage was expected 0x44, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -2774,6 +2983,22 @@ func Read_OrderDeletedMessage(stream Streams.IMitchReader) (value *OrderDeletedM
 	return value, byteCount, nil
 }
 
+// OrderDeletedMessage reset
+func Reset_OrderDeletedMessage(value *OrderDeletedMessage) {
+	value.Length = 15
+	value.MessageType = 68
+	value.Nanosecond = 0
+	value.OrderID = 0
+}
+
+// OrderDeletedMessage clone
+func Clone_OrderDeletedMessage(value *OrderDeletedMessage) *OrderDeletedMessage {
+	result := NewOrderDeletedMessage()
+	result.Nanosecond = value.Nanosecond
+	result.OrderID = value.OrderID
+	return result
+}
+
 // OrderDeletedMessage WriteMessage
 func WriteMessage_OrderDeletedMessage(stream Streams.IMitchWriter, value *OrderDeletedMessage) (int, error) {
 	byteCount := 0
@@ -2798,7 +3023,7 @@ func ReadMessage_OrderDeletedMessage(stream Streams.IMitchReader) (*OrderDeleted
 		return nil, 0, err
 	}
 	if typeCode != 0x71ebfeee {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderDeletedMessage. Expected 0x71ebfeee, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading OrderDeletedMessage. Expected 0x71ebfeee, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderDeletedMessage, n, err := Read_OrderDeletedMessage(stream)
@@ -2852,7 +3077,7 @@ func ReadMessage_OrderModifiedFlags(stream Streams.IMitchReader) (OrderModifiedF
 		return OrderModifiedFlags{}, 0, err
 	}
 	if typeCode != 0x4bfbc52c {
-		return OrderModifiedFlags{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderModifiedFlags. Expected 0x4bfbc52c, got 0x%08x", typeCode))
+		return OrderModifiedFlags{}, 0, fmt.Errorf("typecode mismatch, while reading OrderModifiedFlags. Expected 0x4bfbc52c, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderModifiedFlags, n, err := Read_OrderModifiedFlags(stream)
@@ -2877,17 +3102,20 @@ func Read_OrderModifiedFlags(stream Streams.IMitchReader) (value OrderModifiedFl
 
 // OrderModifiedMessage Declaration TypeCode: 0x34838f04
 type OrderModifiedMessage struct {
-	Length      uint16
-	MessageType byte
-	Nanosecond  uint32
-	OrderID     uint64
-	NewQuantity uint32
-	NewPrice    float64
-	Flags       OrderModifiedFlags
+	Length      uint16             `json:"Length" xml:"Length,attr"`
+	MessageType byte               `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond  uint32             `json:"Nanosecond" xml:"Nanosecond,attr"`
+	OrderID     uint64             `json:"OrderID" xml:"OrderID,attr"`
+	NewQuantity uint32             `json:"NewQuantity" xml:"NewQuantity,attr"`
+	NewPrice    float64            `json:"NewPrice" xml:"NewPrice,attr"`
+	Flags       OrderModifiedFlags `json:"Flags" xml:"Flags,attr"`
 }
 
 func NewOrderModifiedMessage() *OrderModifiedMessage {
-	return &OrderModifiedMessage{}
+	return &OrderModifiedMessage{
+		Length:      28,
+		MessageType: 85,
+	}
 }
 
 // OrderModifiedMessage writer
@@ -2898,7 +3126,7 @@ func Write_OrderModifiedMessage(stream Streams.IMitchWriter, value *OrderModifie
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(28)
 	if err != nil {
 		return 0, err
 	}
@@ -2975,11 +3203,12 @@ func Read_OrderModifiedMessage(stream Streams.IMitchReader) (value *OrderModifie
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 28
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -2987,7 +3216,7 @@ func Read_OrderModifiedMessage(stream Streams.IMitchReader) (value *OrderModifie
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x55 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message OrderModifiedMessage was expected 0x55, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message OrderModifiedMessage was expected 0x55, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -3047,6 +3276,28 @@ func Read_OrderModifiedMessage(stream Streams.IMitchReader) (value *OrderModifie
 	return value, byteCount, nil
 }
 
+// OrderModifiedMessage reset
+func Reset_OrderModifiedMessage(value *OrderModifiedMessage) {
+	value.Length = 28
+	value.MessageType = 85
+	value.Nanosecond = 0
+	value.OrderID = 0
+	value.NewQuantity = 0
+	value.NewPrice = 0.0
+	value.Flags = OrderModifiedFlags{}
+}
+
+// OrderModifiedMessage clone
+func Clone_OrderModifiedMessage(value *OrderModifiedMessage) *OrderModifiedMessage {
+	result := NewOrderModifiedMessage()
+	result.Nanosecond = value.Nanosecond
+	result.OrderID = value.OrderID
+	result.NewQuantity = value.NewQuantity
+	result.NewPrice = value.NewPrice
+	result.Flags = value.Flags
+	return result
+}
+
 // OrderModifiedMessage WriteMessage
 func WriteMessage_OrderModifiedMessage(stream Streams.IMitchWriter, value *OrderModifiedMessage) (int, error) {
 	byteCount := 0
@@ -3071,7 +3322,7 @@ func ReadMessage_OrderModifiedMessage(stream Streams.IMitchReader) (*OrderModifi
 		return nil, 0, err
 	}
 	if typeCode != 0x34838f04 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderModifiedMessage. Expected 0x34838f04, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading OrderModifiedMessage. Expected 0x34838f04, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderModifiedMessage, n, err := Read_OrderModifiedMessage(stream)
@@ -3131,7 +3382,7 @@ func ReadMessage_OrderBookClearSubBook(stream Streams.IMitchReader) (OrderBookCl
 		return 0, 0, err
 	}
 	if typeCode != 0x5ead6996 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderBookClearSubBook. Expected 0x5ead6996, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading OrderBookClearSubBook. Expected 0x5ead6996, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderBookClearSubBook, n, err := Read_OrderBookClearSubBook(stream)
@@ -3190,7 +3441,7 @@ func ReadMessage_OrderBookClearBookType(stream Streams.IMitchReader) (OrderBookC
 		return 0, 0, err
 	}
 	if typeCode != 0x7d3b6454 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderBookClearBookType. Expected 0x7d3b6454, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading OrderBookClearBookType. Expected 0x7d3b6454, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderBookClearBookType, n, err := Read_OrderBookClearBookType(stream)
@@ -3214,16 +3465,19 @@ func Read_OrderBookClearBookType(stream Streams.IMitchReader) (value OrderBookCl
 
 // OrderBookClearMessage Declaration TypeCode: 0x90074430
 type OrderBookClearMessage struct {
-	Length       uint16
-	MessageType  byte // default value: Int64(121)
-	Nanosecond   uint32
-	InstrumentID uint32
-	SubBook      OrderBookClearSubBook
-	BookType     OrderBookClearBookType
+	Length       uint16                 `json:"Length" xml:"Length,attr"`
+	MessageType  byte                   `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond   uint32                 `json:"Nanosecond" xml:"Nanosecond,attr"`
+	InstrumentID uint32                 `json:"InstrumentID" xml:"InstrumentID,attr"`
+	SubBook      OrderBookClearSubBook  `json:"SubBook" xml:"SubBook,attr"`
+	BookType     OrderBookClearBookType `json:"BookType" xml:"BookType,attr"`
 }
 
 func NewOrderBookClearMessage() *OrderBookClearMessage {
-	return &OrderBookClearMessage{}
+	return &OrderBookClearMessage{
+		Length:      13,
+		MessageType: 121,
+	}
 }
 
 // OrderBookClearMessage writer
@@ -3234,7 +3488,7 @@ func Write_OrderBookClearMessage(stream Streams.IMitchWriter, value *OrderBookCl
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(13)
 	if err != nil {
 		return 0, err
 	}
@@ -3301,11 +3555,12 @@ func Read_OrderBookClearMessage(stream Streams.IMitchReader) (value *OrderBookCl
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 13
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -3313,7 +3568,7 @@ func Read_OrderBookClearMessage(stream Streams.IMitchReader) (value *OrderBookCl
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x79 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message OrderBookClearMessage was expected 0x79, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message OrderBookClearMessage was expected 0x79, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -3365,6 +3620,26 @@ func Read_OrderBookClearMessage(stream Streams.IMitchReader) (value *OrderBookCl
 	return value, byteCount, nil
 }
 
+// OrderBookClearMessage reset
+func Reset_OrderBookClearMessage(value *OrderBookClearMessage) {
+	value.Length = 13
+	value.MessageType = 121
+	value.Nanosecond = 0
+	value.InstrumentID = 0
+	value.SubBook = 0
+	value.BookType = 0
+}
+
+// OrderBookClearMessage clone
+func Clone_OrderBookClearMessage(value *OrderBookClearMessage) *OrderBookClearMessage {
+	result := NewOrderBookClearMessage()
+	result.Nanosecond = value.Nanosecond
+	result.InstrumentID = value.InstrumentID
+	result.SubBook = value.SubBook
+	result.BookType = value.BookType
+	return result
+}
+
 // OrderBookClearMessage WriteMessage
 func WriteMessage_OrderBookClearMessage(stream Streams.IMitchWriter, value *OrderBookClearMessage) (int, error) {
 	byteCount := 0
@@ -3389,7 +3664,7 @@ func ReadMessage_OrderBookClearMessage(stream Streams.IMitchReader) (*OrderBookC
 		return nil, 0, err
 	}
 	if typeCode != 0x90074430 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderBookClearMessage. Expected 0x90074430, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading OrderBookClearMessage. Expected 0x90074430, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderBookClearMessage, n, err := Read_OrderBookClearMessage(stream)
@@ -3412,19 +3687,22 @@ func IsTypeCode_OrderBookClearMessage(typeCode uint32) bool {
 
 // OrderExecutedMessage Declaration TypeCode: 0xf694c0e7
 type OrderExecutedMessage struct {
-	Length                   uint16
-	MessageType              byte
-	Nanosecond               uint32
-	OrderID                  uint64
-	ExecutedQuantity         uint32
-	TradeID                  uint64
-	LastOptPx                float64
-	Volatility               float64
-	UnderlyingReferencePrice float64
+	Length                   uint16  `json:"Length" xml:"Length,attr"`
+	MessageType              byte    `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond               uint32  `json:"Nanosecond" xml:"Nanosecond,attr"`
+	OrderID                  uint64  `json:"OrderID" xml:"OrderID,attr"`
+	ExecutedQuantity         uint32  `json:"ExecutedQuantity" xml:"ExecutedQuantity,attr"`
+	TradeID                  uint64  `json:"TradeID" xml:"TradeID,attr"`
+	LastOptPx                float64 `json:"LastOptPx" xml:"LastOptPx,attr"`
+	Volatility               float64 `json:"Volatility" xml:"Volatility,attr"`
+	UnderlyingReferencePrice float64 `json:"UnderlyingReferencePrice" xml:"UnderlyingReferencePrice,attr"`
 }
 
 func NewOrderExecutedMessage() *OrderExecutedMessage {
-	return &OrderExecutedMessage{}
+	return &OrderExecutedMessage{
+		Length:      51,
+		MessageType: 69,
+	}
 }
 
 // OrderExecutedMessage writer
@@ -3435,7 +3713,7 @@ func Write_OrderExecutedMessage(stream Streams.IMitchWriter, value *OrderExecute
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(51)
 	if err != nil {
 		return 0, err
 	}
@@ -3532,11 +3810,12 @@ func Read_OrderExecutedMessage(stream Streams.IMitchReader) (value *OrderExecute
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 51
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -3544,7 +3823,7 @@ func Read_OrderExecutedMessage(stream Streams.IMitchReader) (value *OrderExecute
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x45 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message OrderExecutedMessage was expected 0x45, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message OrderExecutedMessage was expected 0x45, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -3624,6 +3903,32 @@ func Read_OrderExecutedMessage(stream Streams.IMitchReader) (value *OrderExecute
 	return value, byteCount, nil
 }
 
+// OrderExecutedMessage reset
+func Reset_OrderExecutedMessage(value *OrderExecutedMessage) {
+	value.Length = 51
+	value.MessageType = 69
+	value.Nanosecond = 0
+	value.OrderID = 0
+	value.ExecutedQuantity = 0
+	value.TradeID = 0
+	value.LastOptPx = 0.0
+	value.Volatility = 0.0
+	value.UnderlyingReferencePrice = 0.0
+}
+
+// OrderExecutedMessage clone
+func Clone_OrderExecutedMessage(value *OrderExecutedMessage) *OrderExecutedMessage {
+	result := NewOrderExecutedMessage()
+	result.Nanosecond = value.Nanosecond
+	result.OrderID = value.OrderID
+	result.ExecutedQuantity = value.ExecutedQuantity
+	result.TradeID = value.TradeID
+	result.LastOptPx = value.LastOptPx
+	result.Volatility = value.Volatility
+	result.UnderlyingReferencePrice = value.UnderlyingReferencePrice
+	return result
+}
+
 // OrderExecutedMessage WriteMessage
 func WriteMessage_OrderExecutedMessage(stream Streams.IMitchWriter, value *OrderExecutedMessage) (int, error) {
 	byteCount := 0
@@ -3648,7 +3953,7 @@ func ReadMessage_OrderExecutedMessage(stream Streams.IMitchReader) (*OrderExecut
 		return nil, 0, err
 	}
 	if typeCode != 0xf694c0e7 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderExecutedMessage. Expected 0xf694c0e7, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading OrderExecutedMessage. Expected 0xf694c0e7, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderExecutedMessage, n, err := Read_OrderExecutedMessage(stream)
@@ -3671,22 +3976,25 @@ func IsTypeCode_OrderExecutedMessage(typeCode uint32) bool {
 
 // OrderExecutedWithPriceSizeMessage Declaration TypeCode: 0xca49e936
 type OrderExecutedWithPriceSizeMessage struct {
-	Length                   uint16
-	MessageType              byte
-	Nanosecond               uint32
-	OrderID                  uint64
-	ExecutedQuantity         uint32
-	DisplayQuantity          uint32
-	TradeID                  uint64
-	Printable                byte
-	Price                    float64
-	LastOptPx                float64
-	Volatility               float64
-	UnderlyingReferencePrice float64
+	Length                   uint16  `json:"Length" xml:"Length,attr"`
+	MessageType              byte    `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond               uint32  `json:"Nanosecond" xml:"Nanosecond,attr"`
+	OrderID                  uint64  `json:"OrderID" xml:"OrderID,attr"`
+	ExecutedQuantity         uint32  `json:"ExecutedQuantity" xml:"ExecutedQuantity,attr"`
+	DisplayQuantity          uint32  `json:"DisplayQuantity" xml:"DisplayQuantity,attr"`
+	TradeID                  uint64  `json:"TradeID" xml:"TradeID,attr"`
+	Printable                byte    `json:"Printable" xml:"Printable,attr"`
+	Price                    float64 `json:"Price" xml:"Price,attr"`
+	LastOptPx                float64 `json:"LastOptPx" xml:"LastOptPx,attr"`
+	Volatility               float64 `json:"Volatility" xml:"Volatility,attr"`
+	UnderlyingReferencePrice float64 `json:"UnderlyingReferencePrice" xml:"UnderlyingReferencePrice,attr"`
 }
 
 func NewOrderExecutedWithPriceSizeMessage() *OrderExecutedWithPriceSizeMessage {
-	return &OrderExecutedWithPriceSizeMessage{}
+	return &OrderExecutedWithPriceSizeMessage{
+		Length:      64,
+		MessageType: 67,
+	}
 }
 
 // OrderExecutedWithPriceSizeMessage writer
@@ -3697,7 +4005,7 @@ func Write_OrderExecutedWithPriceSizeMessage(stream Streams.IMitchWriter, value 
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(64)
 	if err != nil {
 		return 0, err
 	}
@@ -3824,11 +4132,12 @@ func Read_OrderExecutedWithPriceSizeMessage(stream Streams.IMitchReader) (value 
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 64
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -3836,7 +4145,7 @@ func Read_OrderExecutedWithPriceSizeMessage(stream Streams.IMitchReader) (value 
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x43 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message OrderExecutedWithPriceSizeMessage was expected 0x43, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message OrderExecutedWithPriceSizeMessage was expected 0x43, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -3946,6 +4255,38 @@ func Read_OrderExecutedWithPriceSizeMessage(stream Streams.IMitchReader) (value 
 	return value, byteCount, nil
 }
 
+// OrderExecutedWithPriceSizeMessage reset
+func Reset_OrderExecutedWithPriceSizeMessage(value *OrderExecutedWithPriceSizeMessage) {
+	value.Length = 64
+	value.MessageType = 67
+	value.Nanosecond = 0
+	value.OrderID = 0
+	value.ExecutedQuantity = 0
+	value.DisplayQuantity = 0
+	value.TradeID = 0
+	value.Printable = 0
+	value.Price = 0.0
+	value.LastOptPx = 0.0
+	value.Volatility = 0.0
+	value.UnderlyingReferencePrice = 0.0
+}
+
+// OrderExecutedWithPriceSizeMessage clone
+func Clone_OrderExecutedWithPriceSizeMessage(value *OrderExecutedWithPriceSizeMessage) *OrderExecutedWithPriceSizeMessage {
+	result := NewOrderExecutedWithPriceSizeMessage()
+	result.Nanosecond = value.Nanosecond
+	result.OrderID = value.OrderID
+	result.ExecutedQuantity = value.ExecutedQuantity
+	result.DisplayQuantity = value.DisplayQuantity
+	result.TradeID = value.TradeID
+	result.Printable = value.Printable
+	result.Price = value.Price
+	result.LastOptPx = value.LastOptPx
+	result.Volatility = value.Volatility
+	result.UnderlyingReferencePrice = value.UnderlyingReferencePrice
+	return result
+}
+
 // OrderExecutedWithPriceSizeMessage WriteMessage
 func WriteMessage_OrderExecutedWithPriceSizeMessage(stream Streams.IMitchWriter, value *OrderExecutedWithPriceSizeMessage) (int, error) {
 	byteCount := 0
@@ -3970,7 +4311,7 @@ func ReadMessage_OrderExecutedWithPriceSizeMessage(stream Streams.IMitchReader) 
 		return nil, 0, err
 	}
 	if typeCode != 0xca49e936 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OrderExecutedWithPriceSizeMessage. Expected 0xca49e936, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading OrderExecutedWithPriceSizeMessage. Expected 0xca49e936, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OrderExecutedWithPriceSizeMessage, n, err := Read_OrderExecutedWithPriceSizeMessage(stream)
@@ -4024,7 +4365,7 @@ func ReadMessage_TradeMessageFlags(stream Streams.IMitchReader) (TradeMessageFla
 		return TradeMessageFlags{}, 0, err
 	}
 	if typeCode != 0x8fa6f67d {
-		return TradeMessageFlags{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TradeMessageFlags. Expected 0x8fa6f67d, got 0x%08x", typeCode))
+		return TradeMessageFlags{}, 0, fmt.Errorf("typecode mismatch, while reading TradeMessageFlags. Expected 0x8fa6f67d, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TradeMessageFlags, n, err := Read_TradeMessageFlags(stream)
@@ -4084,7 +4425,7 @@ func ReadMessage_TradeMessageSubBook(stream Streams.IMitchReader) (TradeMessageS
 		return 0, 0, err
 	}
 	if typeCode != 0x09c46d4d {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TradeMessageSubBook. Expected 0x09c46d4d, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading TradeMessageSubBook. Expected 0x09c46d4d, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TradeMessageSubBook, n, err := Read_TradeMessageSubBook(stream)
@@ -4108,25 +4449,28 @@ func Read_TradeMessageSubBook(stream Streams.IMitchReader) (value TradeMessageSu
 
 // TradeMessage Declaration TypeCode: 0xb1ce427e
 type TradeMessage struct {
-	Length                   uint16
-	MessageType              byte
-	Nanosecond               uint32
-	ExecutedQuantity         uint32
-	InstrumentID             uint32
-	Reserved01               byte
-	Reserved02               byte
-	Price                    float64
-	TradeID                  uint64
-	SubBook                  TradeMessageSubBook
-	Flags                    TradeMessageFlags
-	TradeSubType             string
-	LastOptPx                float64
-	Volatility               float64
-	UnderlyingReferencePrice float64
+	Length                   uint16              `json:"Length" xml:"Length,attr"`
+	MessageType              byte                `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond               uint32              `json:"Nanosecond" xml:"Nanosecond,attr"`
+	ExecutedQuantity         uint32              `json:"ExecutedQuantity" xml:"ExecutedQuantity,attr"`
+	InstrumentID             uint32              `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01               byte                `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02               byte                `json:"Reserved02" xml:"Reserved02,attr"`
+	Price                    float64             `json:"Price" xml:"Price,attr"`
+	TradeID                  uint64              `json:"TradeID" xml:"TradeID,attr"`
+	SubBook                  TradeMessageSubBook `json:"SubBook" xml:"SubBook,attr"`
+	Flags                    TradeMessageFlags   `json:"Flags" xml:"Flags,attr"`
+	TradeSubType             string              `json:"TradeSubType" xml:"TradeSubType,attr"`
+	LastOptPx                float64             `json:"LastOptPx" xml:"LastOptPx,attr"`
+	Volatility               float64             `json:"Volatility" xml:"Volatility,attr"`
+	UnderlyingReferencePrice float64             `json:"UnderlyingReferencePrice" xml:"UnderlyingReferencePrice,attr"`
 }
 
 func NewTradeMessage() *TradeMessage {
-	return &TradeMessage{}
+	return &TradeMessage{
+		Length:      63,
+		MessageType: 80,
+	}
 }
 
 // TradeMessage writer
@@ -4137,7 +4481,7 @@ func Write_TradeMessage(stream Streams.IMitchWriter, value *TradeMessage) (byteC
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(63)
 	if err != nil {
 		return 0, err
 	}
@@ -4294,11 +4638,12 @@ func Read_TradeMessage(stream Streams.IMitchReader) (value *TradeMessage, byteCo
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 63
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -4306,7 +4651,7 @@ func Read_TradeMessage(stream Streams.IMitchReader) (value *TradeMessage, byteCo
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x50 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message TradeMessage was expected 0x50, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message TradeMessage was expected 0x50, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -4447,6 +4792,44 @@ func Read_TradeMessage(stream Streams.IMitchReader) (value *TradeMessage, byteCo
 	return value, byteCount, nil
 }
 
+// TradeMessage reset
+func Reset_TradeMessage(value *TradeMessage) {
+	value.Length = 63
+	value.MessageType = 80
+	value.Nanosecond = 0
+	value.ExecutedQuantity = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.Price = 0.0
+	value.TradeID = 0
+	value.SubBook = 0
+	value.Flags = TradeMessageFlags{}
+	value.TradeSubType = ""
+	value.LastOptPx = 0.0
+	value.Volatility = 0.0
+	value.UnderlyingReferencePrice = 0.0
+}
+
+// TradeMessage clone
+func Clone_TradeMessage(value *TradeMessage) *TradeMessage {
+	result := NewTradeMessage()
+	result.Nanosecond = value.Nanosecond
+	result.ExecutedQuantity = value.ExecutedQuantity
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.Price = value.Price
+	result.TradeID = value.TradeID
+	result.SubBook = value.SubBook
+	result.Flags = value.Flags
+	result.TradeSubType = value.TradeSubType
+	result.LastOptPx = value.LastOptPx
+	result.Volatility = value.Volatility
+	result.UnderlyingReferencePrice = value.UnderlyingReferencePrice
+	return result
+}
+
 // TradeMessage WriteMessage
 func WriteMessage_TradeMessage(stream Streams.IMitchWriter, value *TradeMessage) (int, error) {
 	byteCount := 0
@@ -4471,7 +4854,7 @@ func ReadMessage_TradeMessage(stream Streams.IMitchReader) (*TradeMessage, int, 
 		return nil, 0, err
 	}
 	if typeCode != 0xb1ce427e {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TradeMessage. Expected 0xb1ce427e, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading TradeMessage. Expected 0xb1ce427e, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TradeMessage, n, err := Read_TradeMessage(stream)
@@ -4494,23 +4877,26 @@ func IsTypeCode_TradeMessage(typeCode uint32) bool {
 
 // AuctionTradeMessage Declaration TypeCode: 0x8569a219
 type AuctionTradeMessage struct {
-	Length                   uint16
-	MessageType              byte
-	Nanosecond               uint32
-	Quantity                 uint32
-	InstrumentID             uint32
-	Reserved01               byte
-	Reserved02               byte
-	Price                    float64
-	TradeID                  uint64
-	AuctionType              byte
-	LastOptPx                float64
-	Volatility               float64
-	UnderlyingReferencePrice float64
+	Length                   uint16  `json:"Length" xml:"Length,attr"`
+	MessageType              byte    `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond               uint32  `json:"Nanosecond" xml:"Nanosecond,attr"`
+	Quantity                 uint32  `json:"Quantity" xml:"Quantity,attr"`
+	InstrumentID             uint32  `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01               byte    `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02               byte    `json:"Reserved02" xml:"Reserved02,attr"`
+	Price                    float64 `json:"Price" xml:"Price,attr"`
+	TradeID                  uint64  `json:"TradeID" xml:"TradeID,attr"`
+	AuctionType              byte    `json:"AuctionType" xml:"AuctionType,attr"`
+	LastOptPx                float64 `json:"LastOptPx" xml:"LastOptPx,attr"`
+	Volatility               float64 `json:"Volatility" xml:"Volatility,attr"`
+	UnderlyingReferencePrice float64 `json:"UnderlyingReferencePrice" xml:"UnderlyingReferencePrice,attr"`
 }
 
 func NewAuctionTradeMessage() *AuctionTradeMessage {
-	return &AuctionTradeMessage{}
+	return &AuctionTradeMessage{
+		Length:      58,
+		MessageType: 81,
+	}
 }
 
 // AuctionTradeMessage writer
@@ -4521,7 +4907,7 @@ func Write_AuctionTradeMessage(stream Streams.IMitchWriter, value *AuctionTradeM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(58)
 	if err != nil {
 		return 0, err
 	}
@@ -4658,11 +5044,12 @@ func Read_AuctionTradeMessage(stream Streams.IMitchReader) (value *AuctionTradeM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 58
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -4670,7 +5057,7 @@ func Read_AuctionTradeMessage(stream Streams.IMitchReader) (value *AuctionTradeM
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x51 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message AuctionTradeMessage was expected 0x51, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message AuctionTradeMessage was expected 0x51, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -4790,6 +5177,40 @@ func Read_AuctionTradeMessage(stream Streams.IMitchReader) (value *AuctionTradeM
 	return value, byteCount, nil
 }
 
+// AuctionTradeMessage reset
+func Reset_AuctionTradeMessage(value *AuctionTradeMessage) {
+	value.Length = 58
+	value.MessageType = 81
+	value.Nanosecond = 0
+	value.Quantity = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.Price = 0.0
+	value.TradeID = 0
+	value.AuctionType = 0
+	value.LastOptPx = 0.0
+	value.Volatility = 0.0
+	value.UnderlyingReferencePrice = 0.0
+}
+
+// AuctionTradeMessage clone
+func Clone_AuctionTradeMessage(value *AuctionTradeMessage) *AuctionTradeMessage {
+	result := NewAuctionTradeMessage()
+	result.Nanosecond = value.Nanosecond
+	result.Quantity = value.Quantity
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.Price = value.Price
+	result.TradeID = value.TradeID
+	result.AuctionType = value.AuctionType
+	result.LastOptPx = value.LastOptPx
+	result.Volatility = value.Volatility
+	result.UnderlyingReferencePrice = value.UnderlyingReferencePrice
+	return result
+}
+
 // AuctionTradeMessage WriteMessage
 func WriteMessage_AuctionTradeMessage(stream Streams.IMitchWriter, value *AuctionTradeMessage) (int, error) {
 	byteCount := 0
@@ -4814,7 +5235,7 @@ func ReadMessage_AuctionTradeMessage(stream Streams.IMitchReader) (*AuctionTrade
 		return nil, 0, err
 	}
 	if typeCode != 0x8569a219 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading AuctionTradeMessage. Expected 0x8569a219, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading AuctionTradeMessage. Expected 0x8569a219, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_AuctionTradeMessage, n, err := Read_AuctionTradeMessage(stream)
@@ -4837,25 +5258,28 @@ func IsTypeCode_AuctionTradeMessage(typeCode uint32) bool {
 
 // OffBookTradeMessage Declaration TypeCode: 0xa7b5c913
 type OffBookTradeMessage struct {
-	Length                   uint16
-	MessageType              byte
-	Nanosecond               uint32
-	ExecutedQuantity         uint32
-	InstrumentID             uint32
-	Reserved01               byte
-	Reserved02               byte
-	Price                    float64
-	TradeID                  uint64
-	OffBookTradeType         string
-	TradeTime                time.Time
-	TradeDate                time.Time
-	LastOptPx                float64
-	Volatility               float64
-	UnderlyingReferencePrice float64
+	Length                   uint16    `json:"Length" xml:"Length,attr"`
+	MessageType              byte      `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond               uint32    `json:"Nanosecond" xml:"Nanosecond,attr"`
+	ExecutedQuantity         uint32    `json:"ExecutedQuantity" xml:"ExecutedQuantity,attr"`
+	InstrumentID             uint32    `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01               byte      `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02               byte      `json:"Reserved02" xml:"Reserved02,attr"`
+	Price                    float64   `json:"Price" xml:"Price,attr"`
+	TradeID                  uint64    `json:"TradeID" xml:"TradeID,attr"`
+	OffBookTradeType         string    `json:"OffBookTradeType" xml:"OffBookTradeType,attr"`
+	TradeTime                time.Time `json:"TradeTime" xml:"TradeTime,attr"`
+	TradeDate                time.Time `json:"TradeDate" xml:"TradeDate,attr"`
+	LastOptPx                float64   `json:"LastOptPx" xml:"LastOptPx,attr"`
+	Volatility               float64   `json:"Volatility" xml:"Volatility,attr"`
+	UnderlyingReferencePrice float64   `json:"UnderlyingReferencePrice" xml:"UnderlyingReferencePrice,attr"`
 }
 
 func NewOffBookTradeMessage() *OffBookTradeMessage {
-	return &OffBookTradeMessage{}
+	return &OffBookTradeMessage{
+		Length:      77,
+		MessageType: 120,
+	}
 }
 
 // OffBookTradeMessage writer
@@ -4866,7 +5290,7 @@ func Write_OffBookTradeMessage(stream Streams.IMitchWriter, value *OffBookTradeM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(77)
 	if err != nil {
 		return 0, err
 	}
@@ -4956,14 +5380,14 @@ func Write_OffBookTradeMessage(stream Streams.IMitchWriter, value *OffBookTradeM
 	// Index: 9, Member Name: OffBookTradeType, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.OffBookTradeType, 6)
+	n, err = stream.Write_string(value.OffBookTradeType, 4)
 	if err != nil {
 		return 0, err
 	}
 	byteCount += n
 	//
 	//
-	// Index: 10, Member Name: TradeTime, Type: time
+	// Index: 10, Member Name: TradeTime, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_time(value.TradeTime)
@@ -4973,7 +5397,7 @@ func Write_OffBookTradeMessage(stream Streams.IMitchWriter, value *OffBookTradeM
 	byteCount += n
 	//
 	//
-	// Index: 11, Member Name: TradeDate, Type: date
+	// Index: 11, Member Name: TradeDate, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_date(value.TradeDate)
@@ -5023,11 +5447,12 @@ func Read_OffBookTradeMessage(stream Streams.IMitchReader) (value *OffBookTradeM
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 77
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -5035,7 +5460,7 @@ func Read_OffBookTradeMessage(stream Streams.IMitchReader) (value *OffBookTradeM
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x78 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message OffBookTradeMessage was expected 0x78, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message OffBookTradeMessage was expected 0x78, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -5117,14 +5542,14 @@ func Read_OffBookTradeMessage(stream Streams.IMitchReader) (value *OffBookTradeM
 	// Index: 9, Member Name: OffBookTradeType, Type: string
 	//
 	//
-	value.OffBookTradeType, n, err = stream.Read_string(6)
+	value.OffBookTradeType, n, err = stream.Read_string(4)
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
 	//
 	//
-	// Index: 10, Member Name: TradeTime, Type: time
+	// Index: 10, Member Name: TradeTime, Type: Time
 	//
 	//
 	value.TradeTime, n, err = stream.Read_mitch_time()
@@ -5134,7 +5559,7 @@ func Read_OffBookTradeMessage(stream Streams.IMitchReader) (value *OffBookTradeM
 	byteCount += n
 	//
 	//
-	// Index: 11, Member Name: TradeDate, Type: date
+	// Index: 11, Member Name: TradeDate, Type: Time
 	//
 	//
 	value.TradeDate, n, err = stream.Read_mitch_date()
@@ -5175,6 +5600,44 @@ func Read_OffBookTradeMessage(stream Streams.IMitchReader) (value *OffBookTradeM
 	return value, byteCount, nil
 }
 
+// OffBookTradeMessage reset
+func Reset_OffBookTradeMessage(value *OffBookTradeMessage) {
+	value.Length = 77
+	value.MessageType = 120
+	value.Nanosecond = 0
+	value.ExecutedQuantity = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.Price = 0.0
+	value.TradeID = 0
+	value.OffBookTradeType = ""
+	value.TradeTime = time.Time{}
+	value.TradeDate = time.Time{}
+	value.LastOptPx = 0.0
+	value.Volatility = 0.0
+	value.UnderlyingReferencePrice = 0.0
+}
+
+// OffBookTradeMessage clone
+func Clone_OffBookTradeMessage(value *OffBookTradeMessage) *OffBookTradeMessage {
+	result := NewOffBookTradeMessage()
+	result.Nanosecond = value.Nanosecond
+	result.ExecutedQuantity = value.ExecutedQuantity
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.Price = value.Price
+	result.TradeID = value.TradeID
+	result.OffBookTradeType = value.OffBookTradeType
+	result.TradeTime = value.TradeTime
+	result.TradeDate = value.TradeDate
+	result.LastOptPx = value.LastOptPx
+	result.Volatility = value.Volatility
+	result.UnderlyingReferencePrice = value.UnderlyingReferencePrice
+	return result
+}
+
 // OffBookTradeMessage WriteMessage
 func WriteMessage_OffBookTradeMessage(stream Streams.IMitchWriter, value *OffBookTradeMessage) (int, error) {
 	byteCount := 0
@@ -5199,7 +5662,7 @@ func ReadMessage_OffBookTradeMessage(stream Streams.IMitchReader) (*OffBookTrade
 		return nil, 0, err
 	}
 	if typeCode != 0xa7b5c913 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading OffBookTradeMessage. Expected 0xa7b5c913, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading OffBookTradeMessage. Expected 0xa7b5c913, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_OffBookTradeMessage, n, err := Read_OffBookTradeMessage(stream)
@@ -5222,15 +5685,18 @@ func IsTypeCode_OffBookTradeMessage(typeCode uint32) bool {
 
 // TradeBreakMessage Declaration TypeCode: 0x6c216472
 type TradeBreakMessage struct {
-	Length      uint16
-	MessageType byte
-	Nanosecond  uint32
-	TradeID     uint64
-	TradeType   byte
+	Length      uint16 `json:"Length" xml:"Length,attr"`
+	MessageType byte   `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond  uint32 `json:"Nanosecond" xml:"Nanosecond,attr"`
+	TradeID     uint64 `json:"TradeID" xml:"TradeID,attr"`
+	TradeType   byte   `json:"TradeType" xml:"TradeType,attr"`
 }
 
 func NewTradeBreakMessage() *TradeBreakMessage {
-	return &TradeBreakMessage{}
+	return &TradeBreakMessage{
+		Length:      16,
+		MessageType: 66,
+	}
 }
 
 // TradeBreakMessage writer
@@ -5241,7 +5707,7 @@ func Write_TradeBreakMessage(stream Streams.IMitchWriter, value *TradeBreakMessa
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(16)
 	if err != nil {
 		return 0, err
 	}
@@ -5298,11 +5764,12 @@ func Read_TradeBreakMessage(stream Streams.IMitchReader) (value *TradeBreakMessa
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 16
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -5310,7 +5777,7 @@ func Read_TradeBreakMessage(stream Streams.IMitchReader) (value *TradeBreakMessa
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x42 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message TradeBreakMessage was expected 0x42, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message TradeBreakMessage was expected 0x42, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -5350,6 +5817,24 @@ func Read_TradeBreakMessage(stream Streams.IMitchReader) (value *TradeBreakMessa
 	return value, byteCount, nil
 }
 
+// TradeBreakMessage reset
+func Reset_TradeBreakMessage(value *TradeBreakMessage) {
+	value.Length = 16
+	value.MessageType = 66
+	value.Nanosecond = 0
+	value.TradeID = 0
+	value.TradeType = 0
+}
+
+// TradeBreakMessage clone
+func Clone_TradeBreakMessage(value *TradeBreakMessage) *TradeBreakMessage {
+	result := NewTradeBreakMessage()
+	result.Nanosecond = value.Nanosecond
+	result.TradeID = value.TradeID
+	result.TradeType = value.TradeType
+	return result
+}
+
 // TradeBreakMessage WriteMessage
 func WriteMessage_TradeBreakMessage(stream Streams.IMitchWriter, value *TradeBreakMessage) (int, error) {
 	byteCount := 0
@@ -5374,7 +5859,7 @@ func ReadMessage_TradeBreakMessage(stream Streams.IMitchReader) (*TradeBreakMess
 		return nil, 0, err
 	}
 	if typeCode != 0x6c216472 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TradeBreakMessage. Expected 0x6c216472, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading TradeBreakMessage. Expected 0x6c216472, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TradeBreakMessage, n, err := Read_TradeBreakMessage(stream)
@@ -5428,7 +5913,7 @@ func ReadMessage_RecoveryTradeMessageFlags(stream Streams.IMitchReader) (Recover
 		return RecoveryTradeMessageFlags{}, 0, err
 	}
 	if typeCode != 0x041c16c8 {
-		return RecoveryTradeMessageFlags{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading RecoveryTradeMessageFlags. Expected 0x041c16c8, got 0x%08x", typeCode))
+		return RecoveryTradeMessageFlags{}, 0, fmt.Errorf("typecode mismatch, while reading RecoveryTradeMessageFlags. Expected 0x041c16c8, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_RecoveryTradeMessageFlags, n, err := Read_RecoveryTradeMessageFlags(stream)
@@ -5488,7 +5973,7 @@ func ReadMessage_RecoveryTradeMessageSubBook(stream Streams.IMitchReader) (Recov
 		return 0, 0, err
 	}
 	if typeCode != 0x8d246869 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading RecoveryTradeMessageSubBook. Expected 0x8d246869, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading RecoveryTradeMessageSubBook. Expected 0x8d246869, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_RecoveryTradeMessageSubBook, n, err := Read_RecoveryTradeMessageSubBook(stream)
@@ -5512,29 +5997,32 @@ func Read_RecoveryTradeMessageSubBook(stream Streams.IMitchReader) (value Recove
 
 // RecoveryTradeMessage Declaration TypeCode: 0x800fdbc2
 type RecoveryTradeMessage struct {
-	Length                   uint16
-	MessageType              byte
-	Nanosecond               uint32
-	ExecutedQuantity         uint32
-	InstrumentID             uint32
-	Reserved01               byte
-	Reserved02               byte
-	Price                    float64
-	TradeID                  uint64
-	AuctionType              byte
-	OffBookRFQTradeType      string
-	TradeTime                time.Time
-	TradeDate                time.Time
-	ActionType               byte
-	SubBook                  RecoveryTradeMessageSubBook
-	Flags                    RecoveryTradeMessageFlags
-	LastOptPx                float64
-	Volatility               float64
-	UnderlyingReferencePrice float64
+	Length                   uint16                      `json:"Length" xml:"Length,attr"`
+	MessageType              byte                        `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond               uint32                      `json:"Nanosecond" xml:"Nanosecond,attr"`
+	ExecutedQuantity         uint32                      `json:"ExecutedQuantity" xml:"ExecutedQuantity,attr"`
+	InstrumentID             uint32                      `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01               byte                        `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02               byte                        `json:"Reserved02" xml:"Reserved02,attr"`
+	Price                    float64                     `json:"Price" xml:"Price,attr"`
+	TradeID                  uint64                      `json:"TradeID" xml:"TradeID,attr"`
+	AuctionType              byte                        `json:"AuctionType" xml:"AuctionType,attr"`
+	OffBookRFQTradeType      string                      `json:"OffBookRFQTradeType" xml:"OffBookRFQTradeType,attr"`
+	TradeTime                time.Time                   `json:"TradeTime" xml:"TradeTime,attr"`
+	TradeDate                time.Time                   `json:"TradeDate" xml:"TradeDate,attr"`
+	ActionType               byte                        `json:"ActionType" xml:"ActionType,attr"`
+	SubBook                  RecoveryTradeMessageSubBook `json:"SubBook" xml:"SubBook,attr"`
+	Flags                    RecoveryTradeMessageFlags   `json:"Flags" xml:"Flags,attr"`
+	LastOptPx                float64                     `json:"LastOptPx" xml:"LastOptPx,attr"`
+	Volatility               float64                     `json:"Volatility" xml:"Volatility,attr"`
+	UnderlyingReferencePrice float64                     `json:"UnderlyingReferencePrice" xml:"UnderlyingReferencePrice,attr"`
 }
 
 func NewRecoveryTradeMessage() *RecoveryTradeMessage {
-	return &RecoveryTradeMessage{}
+	return &RecoveryTradeMessage{
+		Length:      81,
+		MessageType: 118,
+	}
 }
 
 // RecoveryTradeMessage writer
@@ -5545,7 +6033,7 @@ func Write_RecoveryTradeMessage(stream Streams.IMitchWriter, value *RecoveryTrad
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(81)
 	if err != nil {
 		return 0, err
 	}
@@ -5645,14 +6133,14 @@ func Write_RecoveryTradeMessage(stream Streams.IMitchWriter, value *RecoveryTrad
 	// Index: 10, Member Name: OffBookRFQTradeType, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.OffBookRFQTradeType, 6)
+	n, err = stream.Write_string(value.OffBookRFQTradeType, 4)
 	if err != nil {
 		return 0, err
 	}
 	byteCount += n
 	//
 	//
-	// Index: 11, Member Name: TradeTime, Type: time
+	// Index: 11, Member Name: TradeTime, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_time(value.TradeTime)
@@ -5662,7 +6150,7 @@ func Write_RecoveryTradeMessage(stream Streams.IMitchWriter, value *RecoveryTrad
 	byteCount += n
 	//
 	//
-	// Index: 12, Member Name: TradeDate, Type: date
+	// Index: 12, Member Name: TradeDate, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_date(value.TradeDate)
@@ -5742,11 +6230,12 @@ func Read_RecoveryTradeMessage(stream Streams.IMitchReader) (value *RecoveryTrad
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 81
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -5754,7 +6243,7 @@ func Read_RecoveryTradeMessage(stream Streams.IMitchReader) (value *RecoveryTrad
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x76 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message RecoveryTradeMessage was expected 0x76, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message RecoveryTradeMessage was expected 0x76, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -5846,14 +6335,14 @@ func Read_RecoveryTradeMessage(stream Streams.IMitchReader) (value *RecoveryTrad
 	// Index: 10, Member Name: OffBookRFQTradeType, Type: string
 	//
 	//
-	value.OffBookRFQTradeType, n, err = stream.Read_string(6)
+	value.OffBookRFQTradeType, n, err = stream.Read_string(4)
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
 	//
 	//
-	// Index: 11, Member Name: TradeTime, Type: time
+	// Index: 11, Member Name: TradeTime, Type: Time
 	//
 	//
 	value.TradeTime, n, err = stream.Read_mitch_time()
@@ -5863,7 +6352,7 @@ func Read_RecoveryTradeMessage(stream Streams.IMitchReader) (value *RecoveryTrad
 	byteCount += n
 	//
 	//
-	// Index: 12, Member Name: TradeDate, Type: date
+	// Index: 12, Member Name: TradeDate, Type: Time
 	//
 	//
 	value.TradeDate, n, err = stream.Read_mitch_date()
@@ -5935,6 +6424,52 @@ func Read_RecoveryTradeMessage(stream Streams.IMitchReader) (value *RecoveryTrad
 	return value, byteCount, nil
 }
 
+// RecoveryTradeMessage reset
+func Reset_RecoveryTradeMessage(value *RecoveryTradeMessage) {
+	value.Length = 81
+	value.MessageType = 118
+	value.Nanosecond = 0
+	value.ExecutedQuantity = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.Price = 0.0
+	value.TradeID = 0
+	value.AuctionType = 0
+	value.OffBookRFQTradeType = ""
+	value.TradeTime = time.Time{}
+	value.TradeDate = time.Time{}
+	value.ActionType = 0
+	value.SubBook = 0
+	value.Flags = RecoveryTradeMessageFlags{}
+	value.LastOptPx = 0.0
+	value.Volatility = 0.0
+	value.UnderlyingReferencePrice = 0.0
+}
+
+// RecoveryTradeMessage clone
+func Clone_RecoveryTradeMessage(value *RecoveryTradeMessage) *RecoveryTradeMessage {
+	result := NewRecoveryTradeMessage()
+	result.Nanosecond = value.Nanosecond
+	result.ExecutedQuantity = value.ExecutedQuantity
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.Price = value.Price
+	result.TradeID = value.TradeID
+	result.AuctionType = value.AuctionType
+	result.OffBookRFQTradeType = value.OffBookRFQTradeType
+	result.TradeTime = value.TradeTime
+	result.TradeDate = value.TradeDate
+	result.ActionType = value.ActionType
+	result.SubBook = value.SubBook
+	result.Flags = value.Flags
+	result.LastOptPx = value.LastOptPx
+	result.Volatility = value.Volatility
+	result.UnderlyingReferencePrice = value.UnderlyingReferencePrice
+	return result
+}
+
 // RecoveryTradeMessage WriteMessage
 func WriteMessage_RecoveryTradeMessage(stream Streams.IMitchWriter, value *RecoveryTradeMessage) (int, error) {
 	byteCount := 0
@@ -5959,7 +6494,7 @@ func ReadMessage_RecoveryTradeMessage(stream Streams.IMitchReader) (*RecoveryTra
 		return nil, 0, err
 	}
 	if typeCode != 0x800fdbc2 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading RecoveryTradeMessage. Expected 0x800fdbc2, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading RecoveryTradeMessage. Expected 0x800fdbc2, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_RecoveryTradeMessage, n, err := Read_RecoveryTradeMessage(stream)
@@ -5982,21 +6517,24 @@ func IsTypeCode_RecoveryTradeMessage(typeCode uint32) bool {
 
 // AuctionInfoMessage Declaration TypeCode: 0x12617b15
 type AuctionInfoMessage struct {
-	Length             uint16
-	MessageType        byte
-	Nanosecond         uint32
-	PairedQuantity     uint32
-	Reserved01         uint32
-	ImbalanceDirection byte
-	InstrumentID       uint32
-	Reserved02         byte
-	Reserved03         byte
-	Price              float64
-	AuctionType        byte
+	Length             uint16  `json:"Length" xml:"Length,attr"`
+	MessageType        byte    `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond         uint32  `json:"Nanosecond" xml:"Nanosecond,attr"`
+	PairedQuantity     uint32  `json:"PairedQuantity" xml:"PairedQuantity,attr"`
+	Reserved01         uint32  `json:"Reserved01" xml:"Reserved01,attr"`
+	ImbalanceDirection byte    `json:"ImbalanceDirection" xml:"ImbalanceDirection,attr"`
+	InstrumentID       uint32  `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved02         byte    `json:"Reserved02" xml:"Reserved02,attr"`
+	Reserved03         byte    `json:"Reserved03" xml:"Reserved03,attr"`
+	Price              float64 `json:"Price" xml:"Price,attr"`
+	AuctionType        byte    `json:"AuctionType" xml:"AuctionType,attr"`
 }
 
 func NewAuctionInfoMessage() *AuctionInfoMessage {
-	return &AuctionInfoMessage{}
+	return &AuctionInfoMessage{
+		Length:      31,
+		MessageType: 73,
+	}
 }
 
 // AuctionInfoMessage writer
@@ -6007,7 +6545,7 @@ func Write_AuctionInfoMessage(stream Streams.IMitchWriter, value *AuctionInfoMes
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(31)
 	if err != nil {
 		return 0, err
 	}
@@ -6124,11 +6662,12 @@ func Read_AuctionInfoMessage(stream Streams.IMitchReader) (value *AuctionInfoMes
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 31
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -6136,7 +6675,7 @@ func Read_AuctionInfoMessage(stream Streams.IMitchReader) (value *AuctionInfoMes
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x49 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message AuctionInfoMessage was expected 0x49, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message AuctionInfoMessage was expected 0x49, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -6236,6 +6775,36 @@ func Read_AuctionInfoMessage(stream Streams.IMitchReader) (value *AuctionInfoMes
 	return value, byteCount, nil
 }
 
+// AuctionInfoMessage reset
+func Reset_AuctionInfoMessage(value *AuctionInfoMessage) {
+	value.Length = 31
+	value.MessageType = 73
+	value.Nanosecond = 0
+	value.PairedQuantity = 0
+	value.Reserved01 = 0
+	value.ImbalanceDirection = 0
+	value.InstrumentID = 0
+	value.Reserved02 = 0
+	value.Reserved03 = 0
+	value.Price = 0.0
+	value.AuctionType = 0
+}
+
+// AuctionInfoMessage clone
+func Clone_AuctionInfoMessage(value *AuctionInfoMessage) *AuctionInfoMessage {
+	result := NewAuctionInfoMessage()
+	result.Nanosecond = value.Nanosecond
+	result.PairedQuantity = value.PairedQuantity
+	result.Reserved01 = value.Reserved01
+	result.ImbalanceDirection = value.ImbalanceDirection
+	result.InstrumentID = value.InstrumentID
+	result.Reserved02 = value.Reserved02
+	result.Reserved03 = value.Reserved03
+	result.Price = value.Price
+	result.AuctionType = value.AuctionType
+	return result
+}
+
 // AuctionInfoMessage WriteMessage
 func WriteMessage_AuctionInfoMessage(stream Streams.IMitchWriter, value *AuctionInfoMessage) (int, error) {
 	byteCount := 0
@@ -6260,7 +6829,7 @@ func ReadMessage_AuctionInfoMessage(stream Streams.IMitchReader) (*AuctionInfoMe
 		return nil, 0, err
 	}
 	if typeCode != 0x12617b15 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading AuctionInfoMessage. Expected 0x12617b15, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading AuctionInfoMessage. Expected 0x12617b15, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_AuctionInfoMessage, n, err := Read_AuctionInfoMessage(stream)
@@ -6287,11 +6856,11 @@ type TStatisticsMessageOpenCloseIndicator byte
 const (
 	TStatisticsMessageOpenCloseIndicator_UT             = 'A' // default value: byte('A')
 	TStatisticsMessageOpenCloseIndicator_AT             = 'B' // default value: byte('B')
-	TStatisticsMessageOpenCloseIndicator_MidofBBO       = 'C' // default value: byte('C')
+	TStatisticsMessageOpenCloseIndicator_MidOfBBO       = 'C' // default value: byte('C')
 	TStatisticsMessageOpenCloseIndicator_LastAT         = 'D' // default value: byte('D')
 	TStatisticsMessageOpenCloseIndicator_LastUT         = 'E' // default value: byte('E')
 	TStatisticsMessageOpenCloseIndicator_Manual         = 'F' // default value: byte('F')
-	TStatisticsMessageOpenCloseIndicator_VWAP           = 'H' // default value: byte('H')
+	TStatisticsMessageOpenCloseIndicator_Vwap           = 'H' // default value: byte('H')
 	TStatisticsMessageOpenCloseIndicator_PreviousClose  = 'I' // default value: byte('I')
 	TStatisticsMessageOpenCloseIndicator_Zero           = 'J' // default value: byte('J')
 	TStatisticsMessageOpenCloseIndicator_BestBid        = 'U' // default value: byte('U')
@@ -6328,7 +6897,7 @@ func ReadMessage_TStatisticsMessageOpenCloseIndicator(stream Streams.IMitchReade
 		return 0, 0, err
 	}
 	if typeCode != 0x9313c377 {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TStatisticsMessageOpenCloseIndicator. Expected 0x9313c377, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading TStatisticsMessageOpenCloseIndicator. Expected 0x9313c377, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TStatisticsMessageOpenCloseIndicator, n, err := Read_TStatisticsMessageOpenCloseIndicator(stream)
@@ -6388,7 +6957,7 @@ func ReadMessage_TStatisticsMessageSubBook(stream Streams.IMitchReader) (TStatis
 		return 0, 0, err
 	}
 	if typeCode != 0x7362a31a {
-		return 0, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TStatisticsMessageSubBook. Expected 0x7362a31a, got 0x%08x", typeCode))
+		return 0, 0, fmt.Errorf("typecode mismatch, while reading TStatisticsMessageSubBook. Expected 0x7362a31a, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TStatisticsMessageSubBook, n, err := Read_TStatisticsMessageSubBook(stream)
@@ -6412,20 +6981,23 @@ func Read_TStatisticsMessageSubBook(stream Streams.IMitchReader) (value TStatist
 
 // StatisticsMessage Declaration TypeCode: 0xc87d7e5a
 type StatisticsMessage struct {
-	Length             uint16
-	MessageType        byte
-	Nanosecond         uint32
-	InstrumentID       uint32
-	Reserved01         byte
-	Reserved02         byte
-	StatisticType      string
-	Price              float64
-	OpenCloseIndicator TStatisticsMessageOpenCloseIndicator
-	SubBook            TStatisticsMessageSubBook
+	Length             uint16                               `json:"Length" xml:"Length,attr"`
+	MessageType        byte                                 `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond         uint32                               `json:"Nanosecond" xml:"Nanosecond,attr"`
+	InstrumentID       uint32                               `json:"InstrumentID" xml:"InstrumentID,attr"`
+	Reserved01         byte                                 `json:"Reserved01" xml:"Reserved01,attr"`
+	Reserved02         byte                                 `json:"Reserved02" xml:"Reserved02,attr"`
+	StatisticType      string                               `json:"StatisticType" xml:"StatisticType,attr"`
+	Price              float64                              `json:"Price" xml:"Price,attr"`
+	OpenCloseIndicator TStatisticsMessageOpenCloseIndicator `json:"OpenCloseIndicator" xml:"OpenCloseIndicator,attr"`
+	SubBook            TStatisticsMessageSubBook            `json:"SubBook" xml:"SubBook,attr"`
 }
 
 func NewStatisticsMessage() *StatisticsMessage {
-	return &StatisticsMessage{}
+	return &StatisticsMessage{
+		Length:      24,
+		MessageType: 119,
+	}
 }
 
 // StatisticsMessage writer
@@ -6436,7 +7008,7 @@ func Write_StatisticsMessage(stream Streams.IMitchWriter, value *StatisticsMessa
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(24)
 	if err != nil {
 		return 0, err
 	}
@@ -6496,7 +7068,7 @@ func Write_StatisticsMessage(stream Streams.IMitchWriter, value *StatisticsMessa
 	// Index: 6, Member Name: StatisticType, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.StatisticType, 6)
+	n, err = stream.Write_string(value.StatisticType, 1)
 	if err != nil {
 		return 0, err
 	}
@@ -6543,11 +7115,12 @@ func Read_StatisticsMessage(stream Streams.IMitchReader) (value *StatisticsMessa
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 24
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -6555,7 +7128,7 @@ func Read_StatisticsMessage(stream Streams.IMitchReader) (value *StatisticsMessa
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x77 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message StatisticsMessage was expected 0x77, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message StatisticsMessage was expected 0x77, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -6607,7 +7180,7 @@ func Read_StatisticsMessage(stream Streams.IMitchReader) (value *StatisticsMessa
 	// Index: 6, Member Name: StatisticType, Type: string
 	//
 	//
-	value.StatisticType, n, err = stream.Read_string(6)
+	value.StatisticType, n, err = stream.Read_string(1)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -6647,6 +7220,34 @@ func Read_StatisticsMessage(stream Streams.IMitchReader) (value *StatisticsMessa
 	return value, byteCount, nil
 }
 
+// StatisticsMessage reset
+func Reset_StatisticsMessage(value *StatisticsMessage) {
+	value.Length = 24
+	value.MessageType = 119
+	value.Nanosecond = 0
+	value.InstrumentID = 0
+	value.Reserved01 = 0
+	value.Reserved02 = 0
+	value.StatisticType = ""
+	value.Price = 0.0
+	value.OpenCloseIndicator = 0
+	value.SubBook = 0
+}
+
+// StatisticsMessage clone
+func Clone_StatisticsMessage(value *StatisticsMessage) *StatisticsMessage {
+	result := NewStatisticsMessage()
+	result.Nanosecond = value.Nanosecond
+	result.InstrumentID = value.InstrumentID
+	result.Reserved01 = value.Reserved01
+	result.Reserved02 = value.Reserved02
+	result.StatisticType = value.StatisticType
+	result.Price = value.Price
+	result.OpenCloseIndicator = value.OpenCloseIndicator
+	result.SubBook = value.SubBook
+	return result
+}
+
 // StatisticsMessage WriteMessage
 func WriteMessage_StatisticsMessage(stream Streams.IMitchWriter, value *StatisticsMessage) (int, error) {
 	byteCount := 0
@@ -6671,7 +7272,7 @@ func ReadMessage_StatisticsMessage(stream Streams.IMitchReader) (*StatisticsMess
 		return nil, 0, err
 	}
 	if typeCode != 0xc87d7e5a {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading StatisticsMessage. Expected 0xc87d7e5a, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading StatisticsMessage. Expected 0xc87d7e5a, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_StatisticsMessage, n, err := Read_StatisticsMessage(stream)
@@ -6694,25 +7295,28 @@ func IsTypeCode_StatisticsMessage(typeCode uint32) bool {
 
 // ExtendedStatisticsMessage Declaration TypeCode: 0xff7aeb65
 type ExtendedStatisticsMessage struct {
-	Length                uint16
-	MessageType           byte
-	Nanosecond            uint32
-	InstrumentID          uint32
-	HighPrice             float64
-	LowPrice              float64
-	VWAP                  float64
-	Volume                uint32
-	Turnover              float64
-	NumberofTrades        uint32
-	Reserved01            string
-	SubBook               TStatisticsMessageSubBook
-	NotionalExposure      float64
-	NotionalDeltaExposure float64
-	OpenInterest          float64
+	Length                uint16                    `json:"Length" xml:"Length,attr"`
+	MessageType           byte                      `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond            uint32                    `json:"Nanosecond" xml:"Nanosecond,attr"`
+	InstrumentID          uint32                    `json:"InstrumentID" xml:"InstrumentID,attr"`
+	HighPrice             float64                   `json:"HighPrice" xml:"HighPrice,attr"`
+	LowPrice              float64                   `json:"LowPrice" xml:"LowPrice,attr"`
+	Vwap                  float64                   `json:"Vwap" xml:"Vwap,attr"`
+	Volume                uint32                    `json:"Volume" xml:"Volume,attr"`
+	Turnover              float64                   `json:"Turnover" xml:"Turnover,attr"`
+	NumberOfTrades        uint32                    `json:"NumberOfTrades" xml:"NumberOfTrades,attr"`
+	Reserved01            string                    `json:"Reserved01" xml:"Reserved01,attr"`
+	SubBook               TStatisticsMessageSubBook `json:"SubBook" xml:"SubBook,attr"`
+	NotionalExposure      float64                   `json:"NotionalExposure" xml:"NotionalExposure,attr"`
+	NotionalDeltaExposure float64                   `json:"NotionalDeltaExposure" xml:"NotionalDeltaExposure,attr"`
+	OpenInterest          float64                   `json:"OpenInterest" xml:"OpenInterest,attr"`
 }
 
 func NewExtendedStatisticsMessage() *ExtendedStatisticsMessage {
-	return &ExtendedStatisticsMessage{}
+	return &ExtendedStatisticsMessage{
+		Length:      84,
+		MessageType: 128,
+	}
 }
 
 // ExtendedStatisticsMessage writer
@@ -6723,7 +7327,7 @@ func Write_ExtendedStatisticsMessage(stream Streams.IMitchWriter, value *Extende
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(84)
 	if err != nil {
 		return 0, err
 	}
@@ -6780,10 +7384,10 @@ func Write_ExtendedStatisticsMessage(stream Streams.IMitchWriter, value *Extende
 	byteCount += n
 	//
 	//
-	// Index: 6, Member Name: VWAP, Type: float64
+	// Index: 6, Member Name: Vwap, Type: float64
 	//
 	//
-	n, err = stream.Write_mitch_price08(value.VWAP)
+	n, err = stream.Write_mitch_price08(value.Vwap)
 	if err != nil {
 		return 0, err
 	}
@@ -6810,10 +7414,10 @@ func Write_ExtendedStatisticsMessage(stream Streams.IMitchWriter, value *Extende
 	byteCount += n
 	//
 	//
-	// Index: 9, Member Name: NumberofTrades, Type: uint32
+	// Index: 9, Member Name: NumberOfTrades, Type: uint32
 	//
 	//
-	n, err = stream.Write_uint32(value.NumberofTrades)
+	n, err = stream.Write_uint32(value.NumberOfTrades)
 	if err != nil {
 		return 0, err
 	}
@@ -6823,7 +7427,7 @@ func Write_ExtendedStatisticsMessage(stream Streams.IMitchWriter, value *Extende
 	// Index: 10, Member Name: Reserved01, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.Reserved01, 1)
+	n, err = stream.Write_string(value.Reserved01, 8)
 	if err != nil {
 		return 0, err
 	}
@@ -6880,11 +7484,12 @@ func Read_ExtendedStatisticsMessage(stream Streams.IMitchReader) (value *Extende
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 84
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -6892,7 +7497,7 @@ func Read_ExtendedStatisticsMessage(stream Streams.IMitchReader) (value *Extende
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x80 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message ExtendedStatisticsMessage was expected 0x80, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message ExtendedStatisticsMessage was expected 0x80, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -6941,10 +7546,10 @@ func Read_ExtendedStatisticsMessage(stream Streams.IMitchReader) (value *Extende
 	byteCount += n
 	//
 	//
-	// Index: 6, Member Name: VWAP, Type: float64
+	// Index: 6, Member Name: Vwap, Type: float64
 	//
 	//
-	value.VWAP, n, err = stream.Read_mitch_price08()
+	value.Vwap, n, err = stream.Read_mitch_price08()
 	if err != nil {
 		return nil, 0, err
 	}
@@ -6971,10 +7576,10 @@ func Read_ExtendedStatisticsMessage(stream Streams.IMitchReader) (value *Extende
 	byteCount += n
 	//
 	//
-	// Index: 9, Member Name: NumberofTrades, Type: uint32
+	// Index: 9, Member Name: NumberOfTrades, Type: uint32
 	//
 	//
-	value.NumberofTrades, n, err = stream.Read_uint32()
+	value.NumberOfTrades, n, err = stream.Read_uint32()
 	if err != nil {
 		return nil, 0, err
 	}
@@ -6984,7 +7589,7 @@ func Read_ExtendedStatisticsMessage(stream Streams.IMitchReader) (value *Extende
 	// Index: 10, Member Name: Reserved01, Type: string
 	//
 	//
-	value.Reserved01, n, err = stream.Read_string(1)
+	value.Reserved01, n, err = stream.Read_string(8)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -7033,6 +7638,44 @@ func Read_ExtendedStatisticsMessage(stream Streams.IMitchReader) (value *Extende
 	return value, byteCount, nil
 }
 
+// ExtendedStatisticsMessage reset
+func Reset_ExtendedStatisticsMessage(value *ExtendedStatisticsMessage) {
+	value.Length = 84
+	value.MessageType = 128
+	value.Nanosecond = 0
+	value.InstrumentID = 0
+	value.HighPrice = 0.0
+	value.LowPrice = 0.0
+	value.Vwap = 0.0
+	value.Volume = 0
+	value.Turnover = 0.0
+	value.NumberOfTrades = 0
+	value.Reserved01 = ""
+	value.SubBook = 0
+	value.NotionalExposure = 0.0
+	value.NotionalDeltaExposure = 0.0
+	value.OpenInterest = 0.0
+}
+
+// ExtendedStatisticsMessage clone
+func Clone_ExtendedStatisticsMessage(value *ExtendedStatisticsMessage) *ExtendedStatisticsMessage {
+	result := NewExtendedStatisticsMessage()
+	result.Nanosecond = value.Nanosecond
+	result.InstrumentID = value.InstrumentID
+	result.HighPrice = value.HighPrice
+	result.LowPrice = value.LowPrice
+	result.Vwap = value.Vwap
+	result.Volume = value.Volume
+	result.Turnover = value.Turnover
+	result.NumberOfTrades = value.NumberOfTrades
+	result.Reserved01 = value.Reserved01
+	result.SubBook = value.SubBook
+	result.NotionalExposure = value.NotionalExposure
+	result.NotionalDeltaExposure = value.NotionalDeltaExposure
+	result.OpenInterest = value.OpenInterest
+	return result
+}
+
 // ExtendedStatisticsMessage WriteMessage
 func WriteMessage_ExtendedStatisticsMessage(stream Streams.IMitchWriter, value *ExtendedStatisticsMessage) (int, error) {
 	byteCount := 0
@@ -7057,7 +7700,7 @@ func ReadMessage_ExtendedStatisticsMessage(stream Streams.IMitchReader) (*Extend
 		return nil, 0, err
 	}
 	if typeCode != 0xff7aeb65 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading ExtendedStatisticsMessage. Expected 0xff7aeb65, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading ExtendedStatisticsMessage. Expected 0xff7aeb65, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_ExtendedStatisticsMessage, n, err := Read_ExtendedStatisticsMessage(stream)
@@ -7080,19 +7723,22 @@ func IsTypeCode_ExtendedStatisticsMessage(typeCode uint32) bool {
 
 // NewsMessage Declaration TypeCode: 0x8a0c79e9
 type NewsMessage struct {
-	Length      uint16
-	MessageType byte
-	Nanosecond  uint32
-	Time        time.Time
-	Urgency     byte
-	Headline    string
-	Text        string
-	Instruments string
-	Underlyings string
+	Length      uint16    `json:"Length" xml:"Length,attr"`
+	MessageType byte      `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond  uint32    `json:"Nanosecond" xml:"Nanosecond,attr"`
+	Time        time.Time `json:"Time" xml:"Time,attr"`
+	Urgency     byte      `json:"Urgency" xml:"Urgency,attr"`
+	Headline    string    `json:"Headline" xml:"Headline,attr"`
+	Text        string    `json:"Text" xml:"Text,attr"`
+	Instruments string    `json:"Instruments" xml:"Instruments,attr"`
+	Underlyings string    `json:"Underlyings" xml:"Underlyings,attr"`
 }
 
 func NewNewsMessage() *NewsMessage {
-	return &NewsMessage{}
+	return &NewsMessage{
+		Length:      1066,
+		MessageType: 117,
+	}
 }
 
 // NewsMessage writer
@@ -7103,7 +7749,7 @@ func Write_NewsMessage(stream Streams.IMitchWriter, value *NewsMessage) (byteCou
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(1066)
 	if err != nil {
 		return 0, err
 	}
@@ -7130,7 +7776,7 @@ func Write_NewsMessage(stream Streams.IMitchWriter, value *NewsMessage) (byteCou
 	byteCount += n
 	//
 	//
-	// Index: 3, Member Name: Time, Type: time
+	// Index: 3, Member Name: Time, Type: Time
 	//
 	//
 	n, err = stream.Write_mitch_time(value.Time)
@@ -7153,7 +7799,7 @@ func Write_NewsMessage(stream Streams.IMitchWriter, value *NewsMessage) (byteCou
 	// Index: 5, Member Name: Headline, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.Headline, 1)
+	n, err = stream.Write_string(value.Headline, 100)
 	if err != nil {
 		return 0, err
 	}
@@ -7163,7 +7809,7 @@ func Write_NewsMessage(stream Streams.IMitchWriter, value *NewsMessage) (byteCou
 	// Index: 6, Member Name: Text, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.Text, 1)
+	n, err = stream.Write_string(value.Text, 750)
 	if err != nil {
 		return 0, err
 	}
@@ -7173,7 +7819,7 @@ func Write_NewsMessage(stream Streams.IMitchWriter, value *NewsMessage) (byteCou
 	// Index: 7, Member Name: Instruments, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.Instruments, 1)
+	n, err = stream.Write_string(value.Instruments, 100)
 	if err != nil {
 		return 0, err
 	}
@@ -7183,7 +7829,7 @@ func Write_NewsMessage(stream Streams.IMitchWriter, value *NewsMessage) (byteCou
 	// Index: 8, Member Name: Underlyings, Type: string
 	//
 	//
-	n, err = stream.Write_string(value.Underlyings, 1)
+	n, err = stream.Write_string(value.Underlyings, 100)
 	if err != nil {
 		return 0, err
 	}
@@ -7200,11 +7846,12 @@ func Read_NewsMessage(stream Streams.IMitchReader) (value *NewsMessage, byteCoun
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 1066
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -7212,7 +7859,7 @@ func Read_NewsMessage(stream Streams.IMitchReader) (value *NewsMessage, byteCoun
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x75 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message NewsMessage was expected 0x75, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message NewsMessage was expected 0x75, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -7231,7 +7878,7 @@ func Read_NewsMessage(stream Streams.IMitchReader) (value *NewsMessage, byteCoun
 	byteCount += n
 	//
 	//
-	// Index: 3, Member Name: Time, Type: time
+	// Index: 3, Member Name: Time, Type: Time
 	//
 	//
 	value.Time, n, err = stream.Read_mitch_time()
@@ -7254,7 +7901,7 @@ func Read_NewsMessage(stream Streams.IMitchReader) (value *NewsMessage, byteCoun
 	// Index: 5, Member Name: Headline, Type: string
 	//
 	//
-	value.Headline, n, err = stream.Read_string(1)
+	value.Headline, n, err = stream.Read_string(100)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -7264,7 +7911,7 @@ func Read_NewsMessage(stream Streams.IMitchReader) (value *NewsMessage, byteCoun
 	// Index: 6, Member Name: Text, Type: string
 	//
 	//
-	value.Text, n, err = stream.Read_string(1)
+	value.Text, n, err = stream.Read_string(750)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -7274,7 +7921,7 @@ func Read_NewsMessage(stream Streams.IMitchReader) (value *NewsMessage, byteCoun
 	// Index: 7, Member Name: Instruments, Type: string
 	//
 	//
-	value.Instruments, n, err = stream.Read_string(1)
+	value.Instruments, n, err = stream.Read_string(100)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -7284,12 +7931,38 @@ func Read_NewsMessage(stream Streams.IMitchReader) (value *NewsMessage, byteCoun
 	// Index: 8, Member Name: Underlyings, Type: string
 	//
 	//
-	value.Underlyings, n, err = stream.Read_string(1)
+	value.Underlyings, n, err = stream.Read_string(100)
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
 	return value, byteCount, nil
+}
+
+// NewsMessage reset
+func Reset_NewsMessage(value *NewsMessage) {
+	value.Length = 1066
+	value.MessageType = 117
+	value.Nanosecond = 0
+	value.Time = time.Time{}
+	value.Urgency = 0
+	value.Headline = ""
+	value.Text = ""
+	value.Instruments = ""
+	value.Underlyings = ""
+}
+
+// NewsMessage clone
+func Clone_NewsMessage(value *NewsMessage) *NewsMessage {
+	result := NewNewsMessage()
+	result.Nanosecond = value.Nanosecond
+	result.Time = value.Time
+	result.Urgency = value.Urgency
+	result.Headline = value.Headline
+	result.Text = value.Text
+	result.Instruments = value.Instruments
+	result.Underlyings = value.Underlyings
+	return result
 }
 
 // NewsMessage WriteMessage
@@ -7316,7 +7989,7 @@ func ReadMessage_NewsMessage(stream Streams.IMitchReader) (*NewsMessage, int, er
 		return nil, 0, err
 	}
 	if typeCode != 0x8a0c79e9 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading NewsMessage. Expected 0x8a0c79e9, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading NewsMessage. Expected 0x8a0c79e9, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_NewsMessage, n, err := Read_NewsMessage(stream)
@@ -7370,7 +8043,7 @@ func ReadMessage_TopOfBookMessageSubBook(stream Streams.IMitchReader) (TopOfBook
 		return TopOfBookMessageSubBook{}, 0, err
 	}
 	if typeCode != 0xb416f305 {
-		return TopOfBookMessageSubBook{}, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TopOfBookMessageSubBook. Expected 0xb416f305, got 0x%08x", typeCode))
+		return TopOfBookMessageSubBook{}, 0, fmt.Errorf("typecode mismatch, while reading TopOfBookMessageSubBook. Expected 0xb416f305, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TopOfBookMessageSubBook, n, err := Read_TopOfBookMessageSubBook(stream)
@@ -7395,23 +8068,25 @@ func Read_TopOfBookMessageSubBook(stream Streams.IMitchReader) (value TopOfBookM
 
 // TopOfBookMessage Declaration TypeCode: 0xac36e385
 type TopOfBookMessage struct {
-	Length              uint16
-	MessageType         byte
-	Nanosecond          uint32
-	instrumentID        uint32
-	ReserveField        uint16
-	SubBook             TopOfBookMessageSubBook
-	Action              byte
-	Side                byte
-	Price               float64
-	Quantity            uint32
-	MarketOrderQuantity uint32
-	Reserved01          uint32
-	Reserved02          uint32
+	Length              uint16                  `json:"Length" xml:"Length,attr"`
+	MessageType         byte                    `json:"MessageType" xml:"MessageType,attr"`
+	Nanosecond          uint32                  `json:"Nanosecond" xml:"Nanosecond,attr"`
+	InstrumentID        uint32                  `json:"InstrumentID" xml:"InstrumentID,attr"`
+	ReserveField        uint16                  `json:"ReserveField" xml:"ReserveField,attr"`
+	SubBook             TopOfBookMessageSubBook `json:"SubBook" xml:"SubBook,attr"`
+	Action              byte                    `json:"Action" xml:"Action,attr"`
+	Side                byte                    `json:"Side" xml:"Side,attr"`
+	Price               float64                 `json:"Price" xml:"Price,attr"`
+	Quantity            uint32                  `json:"Quantity" xml:"Quantity,attr"`
+	MarketOrderQuantity uint32                  `json:"MarketOrderQuantity" xml:"MarketOrderQuantity,attr"`
+	Reserved01          uint16                  `json:"Reserved01" xml:"Reserved01,attr"`
 }
 
 func NewTopOfBookMessage() *TopOfBookMessage {
-	return &TopOfBookMessage{}
+	return &TopOfBookMessage{
+		Length:      34,
+		MessageType: 113,
+	}
 }
 
 // TopOfBookMessage writer
@@ -7422,7 +8097,7 @@ func Write_TopOfBookMessage(stream Streams.IMitchWriter, value *TopOfBookMessage
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint16(value.Length)
+	n, err = stream.Write_uint16(34)
 	if err != nil {
 		return 0, err
 	}
@@ -7449,10 +8124,10 @@ func Write_TopOfBookMessage(stream Streams.IMitchWriter, value *TopOfBookMessage
 	byteCount += n
 	//
 	//
-	// Index: 3, Member Name: instrumentID, Type: uint32
+	// Index: 3, Member Name: InstrumentID, Type: uint32
 	//
 	//
-	n, err = stream.Write_uint32(value.instrumentID)
+	n, err = stream.Write_uint32(value.InstrumentID)
 	if err != nil {
 		return 0, err
 	}
@@ -7529,20 +8204,10 @@ func Write_TopOfBookMessage(stream Streams.IMitchWriter, value *TopOfBookMessage
 	byteCount += n
 	//
 	//
-	// Index: 11, Member Name: Reserved01, Type: uint32
+	// Index: 11, Member Name: Reserved01, Type: uint16
 	//
 	//
-	n, err = stream.Write_uint32(value.Reserved01)
-	if err != nil {
-		return 0, err
-	}
-	byteCount += n
-	//
-	//
-	// Index: 12, Member Name: Reserved02, Type: uint32
-	//
-	//
-	n, err = stream.Write_uint32(value.Reserved02)
+	n, err = stream.Write_uint16(value.Reserved01)
 	if err != nil {
 		return 0, err
 	}
@@ -7559,11 +8224,12 @@ func Read_TopOfBookMessage(stream Streams.IMitchReader) (value *TopOfBookMessage
 	// Index: 0, Member Name: Length, Type: uint16
 	//
 	//
-	value.Length, n, err = stream.Read_uint16()
+	_, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
+	value.Length = 34
 	//
 	//
 	// Index: 1, Member Name: MessageType, Type: byte
@@ -7571,7 +8237,7 @@ func Read_TopOfBookMessage(stream Streams.IMitchReader) (value *TopOfBookMessage
 	//
 	b, n, err := stream.Read_byte()
 	if b != 0x71 {
-		return nil, 0, errors.New(fmt.Sprintf("Message type numbers does not match up. For Message TopOfBookMessage was expected 0x71, but 0x%x was found.)", b))
+		return nil, 0, fmt.Errorf("message type numbers does not match up. For Message TopOfBookMessage was expected 0x71, but 0x%x was found.)", b)
 	}
 	if err != nil {
 		return nil, 0, err
@@ -7590,10 +8256,10 @@ func Read_TopOfBookMessage(stream Streams.IMitchReader) (value *TopOfBookMessage
 	byteCount += n
 	//
 	//
-	// Index: 3, Member Name: instrumentID, Type: uint32
+	// Index: 3, Member Name: InstrumentID, Type: uint32
 	//
 	//
-	value.instrumentID, n, err = stream.Read_uint32()
+	value.InstrumentID, n, err = stream.Read_uint32()
 	if err != nil {
 		return nil, 0, err
 	}
@@ -7670,25 +8336,47 @@ func Read_TopOfBookMessage(stream Streams.IMitchReader) (value *TopOfBookMessage
 	byteCount += n
 	//
 	//
-	// Index: 11, Member Name: Reserved01, Type: uint32
+	// Index: 11, Member Name: Reserved01, Type: uint16
 	//
 	//
-	value.Reserved01, n, err = stream.Read_uint32()
-	if err != nil {
-		return nil, 0, err
-	}
-	byteCount += n
-	//
-	//
-	// Index: 12, Member Name: Reserved02, Type: uint32
-	//
-	//
-	value.Reserved02, n, err = stream.Read_uint32()
+	value.Reserved01, n, err = stream.Read_uint16()
 	if err != nil {
 		return nil, 0, err
 	}
 	byteCount += n
 	return value, byteCount, nil
+}
+
+// TopOfBookMessage reset
+func Reset_TopOfBookMessage(value *TopOfBookMessage) {
+	value.Length = 34
+	value.MessageType = 113
+	value.Nanosecond = 0
+	value.InstrumentID = 0
+	value.ReserveField = 0
+	value.SubBook = TopOfBookMessageSubBook{}
+	value.Action = 0
+	value.Side = 0
+	value.Price = 0.0
+	value.Quantity = 0
+	value.MarketOrderQuantity = 0
+	value.Reserved01 = 0
+}
+
+// TopOfBookMessage clone
+func Clone_TopOfBookMessage(value *TopOfBookMessage) *TopOfBookMessage {
+	result := NewTopOfBookMessage()
+	result.Nanosecond = value.Nanosecond
+	result.InstrumentID = value.InstrumentID
+	result.ReserveField = value.ReserveField
+	result.SubBook = value.SubBook
+	result.Action = value.Action
+	result.Side = value.Side
+	result.Price = value.Price
+	result.Quantity = value.Quantity
+	result.MarketOrderQuantity = value.MarketOrderQuantity
+	result.Reserved01 = value.Reserved01
+	return result
 }
 
 // TopOfBookMessage WriteMessage
@@ -7715,7 +8403,7 @@ func ReadMessage_TopOfBookMessage(stream Streams.IMitchReader) (*TopOfBookMessag
 		return nil, 0, err
 	}
 	if typeCode != 0xac36e385 {
-		return nil, 0, errors.New(fmt.Sprintf("typecode mismatch, while reading TopOfBookMessage. Expected 0xac36e385, got 0x%08x", typeCode))
+		return nil, 0, fmt.Errorf("typecode mismatch, while reading TopOfBookMessage. Expected 0xac36e385, got 0x%08x", typeCode)
 	}
 	byteCount += n
 	value_TopOfBookMessage, n, err := Read_TopOfBookMessage(stream)

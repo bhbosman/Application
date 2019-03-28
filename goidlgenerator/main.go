@@ -32,13 +32,11 @@ func main() {
 	showHelp := flag.Bool("help", false, "Show this")
 
 	flag.Parse()
-
 	if *showHelp {
 		_, _ = fmt.Fprintln(os.Stderr, "goidlgenerator params args\n\twhere params is")
 		flag.PrintDefaults()
 
 		fmt.Println(">>>>>>>>>>>>>")
-
 		if *verbose {
 			flag.VisitAll(func(i *flag.Flag) {
 				fmt.Println(i.Name, i.Value)
@@ -48,55 +46,67 @@ func main() {
 
 		os.Exit(1)
 		return
-
 	}
 
-	outStream, err := GetOutput(*outputFile)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Output file could not be created.\n")
-		os.Exit(2)
-		return
-	}
-
-	defer func() {
-		_ = outStream.Close()
-	}()
-
-	typesInUse, err := yacc.StringToIDlBaseType(*typesToUseAsString)
-	if err != nil {
-		_, _ = os.Stderr.WriteString(fmt.Sprintf("invalid type in use (%v).", typesToUseAsString))
-		os.Exit(7)
-	}
-
-	var definitionDeclarations []interfaces.IDefinitionDeclaration = nil
-	if !*defaultTypes {
-		definitionDeclarations = ReadFromSource(*verbose, typesInUse)
-
-	} else {
-		definitionDeclarations, err = typesInUse.DefaultDecls()
+	tempFileName, err := func() (string, error) {
+		outTempStream, err := GetTempOutput(*outputFile)
 		if err != nil {
-			_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
-			os.Exit(10)
+			_, _ = fmt.Fprintf(os.Stderr, "Output file could not be created.\n")
+			os.Exit(2)
+			return "", err
 		}
 
-	}
-	publisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
-	if err != nil {
-		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
-		os.Exit(5)
-	}
+		defer func() {
+			_ = outTempStream.Close()
+		}()
 
-	err = publisher.Export(
-		typesInUse,
-		Publish.ExportParams{
-			OutputStream:  outStream,
-			PackageName:   *packageName,
-			DeclaredTypes: definitionDeclarations})
-	if err != nil {
-		_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
-		os.Exit(6)
-	}
+		typesInUse, err := yacc.StringToIDlBaseType(*typesToUseAsString)
+		if err != nil {
+			_, _ = os.Stderr.WriteString(fmt.Sprintf("invalid type in use (%v).", typesToUseAsString))
+			return "", fmt.Errorf("error 7")
+		}
 
+		var definitionDeclarations []interfaces.IDefinitionDeclaration = nil
+		if !*defaultTypes {
+			definitionDeclarations = ReadFromSource(*verbose, typesInUse)
+
+		} else {
+			definitionDeclarations, err = typesInUse.DefaultDecls()
+			if err != nil {
+				_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
+				return "", fmt.Errorf("error 7")
+			}
+
+		}
+		publisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
+		if err != nil {
+			_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
+			return "", fmt.Errorf("error 7")
+		}
+
+		err = publisher.Export(
+			typesInUse,
+			Publish.ExportParams{
+				OutputStream:  outTempStream,
+				PackageName:   *packageName,
+				DeclaredTypes: definitionDeclarations})
+		if err != nil {
+			_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
+			return "", fmt.Errorf("error 7")
+		}
+
+		if f, ok := outTempStream.(*os.File); ok {
+			return f.Name(), nil
+		} else {
+			return "", fmt.Errorf("no os.File as temp")
+		}
+	}()
+
+	if err != nil {
+		os.Exit(1)
+		return
+	}
+	_ = os.Rename(tempFileName, *outputFile)
 }
 
 func ReadFromSource(verbose bool, typesInUse interfaces.IBaseTypeInformation) []interfaces.IDefinitionDeclaration {
@@ -160,14 +170,14 @@ func (self *WriterNoCloser) Write(p []byte) (n int, err error) {
 	return self.Writer.Write(p)
 }
 
-func GetOutput(fileName string) (io.WriteCloser, error) {
+func GetTempOutput(fileName string) (io.WriteCloser, error) {
 	if fileName == "" {
 		wc := &WriterNoCloser{
 			Writer: os.Stdout,
 		}
 		return wc, nil
 	}
-	return os.Create(fileName)
+	return ioutil.TempFile("", "tempfile")
 }
 
 func Exists(name string) bool {

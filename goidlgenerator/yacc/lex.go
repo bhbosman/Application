@@ -167,6 +167,7 @@ func CreateIdlTokens() ([]DFA.IDfa, error) {
 	reservedWords["MitchUInt32"] = RwMitchUInt32
 	reservedWords["MitchUInt64"] = RwMitchUInt64
 	reservedWords["MitchMessageNumberType"] = RwMitchMessageNumberType
+	reservedWords["MitchMessageLengthType"] = RwMitchMessageLengthType
 
 	collDfaFunctions := []func() (DFA.IDfa, error){
 		func() (DFA.IDfa, error) { return DFA.NewIdentifier(Identifier, reservedWords) },

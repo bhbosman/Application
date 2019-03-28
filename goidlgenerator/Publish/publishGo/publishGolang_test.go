@@ -2,7 +2,6 @@ package publishGo
 
 import (
 	"bufio"
-	"github.com/bhbosman/Application/goidlgenerator/Extensions"
 	"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/Publish"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
@@ -15,7 +14,7 @@ import (
 func TestPublishOfStructDefinition(t *testing.T) {
 	verbose := false
 	typeInformation := MitchDefinedTypes.NewMitchTypeInformation()
-	typeValueHelper := Extensions.DefaultTypeValueHelper()
+	//typeValueHelper := Extensions DefaultTypeValueHelper()
 	t.Run("", func(t *testing.T) {
 		data := `
 			typedef MitchBitField
@@ -30,7 +29,10 @@ func TestPublishOfStructDefinition(t *testing.T) {
 				b7
 			> SymbolDirectoryFlags;
 
-			struct A{SymbolDirectoryFlags B;};
+			struct A
+			{
+				SymbolDirectoryFlags B;
+			};
 		`
 
 		reader := bufio.NewReader(strings.NewReader(data))
@@ -52,7 +54,7 @@ func TestPublishOfStructDefinition(t *testing.T) {
 			PackageName:   "ddd",
 			DeclaredTypes: DeclaredTypes,
 		}
-		err := newPublishGolang().Export(typeInformation, typeValueHelper, params)
+		err := newPublishGolang().Export(typeInformation, params)
 		assert.NoError(t, err)
 	})
 

@@ -62,6 +62,7 @@ package yacc
 %token RwMitchUInt32
 %token RwMitchUInt64
 %token RwMitchMessageNumberType
+%token RwMitchMessageLengthType
 
 
 
@@ -566,13 +567,26 @@ mitch_type_spec:
 			IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
 			return TypeNotAvailable
 		}
-	}|RwMitchMessageNumberType '<' positive_int_const '>'{
+	}
+	|RwMitchMessageNumberType '<' positive_int_const '>'{
 		context, err := GetIdlExprLex(IdlExprlex)
 		if err != nil{
 			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
 			return NoLex
 		}
 		$$, err = context.IDlBaseType.CreateType(interfaces.MitchMessageNumber, $3)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
+			return TypeNotAvailable
+		}
+	}
+	|RwMitchMessageLengthType '<' positive_int_const '>'{
+		context, err := GetIdlExprLex(IdlExprlex)
+		if err != nil{
+			IdlExprlex.Error(__yyfmt__.Sprintf("GetIdlExprLex failure"))
+			return NoLex
+		}
+		$$, err = context.IDlBaseType.CreateType(interfaces.MitchMessageLength, $3)
 		if err != nil{
 			IdlExprlex.Error(__yyfmt__.Sprintf("%v", err))
 			return TypeNotAvailable

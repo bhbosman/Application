@@ -35,5 +35,5 @@ func (self *mitchTime) Predefined() bool {
 }
 
 func (self *mitchTime) GetName() string {
-	return "time"
+	return "Time"
 }

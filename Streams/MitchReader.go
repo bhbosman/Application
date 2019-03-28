@@ -12,14 +12,11 @@ type MitchReader struct {
 	reader io.Reader
 }
 
-
-
 func NewMitchReader(reader io.Reader) *MitchReader {
 	return &MitchReader{reader: reader}
 }
 
-
-func (self *MitchReader) bufferSize(length int)int {
+func (self *MitchReader) bufferSize(length int) int {
 	return int(math.Pow(2.0, math.Ceil(math.Log2(float64(length)))))
 }
 
@@ -30,16 +27,16 @@ func (self *MitchReader) Read_string(length int) (value string, n int, err error
 	if ok {
 		bs = pool.Get().([]byte)
 		defer pool.Put(bs)
-	}else {
+	} else {
 		bs = make([]byte, length)
 	}
 	n, err = io.ReadAtLeast(self.reader, bs, length)
 	if err != nil {
 		return "", 0, err
 	}
-	if ok{
+	if ok {
 		value = string(bs[0:length])
-	}else{
+	} else {
 		value = string(bs)
 	}
 	return value, n, nil
@@ -138,7 +135,6 @@ func (self *MitchReader) Read_mitch_price08() (value float64, n int, err error) 
 	}
 	return float64(v / 100000000), n, e
 }
-
 
 var byteArrayPools map[int]*sync.Pool
 

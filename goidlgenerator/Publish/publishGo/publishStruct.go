@@ -42,7 +42,8 @@ func (self *publishStruct) Export(writer io.StringWriter, TypeInformation IBaseT
 		errorList.Add(self.ExportDefaultConstructor(writer, TypeInformation))
 		errorList.Add(self.GenerateWriteFunction(writer, TypeInformation, typeNamePrefix, typeCode))
 		errorList.Add(self.GenerateReadFunction(writer, TypeInformation, typeNamePrefix, typeCode))
-
+		errorList.Add(self.GenerateResetFunction(writer, TypeInformation, typeNamePrefix, typeCode))
+		errorList.Add(self.GenerateCloneFunction(writer, TypeInformation, typeNamePrefix, typeCode))
 		returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)
 		errorList.Add(GenerateMessageWriteFunction(
 			writer,
@@ -73,12 +74,18 @@ func (self *publishStruct) ExportDefinition(writer io.StringWriter, TypeInformat
 		_, _ = writer.WriteString(fmt.Sprintf("type %s struct {\n", self.data.Identifier))
 		for _, member := range self.data.Members {
 			defaultValue := member.Declarator.DefaultValue()
+			if member.DefinedType == nil {
+				errorList.Add(fmt.Errorf("type is null"))
+				return
+			}
 			returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(member.DefinedType)
 			if defaultValue == nil {
 				_, _ = writer.WriteString(fmt.Sprintf(
-					"\t%v %v\n",
+					"\t%v %v   `json:\"%v\" xml:\"%v,attr\"`  \n",
 					member.Declarator.Identifier(),
-					returnType))
+					returnType,
+					member.Declarator.Identifier(),
+					member.Declarator.Identifier()))
 			} else {
 				ss := defaultValue.ValueKind().String()
 				_, _ = writer.WriteString(fmt.Sprintf(
@@ -94,11 +101,37 @@ func (self *publishStruct) ExportDefinition(writer io.StringWriter, TypeInformat
 	})
 }
 
+func (self *publishStruct) definedValueMembers() bool {
+	for _, member := range self.data.Members {
+		if member.DefinedType.Kind() == MitchMessageLength {
+			return true
+		}
+		if member.DefinedType.Kind() == MitchMessageNumber {
+			return true
+		}
+	}
+	return false
+}
 func (self *publishStruct) ExportDefaultConstructor(writer io.StringWriter, TypeInformation IBaseTypeInformation) error {
 	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
 		lineWriter := NewLineWriter(writer, errorList)
 		lineWriter.Write("func New%v()*%v {\n", self.data.Identifier, self.data.Identifier)
-		lineWriter.Write("\treturn &%v{}\n", self.data.Identifier)
+		if self.definedValueMembers() {
+			lineWriter.Write("\treturn &%v{\n", self.data.Identifier)
+			for _, member := range self.data.Members {
+				switch member.DefinedType.Kind() {
+				case MitchMessageLength:
+					lineWriter.Write("\t\t%v: %v,\n", member.Declarator.Identifier(), member.DefinedType.DefaultValue())
+					break
+				case MitchMessageNumber:
+					lineWriter.Write("\t\t%v: %v,\n", member.Declarator.Identifier(), member.DefinedType.DefaultValue())
+					break
+				}
+			}
+			lineWriter.Write("\t}\n")
+		} else {
+			lineWriter.Write("\treturn &%v{}\n", self.data.Identifier)
+		}
 		lineWriter.Write("}\n")
 		lineWriter.Write("\n")
 	})
@@ -112,6 +145,11 @@ func (self *publishStruct) GenerateReadFunction(writer io.StringWriter, TypeInfo
 		_, _ = writer.WriteString(fmt.Sprintf("\tvalue = New%v()\n", typeNamePrefix))
 		_, _ = writer.WriteString(fmt.Sprintf("\tvar n int \n"))
 		for index, item := range self.data.Members {
+			if item.DefinedType == nil {
+				errorList.Add(fmt.Errorf("defined type is null"))
+				return
+			}
+
 			errorCheckFunc := func() {
 				_, _ = writer.WriteString(fmt.Sprintf("\tif err != nil {\n"))
 				_, _ = writer.WriteString(fmt.Sprintf("\t\treturn nil, 0, err\n"))
@@ -129,11 +167,16 @@ func (self *publishStruct) GenerateReadFunction(writer io.StringWriter, TypeInfo
 				_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v, n, err = stream.Read_%v(%v)\n", item.Declarator.Identifier(), item.DefinedType.GetStreamFunctionName(), seqCount))
 				errorCheckFunc()
 				break
+			case MitchMessageLength:
+				_, _ = writer.WriteString(fmt.Sprintf("\t_, n, err = stream.Read_uint16()\n"))
+				errorCheckFunc()
+				_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v = %v\n", item.Declarator.Identifier(), item.DefinedType.DefaultValue()))
+				break
 			case MitchMessageNumber:
 				_, _ = writer.WriteString(fmt.Sprintf("\tb, n, err := stream.Read_byte()\n"))
 				i, _ := strconv.Atoi(item.DefinedType.DefaultValue())
 				_, _ = writer.WriteString(fmt.Sprintf("\tif b != 0x%x {\n", i))
-				_, _ = writer.WriteString(fmt.Sprintf("\t\treturn nil, 0, errors.New(fmt.Sprintf(\"Message type numbers does not match up. For Message %v was expected 0x%x, but 0x%%x was found.)\", b))\n", self.data.Identifier, i))
+				_, _ = writer.WriteString(fmt.Sprintf("\t\treturn nil, 0, fmt.Errorf(\"message type numbers does not match up. For Message %v was expected 0x%x, but 0x%%x was found.)\", b)\n", self.data.Identifier, i))
 				_, _ = writer.WriteString(fmt.Sprintf("\t}\n"))
 				errorCheckFunc()
 				_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v = b\n", item.Declarator.Identifier()))
@@ -154,7 +197,6 @@ func (self *publishStruct) GenerateReadFunction(writer io.StringWriter, TypeInfo
 				_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v, n, err = stream.Read_%v()\n", item.Declarator.Identifier(), item.DefinedType.GetStreamFunctionName()))
 				errorCheckFunc()
 			}
-
 		}
 		_, _ = writer.WriteString(fmt.Sprintf("\treturn value, byteCount, nil\n"))
 		_, _ = writer.WriteString(fmt.Sprintf("}\n"))
@@ -169,6 +211,10 @@ func (self *publishStruct) GenerateWriteFunction(writer io.StringWriter, TypeInf
 		_, _ = writer.WriteString(fmt.Sprintf("func Write_%v(stream Streams.I%vWriter, value %v) (byteCount int, err error) {\n", typeNamePrefix, TypeInformation.Name(), returnType))
 		_, _ = writer.WriteString(fmt.Sprintf("\tvar n int \n"))
 		for index, item := range self.data.Members {
+			if item.DefinedType == nil {
+				errorList.Add(fmt.Errorf("defined type is null"))
+				return
+			}
 			_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
 			_, _ = writer.WriteString(fmt.Sprintf("\t//\n"))
 			_, _ = writer.WriteString(fmt.Sprintf("\t// Index: %v, Member Name: %v, Type: %v \n", index, item.Declarator.Identifier(), item.DefinedType.GetName()))
@@ -178,6 +224,9 @@ func (self *publishStruct) GenerateWriteFunction(writer io.StringWriter, TypeInf
 			case MitchAlpha:
 				_, seqCount := item.DefinedType.GetSequenceCount()
 				_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_%v(value.%v, %v)\n", item.DefinedType.GetStreamFunctionName(), item.Declarator.Identifier(), seqCount))
+
+			case MitchMessageLength:
+				_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_uint16(%v)\n", item.DefinedType.DefaultValue()))
 			case MitchMessageNumber:
 				_, _ = writer.WriteString(fmt.Sprintf("\tn, err = stream.Write_byte(%v)\n", item.DefinedType.DefaultValue()))
 				break
@@ -199,6 +248,57 @@ func (self *publishStruct) GenerateWriteFunction(writer io.StringWriter, TypeInf
 			_, _ = writer.WriteString(fmt.Sprintf("\tbyteCount += n\n"))
 		}
 		_, _ = writer.WriteString(fmt.Sprintf("\treturn byteCount, nil\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("}\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\n"))
+	})
+}
+
+func (self *publishStruct) GenerateResetFunction(writer io.StringWriter, TypeInformation IBaseTypeInformation, typeNamePrefix string, typeCode uint32) error {
+	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
+		returnType := "*" + typeNamePrefix
+		_, _ = writer.WriteString(fmt.Sprintf("// %v reset\n", typeNamePrefix))
+		_, _ = writer.WriteString(fmt.Sprintf("func Reset_%v(value %v) {\n", typeNamePrefix, returnType))
+		for _, item := range self.data.Members {
+			if item.DefinedType == nil {
+				errorList.Add(fmt.Errorf("defined type is null"))
+				return
+			}
+			switch item.DefinedType.Kind() {
+			case MitchBitField:
+				memberReturnType := Extensions.TypeValueHelper.TypeValueForDefinedType(item.DefinedType)
+				_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v = %v{}\n", item.Declarator.Identifier(), memberReturnType))
+			default:
+				_, _ = writer.WriteString(fmt.Sprintf("\tvalue.%v = %v\n", item.Declarator.Identifier(), item.DefinedType.DefaultValue()))
+			}
+		}
+		_, _ = writer.WriteString(fmt.Sprintf("}\n"))
+		_, _ = writer.WriteString(fmt.Sprintf("\n"))
+	})
+}
+
+func (self *publishStruct) GenerateCloneFunction(writer io.StringWriter, TypeInformation IBaseTypeInformation, typeNamePrefix string, typeCode uint32) error {
+	return Common.ErrorListFactory.NewErrorListFunc(func(errorList Common.IErrorList) {
+		returnType := "*" + typeNamePrefix
+		_, _ = writer.WriteString(fmt.Sprintf("// %v clone\n", typeNamePrefix))
+		_, _ = writer.WriteString(fmt.Sprintf("func Clone_%v(value %v) %v {\n", typeNamePrefix, returnType, returnType))
+		_, _ = writer.WriteString(fmt.Sprintf("\tresult := New%v()\n", typeNamePrefix))
+		for _, item := range self.data.Members {
+			if item.DefinedType == nil {
+				errorList.Add(fmt.Errorf("defined type is null"))
+				return
+			}
+			switch item.DefinedType.Kind() {
+			case MitchMessageNumber:
+				//_, _ = writer.WriteString(fmt.Sprintf("\tresult.%v = %v\n", item.Declarator.Identifier(), item.DefinedType.DefaultValue()))
+				break
+			case MitchMessageLength:
+				//_, _ = writer.WriteString(fmt.Sprintf("\tresult.%v = %v\n", item.Declarator.Identifier(), item.DefinedType.DefaultValue()))
+				break
+			default:
+				_, _ = writer.WriteString(fmt.Sprintf("\tresult.%v = value.%v\n", item.Declarator.Identifier(), item.Declarator.Identifier()))
+			}
+		}
+		_, _ = writer.WriteString(fmt.Sprintf("\treturn result\n"))
 		_, _ = writer.WriteString(fmt.Sprintf("}\n"))
 		_, _ = writer.WriteString(fmt.Sprintf("\n"))
 	})

@@ -23,6 +23,7 @@ func TestMitchWriter(t *testing.T) {
 		_, ok := obj.(IMitchWriter)
 		assert.True(t, ok)
 	})
+
 	t.Run("Write String Method", func(t *testing.T) {
 		t.Run("Write String", func(t *testing.T) {
 			buffer := bytes.NewBuffer(nil)
@@ -81,6 +82,7 @@ func TestMitchWriter(t *testing.T) {
 			assert.Error(t, e)
 		})
 	})
+
 	t.Run("Write Byte Method", func(t *testing.T) {
 		t.Run("Write one byte on valid buffer", func(t *testing.T) {
 			buffer := bytes.NewBuffer(nil)
@@ -106,6 +108,7 @@ func TestMitchWriter(t *testing.T) {
 			assert.Equal(t, 0, n)
 		})
 	})
+
 	t.Run("Write uint16", func(t *testing.T) {
 		t.Run("Write one uint16 on valid buffer. Test number 'd'", func(t *testing.T) {
 			value := uint16('d')
@@ -152,6 +155,7 @@ func TestMitchWriter(t *testing.T) {
 			assert.Equal(t, 0, n)
 		})
 	})
+
 	t.Run("Write uint32", func(t *testing.T) {
 		t.Run("Write one uint32 on valid buffer. Test number 'd'", func(t *testing.T) {
 			value := uint32('d')
@@ -220,6 +224,7 @@ func TestMitchWriter(t *testing.T) {
 			assert.Equal(t, 0, n)
 		})
 	})
+
 	t.Run("Write uint64", func(t *testing.T) {
 		t.Run("Write one uint64 on valid buffer. Test number 'd'", func(t *testing.T) {
 			value := uint64('d')
@@ -323,6 +328,7 @@ func TestMitchWriter(t *testing.T) {
 			assert.Equal(t, 0, n)
 		})
 	})
+
 	t.Run("Write time", func(t *testing.T) {
 		t.Run("Write one time on valid buffer.", func(t *testing.T) {
 			value, err := time.Parse("15:04:05", "01:02:03")
@@ -366,6 +372,7 @@ func TestMitchWriter(t *testing.T) {
 			assert.Equal(t, 0, n)
 		})
 	})
+
 	t.Run("Write date", func(t *testing.T) {
 		t.Run("Write one date on valid buffer.", func(t *testing.T) {
 			value, err := time.Parse("20060102", "20190101")
@@ -483,5 +490,4 @@ func TestMitchWriter(t *testing.T) {
 			assert.Equal(t, 0, n)
 		})
 	})
-
 }

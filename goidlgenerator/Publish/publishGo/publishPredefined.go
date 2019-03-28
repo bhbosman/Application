@@ -31,7 +31,7 @@ func (self *publishPredefined) Export(
 		_, _ = writer.WriteString(fmt.Sprintf("// %v Declaration TypeCode: 0x%08x\n", typeNamePrefix, typeCode))
 
 		returnType := Extensions.TypeValueHelper.TypeValueForDefinedType(self.data)
-		GenerateMessageWriteFunction(
+		_ = GenerateMessageWriteFunction(
 			writer,
 			returnType,
 			GenerateMessageWriteFunctionParams{
@@ -40,7 +40,7 @@ func (self *publishPredefined) Export(
 				typeNamePrefix:  typeNamePrefix,
 				typeCode:        typeCode,
 			})
-		GenerateMessageReadFunction(
+		_ = GenerateMessageReadFunction(
 			writer,
 			returnType,
 			GenerateMessageReadFunctionParams{

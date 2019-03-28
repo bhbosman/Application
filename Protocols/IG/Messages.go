@@ -16,6 +16,17 @@ type AuthResponse struct {
 	TimezoneOffset        int        `json:"timezoneOffset"` // In seconds
 }
 
+type SessionResponse struct {
+	AccountID             string `json:"accountId"`
+	ClientID              string `json:"clientId"`
+	Currency              string `json:"currency"`
+	LightstreamerEndpoint string `json:"lightstreamerEndpoint"`
+	TimezoneOffset        int    `json:"timezoneOffset"` // In seconds
+	Locale                string `json:"locale"`
+	Cst                   string `json:"CST"`
+	XSECURITYTOKEN        string `json:"X-SECURITY-TOKEN"`
+}
+
 type OAuthToken struct {
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    string `json:"expires_in"`

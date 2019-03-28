@@ -1,7 +1,6 @@
 package MitchDefinedTypes
 
 import (
-	"errors"
 	"fmt"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
@@ -23,38 +22,15 @@ func (self *mitchTypeInformation) CreateType(kind interfaces.Kind, data interfac
 	if result, ok := self.createFunc[kind]; ok {
 		return result(kind, data)
 	}
-	return nil, errors.New(fmt.Sprintf("type (%v) not available in %v type information", kind.String(), self.Name()))
+	return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), self.Name())
 }
 
 func (self *mitchTypeInformation) CanScope(decl interfaces.IDefinedType) bool {
 	return true
-	//if decl.Kind() == interfaces.Enum {
-	//	return true
-	//}
-	//
-	//if decl.Kind() == interfaces.TypeDeclarator {
-	//	if typeDecl, ok := decl.(interfaces.ITypeDeclaration); ok {
-	//		if typeDecl.GetDefinedTyped().Kind() == interfaces.MiBitField {
-	//			return true
-	//		}
-	//	}
-	//}
-	//
-	//return false
 }
 
 func (self *mitchTypeInformation) DefaultDecls() ([]interfaces.IDefinitionDeclaration, error) {
-	return []interfaces.IDefinitionDeclaration{
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchByte),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchDate),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchTime),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchPrice04),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchPrice08),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchUInt08),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchUInt16),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchUInt32),
-		//interfaces.NewWrapDefinedTypeToIDefinitionDeclaration(self.mitchUInt64),
-	}, nil
+	return []interfaces.IDefinitionDeclaration{}, nil
 }
 
 func (self *mitchTypeInformation) Name() interfaces.BaseTypeDescription {
@@ -83,7 +59,7 @@ func NewMitchTypeInformation() *mitchTypeInformation {
 				}, nil
 
 			}
-			return nil, errors.New(fmt.Sprintf("type (%v) not available in %v type information", kind.String(), result.Name()))
+			return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
 		}
 
 	result.createFunc[interfaces.MitchMessageNumber] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
@@ -92,7 +68,16 @@ func NewMitchTypeInformation() *mitchTypeInformation {
 				return newMitchMessageNumber(byte(i)), nil
 			}
 		}
-		return nil, errors.New(fmt.Sprintf("type (%v) not available in %v type information", kind.String(), result.Name()))
+		return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
+	}
+
+	result.createFunc[interfaces.MitchMessageLength] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
+		if i, ok := data.(int64); ok {
+			if 0 <= i && i <= 65535 {
+				return newMitchMessageLength(uint16(i)), nil
+			}
+		}
+		return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
 	}
 
 	result.createFunc[interfaces.MitchBitField] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
@@ -109,7 +94,7 @@ func NewMitchTypeInformation() *mitchTypeInformation {
 				arrayOfData[6],
 				arrayOfData[7]), nil
 		}
-		return nil, errors.New(fmt.Sprintf("type (%v) not available in %v type information", kind.String(), result.Name()))
+		return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
 	}
 	result.createFunc[interfaces.MitchByte] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
 		return result.mitchByte, nil

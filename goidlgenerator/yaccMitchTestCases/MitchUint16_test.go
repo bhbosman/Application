@@ -149,7 +149,7 @@ func TestMitchTypeInformation(t *testing.T) {
 		data := `
 		struct HelloWorld
 		{
-			MitchUInt16 a;
+			MitchMessageLengthType<1066>       Length;
 		};`
 		reader := bufio.NewReader(strings.NewReader(data))
 		IdlExprContext := yacc.NewIdlExprContext()

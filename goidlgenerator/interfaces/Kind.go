@@ -41,6 +41,7 @@ const (
 	MitchUInt32
 	MitchUInt64
 	MitchMessageNumber
+	MitchMessageLength
 )
 
 // String returns the name of k.
@@ -87,4 +88,5 @@ var kindNames = []string{
 	MitchUInt32:        "uint32",
 	MitchUInt64:        "uint64",
 	MitchMessageNumber: "byte",
+	MitchMessageLength: "uint16",
 }

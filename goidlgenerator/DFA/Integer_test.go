@@ -52,6 +52,32 @@ func TestDfaInteger(t *testing.T) {
 		return
 	}
 
+
+
+
+
+	if !t.Run("", func(t *testing.T) {
+		dfa, err := NewDfaInteger(1234)
+		assert.NoError(t, err)
+		assert.NotNil(t, dfa)
+		nodeWalker := NewNodeWalker(dfa)
+
+		assert.True(t, WalkString(nodeWalker, []byte("1066")))
+	}) {
+		return
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 	if !t.Run("", func(t *testing.T) {
 		dfa, err := NewDfaInteger(1234)
 		assert.NoError(t, err)

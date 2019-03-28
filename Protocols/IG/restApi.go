@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strconv"
 	"sync"
@@ -21,28 +22,36 @@ const DemoAPIURL = "https://demo-api.ig.com"
 // LiveAPIURL - Live API URL - Real trading!
 const LiveAPIURL = "https://api.ig.com"
 
-type Api struct {
+type RestApi struct {
 	sync.RWMutex
-	APIURL                string
+	ApiUrl                string
 	APIKey                string
 	AccountID             string
 	Identifier            string
 	Password              string
-	LightstreamerEndpoint string
+	LightStreamerEndpoint string
 	OAuthToken            OAuthToken
 	httpClient            *http.Client
 	timerCb               *TimerCallback
 }
 
-func (self *Api) Open() error {
-	return self.Login()
+func (self *RestApi) Open() error {
+	err := self.Login()
+	if err != nil {
+		self.logError(err, "login failure")
+	}
+	return err
 }
 
-func (self *Api) Close() error {
-	return self.Logout()
+func (self *RestApi) Close() error {
+	err := self.Logout()
+	if err != nil {
+		self.logError(err, "logout failure")
+	}
+	return err
 }
 
-func (self *Api) Login() error {
+func (self *RestApi) Login() error {
 	startTime := time.Now()
 	defer func() {
 		self.logTime("Login", time.Since(startTime))
@@ -59,12 +68,12 @@ func (self *Api) Login() error {
 		return fmt.Errorf("unable to encode JSON response: %v", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", self.APIURL, "gateway/deal/session"), bodyReq)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", self.ApiUrl, "gateway/deal/session"), bodyReq)
 	if err != nil {
 		return fmt.Errorf("unable to send HTTP request: %v", err)
 	}
 
-	igResponseInterface, err := self.doRequest(req, 3, AuthResponse{})
+	igResponseInterface, _, err := self.doRequest(req, 3, AuthResponse{}, nil)
 	if err != nil {
 		return err
 	}
@@ -86,34 +95,30 @@ func (self *Api) Login() error {
 	self.Lock()
 	self.OAuthToken = authResponse.OAuthToken
 	self.AccountID = authResponse.AccountID
-	self.LightstreamerEndpoint = authResponse.LightstreamerEndpoint
+	self.LightStreamerEndpoint = authResponse.LightstreamerEndpoint
 	self.timerCb = newTimerCallback(time.Duration(expiry-15)*time.Second, self.refreshCallback, nil)
 	self.Unlock()
 	return nil
 }
 
-func (self *Api) refreshCallback(t time.Time, cb interface{}) {
-	self.RefreshToken()
-}
-
-func (self *Api) Logout() error {
+func (self *RestApi) Logout() error {
 	startTime := time.Now()
 	defer func() {
 		self.logTime("Logout", time.Since(startTime))
 	}()
 
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/%s", self.APIURL, "gateway/deal/session"), nil)
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/%s", self.ApiUrl, "gateway/deal/session"), nil)
 	if err != nil {
 		return fmt.Errorf("unable to send HTTP request: %v", err)
 	}
 
-	_, err = self.doRequest(req, 1, nil)
+	_, _, err = self.doRequest(req, 1, nil, nil)
 	if err != nil {
 		return err
 	}
 
 	if self.timerCb != nil {
-		self.timerCb.Close()
+		_ = self.timerCb.Close()
 	}
 
 	self.Lock()
@@ -124,7 +129,57 @@ func (self *Api) Logout() error {
 	return nil
 }
 
-func (self *Api) RefreshToken() error {
+func (self *RestApi) GetSession(fetchSessionTokens bool) (*SessionResponse, error) {
+	startTime := time.Now()
+	defer func() {
+		self.logTime("GetSession", time.Since(startTime))
+	}()
+
+	apiUrlBreakdown, _ := url.Parse(self.ApiUrl)
+	urlSession := url.URL{
+		Scheme:     apiUrlBreakdown.Scheme,
+		Opaque:     "",
+		User:       nil,
+		Host:       apiUrlBreakdown.Host,
+		Path:       "gateway/deal/session",
+		RawPath:    "",
+		ForceQuery: false,
+		RawQuery:   fmt.Sprintf("fetchSessionTokens=%v", fetchSessionTokens),
+		Fragment:   "",
+	}
+	resource := urlSession.String()
+	req, err := http.NewRequest("GET", resource, nil)
+	if err != nil {
+		return nil, fmt.Errorf("unable to send HTTP request: %v", err)
+	}
+
+	igResponseInterface, headerValues, err := self.doRequest(
+		req,
+		1,
+		SessionResponse{},
+		[]string{"Cst", "X-Security-Token"})
+	if err != nil {
+		return nil, err
+	}
+	sessionResponse := igResponseInterface.(*SessionResponse)
+	if s, ok := headerValues["Cst"]; ok {
+		sessionResponse.Cst = s
+	}
+	if s, ok := headerValues["X-Security-Token"]; ok {
+		sessionResponse.XSECURITYTOKEN = s
+	}
+
+	return sessionResponse, nil
+}
+
+func (self *RestApi) refreshCallback(t time.Time, cb interface{}) {
+	err := self.RefreshToken()
+	if err != nil {
+		self.logError(err, "refresh token failure")
+	}
+}
+
+func (self *RestApi) RefreshToken() error {
 	startTime := time.Now()
 	defer func() {
 		self.logTime("RefreshToken", time.Since(startTime))
@@ -140,12 +195,12 @@ func (self *Api) RefreshToken() error {
 		return fmt.Errorf("unable to encode JSON response: %v", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", self.APIURL, "gateway/deal/session/refresh-token"), bodyReq)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", self.ApiUrl, "gateway/deal/session/refresh-token"), bodyReq)
 	if err != nil {
 		return fmt.Errorf("unable to send HTTP request: %v", err)
 	}
 
-	igResponseInterface, err := self.doRequest(req, 1, OAuthToken{})
+	igResponseInterface, _, err := self.doRequest(req, 1, OAuthToken{}, nil)
 	if err != nil {
 		return err
 	}
@@ -172,15 +227,20 @@ func (self *Api) RefreshToken() error {
 	return nil
 }
 
-func (self *Api) log(format string, a ...interface{}) {
+func (self *RestApi) log(format string, a ...interface{}) {
 	fmt.Printf(format, a...)
 }
 
-func (self *Api) logTime(s string, t time.Duration) {
+func (self *RestApi) logError(err error, format string, a ...interface{}) {
+	s := fmt.Sprintf(format, a...)
+	fmt.Printf("Error: %v. Message: %v", err, s)
+}
+
+func (self *RestApi) logTime(s string, t time.Duration) {
 	self.log("%s: %v\n", s, t)
 }
 
-func (self *Api) Markets(key string, recursive bool) ([]MarketNavigationMarket, error) {
+func (self *RestApi) Markets(key string, recursive bool) ([]MarketNavigationMarket, error) {
 	startTime := time.Now()
 	defer func() {
 		self.logTime("Markets", time.Since(startTime))
@@ -198,11 +258,11 @@ func (self *Api) Markets(key string, recursive bool) ([]MarketNavigationMarket, 
 		} else {
 			urlString = fmt.Sprintf("gateway/deal/marketnavigation/%v", key)
 		}
-		req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", self.APIURL, urlString), nil)
+		req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", self.ApiUrl, urlString), nil)
 		if err != nil {
 			return nil, fmt.Errorf("unable to send HTTP request: %v", err)
 		}
-		igResponseInterface, err := self.doRequest(req, 1, MarketNavigation{})
+		igResponseInterface, _, err := self.doRequest(req, 1, MarketNavigation{}, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -303,7 +363,7 @@ func (self *Api) Markets(key string, recursive bool) ([]MarketNavigationMarket, 
 	return result, nil
 }
 
-func (self *Api) doRequest(req *http.Request, endpointVersion int, igResponse interface{}) (interface{}, error) {
+func (self *RestApi) doRequest(req *http.Request, endpointVersion int, igResponse interface{}, requiredHeaderValues []string) (interface{}, map[string]string, error) {
 	self.RLock()
 	req.Header.Set("X-IG-API-KEY", self.APIKey)
 	req.Header.Set("Authorization", "Bearer "+self.OAuthToken.AccessToken)
@@ -316,45 +376,56 @@ func (self *Api) doRequest(req *http.Request, endpointVersion int, igResponse in
 
 	resp, err := self.httpClient.Do(req)
 	if err != nil {
-		return igResponse, fmt.Errorf("unable to get markets data: %v", err)
+		return igResponse, nil, fmt.Errorf("unable to get markets data: %v", err)
 	}
 	defer func() {
-		_ = resp.Body.Close()
+		err := resp.Body.Close()
+		if err != nil {
+			self.logError(err, "response body closure failure")
+		}
 	}()
+
+	var responseHeader map[string]string = nil
+	if requiredHeaderValues != nil{
+		responseHeader = make(map[string]string)
+		for _, item := range requiredHeaderValues {
+			responseHeader[item] = resp.Header.Get(item)
+		}
+	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return igResponse, fmt.Errorf("unable to get body of transactions markets data: %v", err)
+		return igResponse, responseHeader, fmt.Errorf("unable to get body of transactions markets data: %v", err)
 	}
 
 	if resp.StatusCode == http.StatusNoContent {
-		return nil, nil
+		return nil, responseHeader, nil
 	}
 
 	if resp.StatusCode != http.StatusOK {
 		errCode := &ErrorMessage{}
 		if err := json.Unmarshal(body, errCode); err != nil {
-			return igResponse, fmt.Errorf("unable to unmarshal JSON response: %v", err)
+			return igResponse, responseHeader, fmt.Errorf("unable to unmarshal JSON response: %v", err)
 		}
 
 		errCode.httpCode = resp.StatusCode
 		errCode.url = req.URL.String()
-		return igResponse, errCode
+		return igResponse, responseHeader, errCode
 	}
 
 	objType := reflect.TypeOf(igResponse)
 	obj := reflect.New(objType).Interface()
 	if obj != nil {
 		if err := json.Unmarshal(body, &obj); err != nil {
-			return obj, fmt.Errorf("unable to unmarshal JSON response: %v", err)
+			return obj, responseHeader, fmt.Errorf("unable to unmarshal JSON response: %v", err)
 		}
 
-		return obj, nil
+		return obj, responseHeader, nil
 	}
-	return igResponse, nil
+	return igResponse, responseHeader, nil
 }
 
-func New(apiURL, apiKey, accountID, identifier, password string, httpTimeout time.Duration) *Api {
+func NewIgRestApi(apiURL, apiKey, accountID, identifier, password string, httpTimeout time.Duration) *RestApi {
 	if apiURL != DemoAPIURL && apiURL != LiveAPIURL {
 		log.Panic("Invalid endpoint URL", apiURL)
 	}
@@ -384,9 +455,9 @@ func New(apiURL, apiKey, accountID, identifier, password string, httpTimeout tim
 		Timeout:       httpTimeout,
 	}
 
-	api := &Api{
+	api := &RestApi{
 		RWMutex:    sync.RWMutex{},
-		APIURL:     apiURL,
+		ApiUrl:     apiURL,
 		APIKey:     apiKey,
 		AccountID:  accountID,
 		Identifier: identifier,

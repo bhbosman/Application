@@ -26,7 +26,7 @@ func GenerateMessageReadFunction(writer io.StringWriter, returnType string, para
 		_, _ = writer.WriteString(fmt.Sprintf("\t}\n"))
 
 		_, _ = writer.WriteString(fmt.Sprintf("\tif typeCode != 0x%08x {\n", params.typeCode))
-		_, _ = writer.WriteString(fmt.Sprintf("\t\treturn %v, 0, errors.New(fmt.Sprintf(\"typecode mismatch, while reading %v. Expected 0x%08x, got 0x%%08x\", typeCode))\n", params.defaultValue, params.typeNamePrefix, params.typeCode))
+		_, _ = writer.WriteString(fmt.Sprintf("\t\treturn %v, 0, fmt.Errorf(\"typecode mismatch, while reading %v. Expected 0x%08x, got 0x%%08x\", typeCode)\n", params.defaultValue, params.typeNamePrefix, params.typeCode))
 		_, _ = writer.WriteString(fmt.Sprintf("\t}\n"))
 
 		_, _ = writer.WriteString(fmt.Sprintf("\tbyteCount += n\n"))
