@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"net/url"
+	"os"
 	"testing"
 	"time"
 )
@@ -16,6 +17,7 @@ func TestLightStreamConnect2(t *testing.T) {
 	httpTimeout := time.Duration(5 * time.Second)
 
 	ig := NewIgRestApi(
+		os.Stdout,
 		igConfiguration.ApiUrl,
 		igConfiguration.ApiKey,
 		"",
@@ -35,7 +37,7 @@ func TestLightStreamConnect2(t *testing.T) {
 	sessionInfo, err := ig.GetSession(true)
 	assert.NoError(t, err)
 	assert.NotNil(t, sessionInfo)
-	lightStreamConnection, _ := CreateLightStreamConnection(sessionInfo.LightstreamerEndpoint)
+	lightStreamConnection, _ := CreateLightStreamConnection(os.Stdout, sessionInfo.LightstreamerEndpoint)
 	ans, err := lightStreamConnection.Connect(
 		func(data url.Values) {
 			data.Set("LS__user", ig.AccountID)
@@ -68,8 +70,31 @@ func TestLightStreamConnect2(t *testing.T) {
 		}
 	}()
 
-
 	t.Run("sss", func(t *testing.T) {
-		lightStreamConnection.Subscribe()
+		subscription := &QuoteAdapterSubscription{
+			Items: []string{
+				//"MARKET:IX.D.SAF.IFD.IP",
+				//"MARKET:IX.D.SAF.IFM.IP",
+				"MARKET:AR.D.STX40.CASH.IP",
+			},
+			Fields: []string{
+				"BID",
+				"OFFER",
+				"HIGH",
+				"LOW",
+				"MID_OPEN",
+				"CHANGE",
+				"CHANGE_PCT",
+				"MARKET_DELAY",
+				"MARKET_STATE",
+				"UPDATE_TIME",
+			},
+			Mode:        "MERGE",
+			DataAdapter: "DEFAULT",
+		}
+
+		ca, _, _:= lightStreamConnection.Subscribe(subscription)
+		fmt.Println(ca)
+		time.Sleep(time.Hour*24)
 	})
 }

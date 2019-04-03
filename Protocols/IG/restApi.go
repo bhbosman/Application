@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/bhbosman/Application/Common"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -33,6 +34,7 @@ type RestApi struct {
 	OAuthToken            OAuthToken
 	httpClient            *http.Client
 	timerCb               *TimerCallback
+	logger                *log.Logger
 }
 
 func (self *RestApi) Open() error {
@@ -228,12 +230,12 @@ func (self *RestApi) RefreshToken() error {
 }
 
 func (self *RestApi) log(format string, a ...interface{}) {
-	fmt.Printf(format, a...)
+	self.logger.Printf(format, a...)
 }
 
 func (self *RestApi) logError(err error, format string, a ...interface{}) {
 	s := fmt.Sprintf(format, a...)
-	fmt.Printf("Error: %v. Message: %v", err, s)
+	fmt.Printf("Error: %v. Message: %v\n", err, s)
 }
 
 func (self *RestApi) logTime(s string, t time.Duration) {
@@ -376,7 +378,7 @@ func (self *RestApi) doRequest(req *http.Request, endpointVersion int, igRespons
 
 	resp, err := self.httpClient.Do(req)
 	if err != nil {
-		return igResponse, nil, fmt.Errorf("unable to get markets data: %v", err)
+		return igResponse, nil, fmt.Errorf("unable to get data from request: %v", err)
 	}
 	defer func() {
 		err := resp.Body.Close()
@@ -386,7 +388,7 @@ func (self *RestApi) doRequest(req *http.Request, endpointVersion int, igRespons
 	}()
 
 	var responseHeader map[string]string = nil
-	if requiredHeaderValues != nil{
+	if requiredHeaderValues != nil {
 		responseHeader = make(map[string]string)
 		for _, item := range requiredHeaderValues {
 			responseHeader[item] = resp.Header.Get(item)
@@ -425,7 +427,7 @@ func (self *RestApi) doRequest(req *http.Request, endpointVersion int, igRespons
 	return igResponse, responseHeader, nil
 }
 
-func NewIgRestApi(apiURL, apiKey, accountID, identifier, password string, httpTimeout time.Duration) *RestApi {
+func NewIgRestApi(logOut io.Writer, apiURL, apiKey, accountID, identifier, password string, httpTimeout time.Duration) *RestApi {
 	if apiURL != DemoAPIURL && apiURL != LiveAPIURL {
 		log.Panic("Invalid endpoint URL", apiURL)
 	}
@@ -456,14 +458,17 @@ func NewIgRestApi(apiURL, apiKey, accountID, identifier, password string, httpTi
 	}
 
 	api := &RestApi{
-		RWMutex:    sync.RWMutex{},
-		ApiUrl:     apiURL,
-		APIKey:     apiKey,
-		AccountID:  accountID,
-		Identifier: identifier,
-		Password:   password,
-		OAuthToken: OAuthToken{},
-		httpClient: httpClient,
+		RWMutex:               sync.RWMutex{},
+		ApiUrl:                apiURL,
+		APIKey:                apiKey,
+		AccountID:             accountID,
+		Identifier:            identifier,
+		Password:              password,
+		LightStreamerEndpoint: "",
+		OAuthToken:            OAuthToken{},
+		httpClient:            httpClient,
+		timerCb:               nil,
+		logger:                log.New(logOut, "RestApi: ", log.LstdFlags),
 	}
 
 	return api

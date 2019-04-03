@@ -2,6 +2,7 @@ package IG
 
 import (
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 	"time"
 )
@@ -14,7 +15,14 @@ func TestApi_GetMarkets(t *testing.T) {
 	httpTimeout := time.Duration(5 * time.Second)
 
 	t.Run("Between log and logout", func(t *testing.T) {
-		ig := NewIgRestApi(igConfiguration.ApiUrl, igConfiguration.ApiKey, "", igConfiguration.Identifier, igConfiguration.Password, httpTimeout)
+		ig := NewIgRestApi(
+			os.Stdout,
+			igConfiguration.ApiUrl,
+			igConfiguration.ApiKey,
+			"",
+			igConfiguration.Identifier,
+			igConfiguration.Password,
+			httpTimeout)
 		err := ig.Login()
 		if !assert.NoError(t, err, "fail on login") {
 			return

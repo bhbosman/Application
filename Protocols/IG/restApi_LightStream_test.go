@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"net/url"
+	"os"
 	"testing"
 	"time"
 )
@@ -15,7 +16,14 @@ func TestLightStreamConnect(t *testing.T) {
 	}
 	httpTimeout := time.Duration(5 * time.Second)
 	t.Run("Between log and logout", func(t *testing.T) {
-		ig := NewIgRestApi(igConfiguration.ApiUrl, igConfiguration.ApiKey, "", igConfiguration.Identifier, igConfiguration.Password, httpTimeout)
+		ig := NewIgRestApi(
+			os.Stdout,
+			igConfiguration.ApiUrl,
+			igConfiguration.ApiKey,
+			"",
+			igConfiguration.Identifier,
+			igConfiguration.Password,
+			httpTimeout)
 		err := ig.Login()
 		if !assert.NoError(t, err, "fail on login") {
 			return
@@ -28,7 +36,7 @@ func TestLightStreamConnect(t *testing.T) {
 			sessionInfo, err := ig.GetSession(true)
 			assert.NoError(t, err)
 			assert.NotNil(t, sessionInfo)
-			lightStreamConnection, _ := CreateLightStreamConnection(sessionInfo.LightstreamerEndpoint)
+			lightStreamConnection, _ := CreateLightStreamConnection(os.Stdout, sessionInfo.LightstreamerEndpoint)
 			ans, err := lightStreamConnection.Connect(
 				func(data url.Values) {
 					data.Set("LS__user", ig.AccountID)

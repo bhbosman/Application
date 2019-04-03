@@ -1,7 +1,5 @@
 package IG
 
-
-
 import (
 	"bufio"
 	"bytes"
@@ -10,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -27,6 +24,42 @@ type ISubscription interface {
 	GetLocalRef() string
 	OnNewData(data string)
 	GetId() string
+}
+type QuoteAdapterSubscription struct {
+	subscriptionId string
+	Items          []string
+	Fields         []string
+	Mode           string
+	DataAdapter    string
+	LocalRef       string
+}
+
+func (qas *QuoteAdapterSubscription) GetId() string {
+	return qas.subscriptionId
+}
+
+func (qas *QuoteAdapterSubscription) OnNewData(data string) {
+
+}
+
+func (qas *QuoteAdapterSubscription) GetItems() []string {
+	return qas.Items
+}
+
+func (qas *QuoteAdapterSubscription) GetFields() []string {
+	return qas.Fields
+}
+
+func (qas *QuoteAdapterSubscription) GetMode() string {
+	return qas.Mode
+}
+
+func (qas *QuoteAdapterSubscription) GetDataAdapter() string {
+	return qas.DataAdapter
+}
+
+func (qas *QuoteAdapterSubscription) GetLocalRef() string {
+	return qas.LocalRef
 }
 
 
@@ -58,12 +91,12 @@ type LightStreamConnection struct {
 	connectionOpen   bool
 }
 
-func CreateLightStreamConnection(apiUrl string) (*LightStreamConnection, error) {
+func CreateLightStreamConnection(logOut io.Writer, apiUrl string) (*LightStreamConnection, error) {
 	return &LightStreamConnection{
 		InitialApiUrl:    apiUrl,
 		client:           http.Client{},
 		connectionStream: nil,
-		log:              log.New(os.Stdout, "LightStreamer: ", log.LstdFlags),
+		log:              log.New(logOut, "LightStreamer: ", log.LstdFlags),
 		dataDict:         make(map[string]string),
 		connectionCount:  0,
 		subscriptions:    make(map[string]ISubscription),
