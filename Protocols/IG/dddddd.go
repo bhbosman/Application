@@ -13,9 +13,6 @@ import (
 	"sync"
 )
 
-
-
-
 type ISubscription interface {
 	GetItems() []string
 	GetFields() []string
@@ -62,9 +59,6 @@ func (qas *QuoteAdapterSubscription) GetLocalRef() string {
 	return qas.LocalRef
 }
 
-
-
-
 type ConnectAnswer struct {
 	Answer    string
 	Success   bool
@@ -72,12 +66,6 @@ type ConnectAnswer struct {
 	ErrReason string
 	Status    int
 }
-
-
-
-
-
-
 
 type LightStreamConnection struct {
 	client           http.Client
@@ -140,12 +128,12 @@ func (connection *LightStreamConnection) Subscribe(subscription ISubscription) (
 	if success {
 		connection.subscriptions[subscriptionId] = subscription
 		return ConnectAnswer{
-			Answer:    answer,
-			Success:   true,
-			ErrCode:   0,
-			ErrReason: "",
-			Status:    response.StatusCode,
-		},
+				Answer:    answer,
+				Success:   true,
+				ErrCode:   0,
+				ErrReason: "",
+				Status:    response.StatusCode,
+			},
 			subscriptionId,
 			nil
 	}
@@ -154,12 +142,12 @@ func (connection *LightStreamConnection) Subscribe(subscription ISubscription) (
 	errorMessage, _ := connection.readLine(streamReader)
 
 	return ConnectAnswer{
-		Answer:    answer,
-		Success:   false,
-		ErrCode:   errorCode,
-		ErrReason: errorMessage,
-		Status:    response.StatusCode,
-	},
+			Answer:    answer,
+			Success:   false,
+			ErrCode:   errorCode,
+			ErrReason: errorMessage,
+			Status:    response.StatusCode,
+		},
 		"",
 		nil
 }
@@ -183,12 +171,12 @@ func (connection *LightStreamConnection) Unsubscribe(subscription ISubscription)
 	if success {
 		delete(connection.subscriptions, subscription.GetId())
 		return ConnectAnswer{
-			Answer:    answer,
-			Success:   true,
-			ErrCode:   0,
-			ErrReason: "",
-			Status:    response.StatusCode,
-		},
+				Answer:    answer,
+				Success:   true,
+				ErrCode:   0,
+				ErrReason: "",
+				Status:    response.StatusCode,
+			},
 			nil
 	}
 	errorCodeStr, _ := connection.readLine(streamReader)
@@ -196,12 +184,12 @@ func (connection *LightStreamConnection) Unsubscribe(subscription ISubscription)
 	errorMessage, _ := connection.readLine(streamReader)
 
 	return ConnectAnswer{
-		Answer:    answer,
-		Success:   false,
-		ErrCode:   errorCode,
-		ErrReason: errorMessage,
-		Status:    response.StatusCode,
-	},
+			Answer:    answer,
+			Success:   false,
+			ErrCode:   errorCode,
+			ErrReason: errorMessage,
+			Status:    response.StatusCode,
+		},
 		nil
 }
 
@@ -459,4 +447,3 @@ func (connection *LightStreamConnection) Control(operation string, otherData url
 func (connection *LightStreamConnection) Reset() {
 	connection.dataDict = make(map[string]string)
 }
-

@@ -93,8 +93,8 @@ func TestLightStreamConnect2(t *testing.T) {
 			DataAdapter: "DEFAULT",
 		}
 
-		ca, _, _:= lightStreamConnection.Subscribe(subscription)
+		ca, _, _ := lightStreamConnection.Subscribe(subscription)
 		fmt.Println(ca)
-		time.Sleep(time.Hour*24)
+		time.Sleep(time.Hour * 24)
 	})
 }

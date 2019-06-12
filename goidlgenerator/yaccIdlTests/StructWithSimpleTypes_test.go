@@ -36,8 +36,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -68,8 +68,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -97,8 +97,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -127,8 +127,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -158,8 +158,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -185,8 +185,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -212,8 +212,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -240,8 +240,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -267,8 +267,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -294,8 +294,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -321,8 +321,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -348,8 +348,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -375,8 +375,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -402,8 +402,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())
@@ -429,8 +429,8 @@ func TestStructWithTypes(t *testing.T) {
 			return
 		}
 		assert.Len(t, DeclaredTypes, 1)
-		assert.IsType(t, &yacc.StructDefinition{}, DeclaredTypes[0])
-		structType := DeclaredTypes[0].(*yacc.StructDefinition)
+		assert.IsType(t, &yacc.MitchMessageDefinition{}, DeclaredTypes[0])
+		structType := DeclaredTypes[0].(*yacc.MitchMessageDefinition)
 		assert.Len(t, structType.Members, 1)
 		member := structType.Members[0]
 		assert.Equal(t, "a", member.Declarator.Identifier())

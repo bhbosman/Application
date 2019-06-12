@@ -10,11 +10,11 @@ import (
 
 func TestNewOffBookTradeMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewOffBookTradeMessage()
+		msg, _ := OffBookTradeMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewOffBookTradeMessage()
+		msg, _ := OffBookTradeMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

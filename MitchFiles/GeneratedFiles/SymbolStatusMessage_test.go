@@ -10,12 +10,12 @@ import (
 
 func TestNewSymbolStatusMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewSymbolStatusMessage()
+		msg, _ := SymbolStatusMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewSymbolStatusMessage()
+		msg, _ := SymbolStatusMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

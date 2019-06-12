@@ -10,12 +10,12 @@ import (
 
 func TestNewRecoveryTradeMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewRecoveryTradeMessage()
+		msg, _ := RecoveryTradeMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewRecoveryTradeMessage()
+		msg, _ := RecoveryTradeMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

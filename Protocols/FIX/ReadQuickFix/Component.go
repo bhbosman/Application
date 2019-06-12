@@ -16,7 +16,6 @@ func (self *Component) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 		case xml.StartElement:
 			switch val.Name.Local {
 			case "field":
-
 				field := &FieldListed{}
 				self.Fields = append(self.Fields, field)
 				err := d.DecodeElement(field, &val)

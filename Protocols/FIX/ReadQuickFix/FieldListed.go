@@ -20,5 +20,6 @@ func (self *FieldListed) UnmarshalXML(d *xml.Decoder, start xml.StartElement) er
 			}
 		}
 	}
+
 	return d.Skip()
 }

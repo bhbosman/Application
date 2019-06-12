@@ -3,7 +3,7 @@ package ReadQuickFix
 import "encoding/xml"
 
 type FieldDeclarations struct {
-	Fields []interface{}
+	Fields []*FieldDeclaration
 }
 
 func (self *FieldDeclarations) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {

@@ -1,7 +1,25 @@
-struct TimeMessage
+struct UnitLength
 {
-    MitchMessageLengthType<7>       Length;
-    MitchMessageNumberType<0x54>    MessageType;
+    MitchUInt16 Length;
+};
+
+struct UnitHeader
+{
+    MitchByte MessageCount;
+    MitchByte MarketDataGroup;
+    MitchUInt32 SequenceNumber;
+};
+
+struct MessageHeader
+{
+    MitchUInt16 Length;
+    MitchByte MessageType;
+};
+
+
+
+struct<7, 0x54> TimeMessage
+{
     MitchUInt32                     Seconds;
 };
 
@@ -11,10 +29,8 @@ enum TEventCode
     StartOfDay = 'O'
 };
 
-struct SystemEventMessage
+struct<8, 0x53> SystemEventMessage
 {
-    MitchMessageLengthType<8>       Length;
-    MitchMessageNumberType<0x53>    MessageType;
     MitchUInt32                     Nanosecond;
     TEventCode                      EventCode;
 };
@@ -62,10 +78,8 @@ enum SymbolDirectorySettlementMethod{
     Physical ='P'
 };
 
-struct SymbolDirectoryMessage
+struct<332, 0x52> SymbolDirectoryMessage
 {
-    MitchMessageLengthType<421>       Length;
-    MitchMessageNumberType<0x52>        MessageType;
     MitchUInt32                         Nanosecond;
     MitchUInt32                         InstrumentID;
     MitchByte                           Reserved01;
@@ -86,11 +100,11 @@ struct SymbolDirectoryMessage
     SymbolDirectoryFlags                Flags;
     SymbolDirectorySubBook              SubBook;
     MitchAlpha<189>                     CorporateAction;
-    MitchAlpha<25>                      Leg1Symbol;
-    MitchAlpha<25>                      Leg2Symbol;
-    MitchPrice08                        ContractMultiplier;
-    SymbolDirectorySettlementMethod     SettlementMethod;
-    MitchAlpha<30>                      InstrumentSubCategory;
+//    MitchAlpha<25>                      Leg1Symbol;
+//    MitchAlpha<25>                      Leg2Symbol;
+//    MitchPrice08                        ContractMultiplier;
+//    SymbolDirectorySettlementMethod     SettlementMethod;
+//    MitchAlpha<30>                      InstrumentSubCategory;
 };
 
 
@@ -150,10 +164,8 @@ typedef  MitchBitField
         b7
     > SymbolStatusMessageFlags;
 
-struct SymbolStatusMessage
+struct<29, 0x48> SymbolStatusMessage
 {
-    MitchMessageLengthType<29>       Length;
-    MitchMessageNumberType<0x48>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     InstrumentID;
     MitchByte                       Reserved01;
@@ -190,10 +202,8 @@ typedef MitchBitField
 
 
 
-struct AddOrderMessage
+struct<35, 0x41> AddOrderMessage
 {
-    MitchMessageLengthType<35>       Length;
-    MitchMessageNumberType<0x41>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt64                     OrderId;
     OrderSide                       Side;
@@ -222,10 +232,8 @@ typedef MitchBitField
 
 
 
-struct AddAttributedOrderMessage
+struct<44, 0x46> AddAttributedOrderMessage
 {
-    MitchMessageLengthType<44>       Length;
-    MitchMessageNumberType<0x46>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt64                     OrderID;
     OrderSide                       Side;
@@ -236,10 +244,8 @@ struct AddAttributedOrderMessage
     AddAttributedOrderFlags         Flags;
 };
 
-struct OrderDeletedMessage
+struct<15, 0x44> OrderDeletedMessage
 {
-    MitchMessageLengthType<15>       Length;
-    MitchMessageNumberType<0x44>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt64                     OrderID;
 };
@@ -258,10 +264,8 @@ typedef MitchBitField
         b7
     > OrderModifiedFlags;
 
-struct OrderModifiedMessage
+struct<28, 0x55> OrderModifiedMessage
 {
-    MitchMessageLengthType<28>       Length;
-    MitchMessageNumberType<0x55>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt64                     OrderID;
     MitchUInt32                     NewQuantity;
@@ -287,10 +291,8 @@ enum OrderBookClearBookType
 };
 
 
-struct OrderBookClearMessage
+struct<13, 0x79> OrderBookClearMessage
 {
-    MitchMessageLengthType<13>       Length;
-    MitchMessageNumberType<0x79>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     InstrumentID;
     OrderBookClearSubBook           SubBook;
@@ -298,10 +300,8 @@ struct OrderBookClearMessage
 };
 
 
-struct OrderExecutedMessage
+struct<51, 0x45> OrderExecutedMessage
 {
-    MitchMessageLengthType<51>       Length;
-    MitchMessageNumberType<0x45>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt64                     OrderID;
     MitchUInt32                     ExecutedQuantity;
@@ -315,10 +315,8 @@ struct OrderExecutedMessage
 
 
 
-struct OrderExecutedWithPriceSizeMessage
+struct<64, 0x43> OrderExecutedWithPriceSizeMessage
 {
-    MitchMessageLengthType<64>       Length;
-    MitchMessageNumberType<0x43>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt64                     OrderID;
     MitchUInt32                     ExecutedQuantity;
@@ -356,10 +354,8 @@ enum TradeMessageSubBook
 
 
 
-struct TradeMessage
+struct<63, 0x50> TradeMessage
 {
-    MitchMessageLengthType<63>       Length;
-    MitchMessageNumberType<0x50>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     ExecutedQuantity;
     MitchUInt32                     InstrumentID;
@@ -375,10 +371,8 @@ struct TradeMessage
     MitchPrice08                    UnderlyingReferencePrice;
 };
 
-struct AuctionTradeMessage
+struct<58, 0x51> AuctionTradeMessage
 {
-    MitchMessageLengthType<58>       Length;
-    MitchMessageNumberType<0x51>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     Quantity;
     MitchUInt32                     InstrumentID;
@@ -392,10 +386,8 @@ struct AuctionTradeMessage
     MitchPrice08                    UnderlyingReferencePrice;
 };
 
-struct OffBookTradeMessage
+struct<77, 0x78> OffBookTradeMessage
 {
-    MitchMessageLengthType<77>       Length;
-    MitchMessageNumberType<0x78>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     ExecutedQuantity;
     MitchUInt32                     InstrumentID;
@@ -411,10 +403,8 @@ struct OffBookTradeMessage
     MitchPrice08                    UnderlyingReferencePrice;
 };
 
-struct TradeBreakMessage
+struct<16, 0x42> TradeBreakMessage
 {
-    MitchMessageLengthType<16>       Length;
-    MitchMessageNumberType<0x42>   MessageType;
     MitchUInt32 Nanosecond;
     MitchUInt64 TradeID;
     MitchByte   TradeType;
@@ -438,10 +428,8 @@ enum RecoveryTradeMessageSubBook
     NegotiatedTrades = 11
 };
 
-struct RecoveryTradeMessage
+struct<81, 0x76> RecoveryTradeMessage
 {
-    MitchMessageLengthType<81>       Length;
-    MitchMessageNumberType<0x76>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     ExecutedQuantity;
     MitchUInt32                     InstrumentID;
@@ -461,10 +449,8 @@ struct RecoveryTradeMessage
     MitchPrice08                    UnderlyingReferencePrice;
 };
 
-struct AuctionInfoMessage
+struct<31, 0x49> AuctionInfoMessage
 {
-    MitchMessageLengthType<31>       Length;
-    MitchMessageNumberType<0x49>       MessageType;
     MitchUInt32     Nanosecond;
     MitchUInt32     PairedQuantity;
     MitchUInt32     Reserved01;
@@ -498,10 +484,8 @@ enum TStatisticsMessageSubBook{
     BulletinBoard=9
 };
 
-struct StatisticsMessage
+struct<24, 0x77> StatisticsMessage
 {
-    MitchMessageLengthType<24>       Length;
-    MitchMessageNumberType<0x77>       MessageType;
     MitchUInt32     Nanosecond;
     MitchUInt32     InstrumentID;
     MitchByte       Reserved01;
@@ -515,10 +499,8 @@ struct StatisticsMessage
 
 
 
-struct ExtendedStatisticsMessage
+struct<84, 0x80> ExtendedStatisticsMessage
 {
-    MitchMessageLengthType<84>       Length;
-    MitchMessageNumberType<0x80>       MessageType;
     MitchUInt32     Nanosecond;
     MitchUInt32     InstrumentID;
     MitchPrice08    HighPrice;
@@ -534,10 +516,8 @@ struct ExtendedStatisticsMessage
     MitchPrice08    OpenInterest;
 };
 
-struct NewsMessage
+struct<1066, 0x75> NewsMessage
 {
-    MitchMessageLengthType<1066>       Length;
-    MitchMessageNumberType<0x75>   MessageType;
     MitchUInt32 Nanosecond;
     MitchTime   Time;
     MitchByte   Urgency;
@@ -565,10 +545,8 @@ typedef MitchBitField
 
 
 
-struct TopOfBookMessage
+struct<34, 0x71> TopOfBookMessage
 {
-    MitchMessageLengthType<34>       Length;
-    MitchMessageNumberType<0x71>    MessageType;
     MitchUInt32                     Nanosecond;
     MitchUInt32                     InstrumentID;
     MitchUInt16                     ReserveField;

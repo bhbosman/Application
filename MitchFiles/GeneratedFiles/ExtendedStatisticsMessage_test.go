@@ -10,12 +10,12 @@ import (
 
 func TestNewExtendedStatisticsMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewExtendedStatisticsMessage()
+		msg, _ := ExtendedStatisticsMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewExtendedStatisticsMessage()
+		msg, _ := ExtendedStatisticsMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

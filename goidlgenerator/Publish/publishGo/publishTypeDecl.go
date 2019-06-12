@@ -2,14 +2,12 @@ package publishGo
 
 import (
 	"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
-	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"github.com/bhbosman/Application/goidlgenerator/yacc"
 	"io"
 )
 
 type publishTypeDecl struct {
-	data            *yacc.TypeDeclarator
-	typeInformation interfaces.IBaseTypeInformation
+	data *yacc.TypeDeclarator
 }
 
 func (self *publishTypeDecl) ExportDefinition(writer io.StringWriter) {
@@ -38,16 +36,15 @@ func (self *publishTypeDecl) ExportDefinition(writer io.StringWriter) {
 
 }
 
-func (self *publishTypeDecl) Export(writer io.StringWriter, TypeInformation interfaces.IBaseTypeInformation) {
+func (self *publishTypeDecl) Export(writer io.StringWriter) {
 	if definition, ok := self.data.DefinedTyped.(*MitchDefinedTypes.MitchBitField); ok {
 		publish := NewPublishBitField(definition, self.data.Declarator.Identifier())
-		publish.Export(writer, TypeInformation)
+		publish.Export(writer)
 	}
 }
 
-func NewpublishTypeDecl(data *yacc.TypeDeclarator, typeInformation interfaces.IBaseTypeInformation) *publishTypeDecl {
+func NewpublishTypeDecl(data *yacc.TypeDeclarator) *publishTypeDecl {
 	return &publishTypeDecl{
-		data:            data,
-		typeInformation: typeInformation,
+		data: data,
 	}
 }

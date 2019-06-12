@@ -32,7 +32,7 @@ type ExportParams struct {
 }
 
 type IPublish interface {
-	Export(TypeInformation interfaces.IBaseTypeInformation, params ExportParams) error
+	Export(params ExportParams) error
 }
 
 var registrations map[OutputType]IPublish
@@ -56,13 +56,11 @@ func HasOutputType(outputType OutputType) (IPublish, error) {
 func PublishOutputType(
 	outputType OutputType,
 	writer io.Writer,
-	information interfaces.IBaseTypeInformation,
 	packageName string,
 	declaredTypes []interfaces.IDefinitionDeclaration) error {
 	result, ok := registrations[outputType]
 	if ok {
 		err := result.Export(
-			information,
 			ExportParams{
 				OutputStream:  writer,
 				PackageName:   packageName,

@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/bhbosman/Application/Common"
 	"github.com/bhbosman/Application/goidlgenerator/DFA"
-	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/MitchDefinedTypes"
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 	"io"
@@ -20,8 +19,6 @@ const eof = 0
 
 func StringToIDlBaseType(s string) (interfaces.IBaseTypeInformation, error) {
 	switch s {
-	case "IdlNative":
-		return IdlDefinedTypes.NewIdlNativeTypeInformation(), nil
 	case "Mitch":
 		return MitchDefinedTypes.NewMitchTypeInformation(), nil
 	}
@@ -39,7 +36,7 @@ type IdlExprLex struct {
 	Col             int
 	Row             int
 	idlExprContext  *IdlExprContext
-	IDlBaseType     interfaces.IBaseTypeInformation
+	//IDlBaseType     interfaces.IBaseTypeInformation
 }
 
 func (x *IdlExprLex) Lex(yylval *IdlExprSymType) int {
@@ -101,8 +98,8 @@ func (x *IdlExprLex) Lex(yylval *IdlExprSymType) int {
 		}
 
 		switch token {
-		case String_literal:
-			yylval.StringValue = lexValue
+		//case String_literal:
+		//	yylval.StringValue = lexValue
 		case Character_literal:
 			yylval.StringValue = lexValue
 
@@ -129,32 +126,9 @@ func (x *IdlExprLex) Error(s string) {
 
 func CreateIdlTokens() ([]DFA.IDfa, error) {
 	reservedWords := make(map[string]int)
-	reservedWords["boolean"] = Rwboolean
-	reservedWords["case"] = Rwcase
-	reservedWords["char"] = Rwchar
-	reservedWords["const"] = Rwconst
-	reservedWords["default"] = Rwdefault
-	reservedWords["double"] = Rwdouble
 	reservedWords["enum"] = Rwenum
-	reservedWords["FALSE"] = RwFALSE
-	reservedWords["fixed"] = Rwfixed
-	reservedWords["float"] = Rwfloat
-	reservedWords["long"] = Rwlong
-	reservedWords["module"] = Rwmodule
-	reservedWords["native"] = Rwnative
-	reservedWords["octet"] = Rwoctet
-	reservedWords["sequence"] = Rwsequence
-	reservedWords["short"] = Rwshort
-	reservedWords["string"] = Rwstring
 	reservedWords["struct"] = Rwstruct
-	reservedWords["switch"] = Rwswitch
-	reservedWords["TRUE"] = RwTRUE
 	reservedWords["typedef"] = Rwtypedef
-	reservedWords["unsigned"] = Rwunsigned
-	reservedWords["union"] = Rwunion
-	reservedWords["void"] = Rwvoid
-	reservedWords["wchar"] = Rwwchar
-	reservedWords["wstring"] = Rwwstring
 	reservedWords["MitchAlpha"] = RwMitchAlpha
 	reservedWords["MitchBitField"] = RwMitchBitField
 	reservedWords["MitchByte"] = RwMitchByte
@@ -166,16 +140,16 @@ func CreateIdlTokens() ([]DFA.IDfa, error) {
 	reservedWords["MitchUInt16"] = RwMitchUInt16
 	reservedWords["MitchUInt32"] = RwMitchUInt32
 	reservedWords["MitchUInt64"] = RwMitchUInt64
-	reservedWords["MitchMessageNumberType"] = RwMitchMessageNumberType
-	reservedWords["MitchMessageLengthType"] = RwMitchMessageLengthType
+	//reservedWords["MitchMessageNumberType"] = RwMitchMessageNumberType
+	//reservedWords["MitchMessageLengthType"] = RwMitchMessageLengthType
 
 	collDfaFunctions := []func() (DFA.IDfa, error){
 		func() (DFA.IDfa, error) { return DFA.NewIdentifier(Identifier, reservedWords) },
 		func() (DFA.IDfa, error) { return DFA.NewDfaInteger(Integer_literal) },
 		func() (DFA.IDfa, error) { return DFA.NewHexDfa(Hex_literal) },
-		func() (DFA.IDfa, error) { return DFA.NewDfaWhiteSpace(Whitespace), nil },
+		func() (DFA.IDfa, error) { return DFA.NewDfaWhiteSpace(Whitespace) },
 		func() (DFA.IDfa, error) { return DFA.NewSingleLineComment(SingleLineComment) },
-		func() (DFA.IDfa, error) { return DFA.NewStringNode(String_literal), nil },
+		//func() (DFA.IDfa, error) { return DFA.NewStringNode(String_literal), nil },
 		func() (DFA.IDfa, error) { return DFA.NewCharNode(Character_literal) },
 		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("{", '{', '{') },
 		func() (DFA.IDfa, error) { return DFA.NewGenericSingleCharToken("}", '}', '}') },
@@ -212,7 +186,7 @@ type NewIdlExprLexParams struct {
 
 func NewIdlExprLex(
 	inputStream io.ByteScanner,
-	IDlBaseType interfaces.IBaseTypeInformation,
+	//IDlBaseType interfaces.IBaseTypeInformation,
 	params NewIdlExprLexParams) (*IdlExprLex, error) {
 
 	IdlExprErrorVerbose = true
@@ -239,7 +213,7 @@ func NewIdlExprLex(
 		Col:             1,
 		Row:             1,
 		idlExprContext:  params.IdlExprContext,
-		IDlBaseType:     IDlBaseType,
+		//IDlBaseType:     IDlBaseType,
 	}, nil
 
 }

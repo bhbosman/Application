@@ -9,12 +9,12 @@ import (
 
 func TestTimeMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewTimeMessage()
+		msg, _ := TimeMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewTimeMessage()
+		msg, _ := TimeMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}
@@ -37,7 +37,8 @@ func TestTimeMessage(t *testing.T) {
 		if !assert.NotNil(t, mitchReader) {
 			return
 		}
-		v, n, err := Read_TimeMessage(mitchReader)
+		v, _ := TimeMessageFactory.New()
+		n, err := TimeMessageFactory.ReadMessageInFull(v, mitchReader)
 		assert.NoError(t, err)
 		assert.Equal(t, 7, n)
 		assert.NotNil(t, v)
@@ -49,14 +50,17 @@ func TestTimeMessage(t *testing.T) {
 		if !assert.NotNil(t, mitchReader) {
 			return
 		}
-		v, n, err := Read_TimeMessage(mitchReader)
+		v, err := TimeMessageFactory.New()
+		assert.NoError(t, err)
+		if !assert.NotNil(t, v) {
+			return
+		}
+
+		n, err := TimeMessageFactory.ReadMessageInFull(v, mitchReader)
 		if !assert.Error(t, err) {
 			return
 		}
 		if !assert.Equal(t, 0, n) {
-			return
-		}
-		if !assert.Nil(t, v) {
 			return
 		}
 	})

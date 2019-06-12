@@ -10,12 +10,12 @@ import (
 
 func TestNewAuctionInfoMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewAuctionInfoMessage()
+		msg, _ := AuctionInfoMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewAuctionInfoMessage()
+		msg, _ := AuctionInfoMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

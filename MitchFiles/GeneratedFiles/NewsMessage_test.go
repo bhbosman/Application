@@ -10,12 +10,12 @@ import (
 
 func TestNewNewsMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewNewsMessage()
+		msg, _ := NewsMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewNewsMessage()
+		msg, _ := NewsMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

@@ -52,10 +52,6 @@ func TestDfaInteger(t *testing.T) {
 		return
 	}
 
-
-
-
-
 	if !t.Run("", func(t *testing.T) {
 		dfa, err := NewDfaInteger(1234)
 		assert.NoError(t, err)
@@ -66,17 +62,6 @@ func TestDfaInteger(t *testing.T) {
 	}) {
 		return
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 	if !t.Run("", func(t *testing.T) {
 		dfa, err := NewDfaInteger(1234)

@@ -4,37 +4,37 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-type mitchAlpha struct {
-	length int64
+type MitchAlpha struct {
+	Length int64
 }
 
-func (self *mitchAlpha) GetStreamFunctionName() string {
+func (self *MitchAlpha) GetStreamFunctionName() string {
 	return self.Kind().String()
 }
 
-func (self *mitchAlpha) GetPackageName() (bool, string, string) {
+func (self *MitchAlpha) GetPackageName() (bool, string, string) {
 	return true, "", self.Kind().String()
 }
 
-func (self *mitchAlpha) GetSequenceCount() (bool, int) {
-	if self.length == 0 {
+func (self *MitchAlpha) GetSequenceCount() (bool, int) {
+	if self.Length == 0 {
 		return false, 0
 	}
-	return true, int(self.length)
+	return true, int(self.Length)
 }
 
-func (self *mitchAlpha) DefaultValue() string {
+func (self *MitchAlpha) DefaultValue() string {
 	return "\"\""
 }
 
-func (self *mitchAlpha) Kind() interfaces.Kind {
+func (self *MitchAlpha) Kind() interfaces.Kind {
 	return interfaces.MitchAlpha
 }
 
-func (self *mitchAlpha) Predefined() bool {
+func (self *MitchAlpha) Predefined() bool {
 	return true
 }
 
-func (self *mitchAlpha) GetName() string {
+func (self *MitchAlpha) GetName() string {
 	return self.Kind().String()
 }

@@ -10,12 +10,12 @@ import (
 
 func TestNewOrderModifiedMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewOrderModifiedMessage()
+		msg, _ := OrderModifiedMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewOrderModifiedMessage()
+		msg, _ := OrderModifiedMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

@@ -6,15 +6,15 @@ import (
 )
 
 type mitchTypeInformation struct {
-	mitchByte    *mitchByte
-	mitchDate    *mitchDate
-	mitchTime    *mitchTime
-	mitchPrice04 *mitchPrice04
-	mitchPrice08 *mitchPrice08
-	mitchUInt08  *mitchUInt08
-	mitchUInt16  *mitchUInt16
-	mitchUInt32  *mitchUInt32
-	mitchUInt64  *mitchUInt64
+	mitchByte    *MitchByte
+	mitchDate    *MitchDate
+	mitchTime    *MitchTime
+	mitchPrice04 *MitchPrice04
+	mitchPrice08 *MitchPrice08
+	mitchUInt08  *MitchUInt08
+	mitchUInt16  *MitchUInt16
+	mitchUInt32  *MitchUInt32
+	mitchUInt64  *MitchUInt64
 	createFunc   map[interfaces.Kind]func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error)
 }
 
@@ -40,51 +40,51 @@ func (self *mitchTypeInformation) Name() interfaces.BaseTypeDescription {
 func NewMitchTypeInformation() *mitchTypeInformation {
 
 	result := &mitchTypeInformation{
-		mitchByte:    &mitchByte{},
-		mitchDate:    &mitchDate{},
-		mitchTime:    &mitchTime{},
-		mitchPrice04: &mitchPrice04{},
-		mitchPrice08: &mitchPrice08{},
-		mitchUInt08:  &mitchUInt08{},
-		mitchUInt16:  &mitchUInt16{},
-		mitchUInt32:  &mitchUInt32{},
-		mitchUInt64:  &mitchUInt64{},
+		mitchByte:    &MitchByte{},
+		mitchDate:    &MitchDate{},
+		mitchTime:    &MitchTime{},
+		mitchPrice04: &MitchPrice04{},
+		mitchPrice08: &MitchPrice08{},
+		mitchUInt08:  &MitchUInt08{},
+		mitchUInt16:  &MitchUInt16{},
+		mitchUInt32:  &MitchUInt32{},
+		mitchUInt64:  &MitchUInt64{},
 		createFunc:   make(map[interfaces.Kind]func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error)),
 	}
 	result.createFunc[interfaces.MitchAlpha] =
 		func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
 			if i, ok := data.(int64); ok {
-				return &mitchAlpha{
-					length: i,
+				return &MitchAlpha{
+					Length: i,
 				}, nil
 
 			}
 			return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
 		}
 
-	result.createFunc[interfaces.MitchMessageNumber] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
-		if i, ok := data.(int64); ok {
-			if 0 <= i && i <= 255 {
-				return newMitchMessageNumber(byte(i)), nil
-			}
-		}
-		return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
-	}
+	//result.createFunc[interfaces.MitchMessageNumber] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
+	//	if i, ok := data.(int64); ok {
+	//		if 0 <= i && i <= 255 {
+	//			return newMitchMessageNumber(byte(i)), nil
+	//		}
+	//	}
+	//	return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
+	//}
 
-	result.createFunc[interfaces.MitchMessageLength] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
-		if i, ok := data.(int64); ok {
-			if 0 <= i && i <= 65535 {
-				return newMitchMessageLength(uint16(i)), nil
-			}
-		}
-		return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
-	}
+	//result.createFunc[interfaces.MitchMessageLength] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
+	//	if i, ok := data.(int64); ok {
+	//		if 0 <= i && i <= 65535 {
+	//			return newMitchMessageLength(uint16(i)), nil
+	//		}
+	//	}
+	//	return nil, fmt.Errorf("type (%v) not available in %v type information", kind.String(), result.Name())
+	//}
 
 	result.createFunc[interfaces.MitchBitField] = func(kind interfaces.Kind, data interface{}) (interfaces.IDefinedType, error) {
 		if arrayOfData, ok := data.([]string); ok {
 			if len(arrayOfData) == 8 {
 			}
-			return newMitchBitField(
+			return NewMitchBitField(
 				arrayOfData[0],
 				arrayOfData[1],
 				arrayOfData[2],

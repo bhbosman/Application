@@ -1,6 +1,8 @@
 package DFA
 
-import "github.com/bhbosman/Application/Common"
+import (
+	"go.uber.org/multierr"
+)
 
 type IIdentifierDfa interface {
 	IDfa
@@ -41,24 +43,21 @@ func (identifier *Identifier) StartNode() *PlainNode {
 func NewIdentifier(tokenValue int, reservedWords map[string]int) (*Identifier, error) {
 	startNode := NewPlainNode("IdentifierStartNode", false)
 	terminalNode := NewPlainNode("IdentifierTerminalNode", true)
+
+	var err error = nil
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('_', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeMultiLink('a', 'z', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeMultiLink('A', 'Z', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('_', terminalNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeMultiLink('a', 'z', terminalNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeMultiLink('A', 'Z', terminalNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeMultiLink('0', '9', terminalNode, terminalNode))
 	local_reservedWords := make(map[string]int)
-	err := Common.ErrorListFactory.NewErrorListFunc(
-		func(errorList Common.IErrorList) {
-
-			errorList.Add(NodeFactory.PlainNodeLink('_', startNode, terminalNode))
-			errorList.Add(NodeFactory.PlainNodeMultiLink('a', 'z', startNode, terminalNode))
-			errorList.Add(NodeFactory.PlainNodeMultiLink('A', 'Z', startNode, terminalNode))
-
-			errorList.Add(NodeFactory.PlainNodeLink('_', terminalNode, terminalNode))
-			errorList.Add(NodeFactory.PlainNodeMultiLink('a', 'z', terminalNode, terminalNode))
-			errorList.Add(NodeFactory.PlainNodeMultiLink('A', 'Z', terminalNode, terminalNode))
-			errorList.Add(NodeFactory.PlainNodeMultiLink('0', '9', terminalNode, terminalNode))
-			if reservedWords != nil {
-				for k, v := range reservedWords {
-					local_reservedWords[k] = v
-				}
-			}
-		})
+	if reservedWords != nil {
+		for k, v := range reservedWords {
+			local_reservedWords[k] = v
+		}
+	}
 
 	if err != nil {
 		return nil, err

@@ -5,35 +5,35 @@ import (
 	"github.com/bhbosman/Application/goidlgenerator/interfaces"
 )
 
-type mitchTime struct {
+type MitchTime struct {
 }
 
-func (self *mitchTime) GetStreamFunctionName() string {
+func (self *MitchTime) GetStreamFunctionName() string {
 	return "mitch_time"
 }
 
-func (self *mitchTime) GetPackageName() (bool, string, string) {
+func (self *MitchTime) GetPackageName() (bool, string, string) {
 	return true, "time", self.Kind().String()
 }
 
-func (self *mitchTime) GetSequenceCount() (bool, int) {
+func (self *MitchTime) GetSequenceCount() (bool, int) {
 	return false, 0
 }
 
-func (self *mitchTime) DefaultValue() string {
+func (self *MitchTime) DefaultValue() string {
 	_, s, _ := self.GetPackageName()
 	name := self.GetName()
 	return fmt.Sprintf("%v.%v{}", s, name)
 }
 
-func (self *mitchTime) Kind() interfaces.Kind {
+func (self *MitchTime) Kind() interfaces.Kind {
 	return interfaces.MitchTime
 }
 
-func (self *mitchTime) Predefined() bool {
+func (self *MitchTime) Predefined() bool {
 	return true
 }
 
-func (self *mitchTime) GetName() string {
+func (self *MitchTime) GetName() string {
 	return "Time"
 }

@@ -60,7 +60,7 @@ func main() {
 			_ = outTempStream.Close()
 		}()
 
-		typesInUse, err := yacc.StringToIDlBaseType(*typesToUseAsString)
+		//typesInUse, err := yacc.StringToIDlBaseType(*typesToUseAsString)
 		if err != nil {
 			_, _ = os.Stderr.WriteString(fmt.Sprintf("invalid type in use (%v).", typesToUseAsString))
 			return "", fmt.Errorf("error 7")
@@ -68,14 +68,14 @@ func main() {
 
 		var definitionDeclarations []interfaces.IDefinitionDeclaration = nil
 		if !*defaultTypes {
-			definitionDeclarations = ReadFromSource(*verbose, typesInUse)
+			definitionDeclarations = ReadFromSource(*verbose)
 
 		} else {
-			definitionDeclarations, err = typesInUse.DefaultDecls()
-			if err != nil {
-				_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
-				return "", fmt.Errorf("error 7")
-			}
+			//definitionDeclarations, err = typesInUse.DefaultDecls()
+			//if err != nil {
+			//	_, _ = os.Stderr.Write([]byte(fmt.Sprintf("Error: %v\n", err.Error())))
+			//	return "", fmt.Errorf("error 7")
+			//}
 
 		}
 		publisher, err := Publish.HasOutputType(Publish.ToOutputType(*outputType))
@@ -85,7 +85,6 @@ func main() {
 		}
 
 		err = publisher.Export(
-			typesInUse,
 			Publish.ExportParams{
 				OutputStream:  outTempStream,
 				PackageName:   *packageName,
@@ -109,7 +108,7 @@ func main() {
 	_ = os.Rename(tempFileName, *outputFile)
 }
 
-func ReadFromSource(verbose bool, typesInUse interfaces.IBaseTypeInformation) []interfaces.IDefinitionDeclaration {
+func ReadFromSource(verbose bool) []interfaces.IDefinitionDeclaration {
 	inStream, err := GetInput(flag.Args())
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "No input file. See help:\n")
@@ -131,7 +130,6 @@ func ReadFromSource(verbose bool, typesInUse interfaces.IBaseTypeInformation) []
 		for i, reader := range inStream {
 			lex, err := yacc.NewIdlExprLex(
 				bufio.NewReader(reader),
-				typesInUse,
 				yacc.NewIdlExprLexParams{
 					IdlExprContext: idlExprContext,
 					Verbose:        verbose,

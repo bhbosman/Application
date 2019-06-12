@@ -16,8 +16,15 @@ func main() {
 	args := flag.Args()
 	readers, err := GetInput(args)
 	if err != nil {
+		fmt.Println(err)
 		os.Exit(101)
 	}
+	defer func(closers []io.ReadCloser) {
+		for _, closer := range closers {
+			_ = closer.Close()
+		}
+	}(readers)
+
 	if len(readers) > 0 {
 		xmlDecoder := xml.NewDecoder(readers[0])
 		fix := &ReadQuickFix.FixDecl{}
@@ -29,6 +36,9 @@ func main() {
 		fmt.Println(len(fix.Trailer.Fields))
 		fmt.Println(len(fix.Components.Fields))
 		fmt.Println(len(fix.Fields.Fields))
+
+		fix.EnumsToIds(os.Stdout)
+
 	}
 }
 

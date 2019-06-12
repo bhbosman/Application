@@ -1,5 +1,7 @@
 package DFA
 
+import "go.uber.org/multierr"
+
 type WhiteSpace struct {
 	tokenValue   int
 	start        *PlainNode
@@ -18,25 +20,29 @@ func (identifier *WhiteSpace) StartNode() *PlainNode {
 	return identifier.start
 }
 
-func NewDfaWhiteSpace(tokenValue int) *WhiteSpace {
+func NewDfaWhiteSpace(tokenValue int) (*WhiteSpace, error) {
+	var err error = nil
 	startNode := NewPlainNode("WhiteSpaceStartNode", false)
 	terminalNode := NewPlainNode("WhiteSpaceTerminalNode", true)
 
-	_ = NodeFactory.PlainNodeLink(' ', startNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\t', startNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\n', startNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\r', startNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\b', startNode, terminalNode)
+	err = multierr.Append(err, NodeFactory.PlainNodeLink(' ', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\t', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\n', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\r', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\b', startNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink(' ', terminalNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\t', terminalNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\n', terminalNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\r', terminalNode, terminalNode))
+	err = multierr.Append(err, NodeFactory.PlainNodeLink('\b', terminalNode, terminalNode))
 
-	_ = NodeFactory.PlainNodeLink(' ', terminalNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\t', terminalNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\n', terminalNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\r', terminalNode, terminalNode)
-	_ = NodeFactory.PlainNodeLink('\b', terminalNode, terminalNode)
+	if err != nil {
+		return nil, err
+	}
 
 	return &WhiteSpace{
 		tokenValue:   tokenValue,
 		start:        startNode,
 		terminalNode: terminalNode,
-	}
+	}, nil
 }

@@ -7,59 +7,67 @@ import (
 
 //go:generate goyacc -o idl.go -p "IdlExpr" idl.y
 
-type StructDefinition struct {
+type MitchMessageDefinition struct {
 	Type       string                            `json:"Type"`
 	Identifier string                            `json:"Identifier"`
 	Members    []*Member                         `json:"Members"`
 	Next       interfaces.IDefinitionDeclaration `json:"-"`
+
+	MessageLength uint16
+	MessageType byte
 }
 
-func (self *StructDefinition) GetStreamFunctionName() string {
+func (self *MitchMessageDefinition) HasMessageInformation() bool {
+	return self.MessageType != 0 && self.MessageLength != 0
+}
+
+
+func (self *MitchMessageDefinition) GetStreamFunctionName() string {
 	return self.Identifier
 }
 
-func (self *StructDefinition) GetPackageName() (bool, string, string) {
+func (self *MitchMessageDefinition) GetPackageName() (bool, string, string) {
 	return true, "", self.Identifier
 }
 
-func (self *StructDefinition) GetSequenceCount() (bool, int) {
+func (self *MitchMessageDefinition) GetSequenceCount() (bool, int) {
 	return false, 0
 }
 
-func (self *StructDefinition) Kind() interfaces.Kind {
+func (self *MitchMessageDefinition) Kind() interfaces.Kind {
 	return interfaces.Struct
 }
 
-func (self *StructDefinition) DefaultValue() string {
+func (self *MitchMessageDefinition) DefaultValue() string {
 	return "nil"
 }
 
-func (self *StructDefinition) Predefined() bool {
+func (self *MitchMessageDefinition) Predefined() bool {
 	return false
 }
 
-func (self *StructDefinition) GetScopeName() string {
+func (self *MitchMessageDefinition) GetScopeName() string {
 	return self.Identifier
 }
 
-func (self *StructDefinition) ClearNext() {
+func (self *MitchMessageDefinition) ClearNext() {
 	self.Next = nil
 }
 
-func (self *StructDefinition) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
+func (self *MitchMessageDefinition) SetNext(typeSpec interfaces.IDefinitionDeclaration) {
 	self.Next = typeSpec
 }
 
-func (self *StructDefinition) GetName() string {
+func (self *MitchMessageDefinition) GetName() string {
 	return self.Identifier
 
 }
 
-func (self *StructDefinition) AddMember(typeSpec interfaces.IDefinedType, declarator interfaces.IDeclarator) {
+func (self *MitchMessageDefinition) AddMember(typeSpec interfaces.IDefinedType, declarator interfaces.IDeclarator) {
 	self.Members = append(self.Members, NewMember(typeSpec, declarator, nil))
 }
 
-func (self *StructDefinition) String() string {
+func (self *MitchMessageDefinition) String() string {
 	bytes, err := json.MarshalIndent(self, "", "\t")
 	if err != nil {
 		return err.Error()
@@ -67,15 +75,17 @@ func (self *StructDefinition) String() string {
 	return string(bytes)
 }
 
-func (self *StructDefinition) GetNext() interfaces.IDefinitionDeclaration {
+func (self *MitchMessageDefinition) GetNext() interfaces.IDefinitionDeclaration {
 	return self.Next
 }
 
-func NewStructDefinition(identifier string) *StructDefinition {
-	return &StructDefinition{
-		Type:       "struct",
-		Identifier: identifier,
-		Members:    make([]*Member, 0),
-		Next:       nil,
+func NewMitchMessageDefinition(identifier string, MessageLength int64, MessageType int64) *MitchMessageDefinition {
+	return &MitchMessageDefinition{
+		Type:          "struct",
+		Identifier:    identifier,
+		Members:       make([]*Member, 0),
+		Next:          nil,
+		MessageLength: uint16(MessageLength),
+		MessageType:   byte(MessageType),
 	}
 }

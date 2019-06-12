@@ -10,12 +10,12 @@ import (
 
 func TestNewSystemEventMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewSystemEventMessage()
+		msg, _ := SystemEventMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewSystemEventMessage()
+		msg, _ := SystemEventMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

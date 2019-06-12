@@ -10,12 +10,12 @@ import (
 
 func TestNewSymbolDirectoryMessage(t *testing.T) {
 	t.Run("Constructor", func(t *testing.T) {
-		msg := NewSymbolDirectoryMessage()
+		msg, _ := SymbolDirectoryMessageFactory.New()
 		assert.NotNil(t, msg)
 	})
 
 	t.Run("WriteMessage", func(t *testing.T) {
-		msg := NewSymbolDirectoryMessage()
+		msg, _ := SymbolDirectoryMessageFactory.New()
 		if !assert.NotNil(t, msg) {
 			return
 		}

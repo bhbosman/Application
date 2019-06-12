@@ -100,7 +100,7 @@ func (self *MitchBitField) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func newMitchBitField(
+func NewMitchBitField(
 	MitchBitField00 string,
 	MitchBitField01 string,
 	MitchBitField02 string,
