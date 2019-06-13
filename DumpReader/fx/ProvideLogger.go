@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func ProvideLogger(logger *log.Logger) fx.Option {
+func ProvideApplicationLogger(logger *log.Logger) fx.Option {
 	return fx.Provide(
 		func() (*log.Logger, error) {
 			logger := logger

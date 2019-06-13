@@ -15,39 +15,29 @@ import (
 	"sync"
 )
 
-
 func main() {
-	//
+	applicationContext, applicationCancel := context.WithCancel(context.Background())
 	applicationLogger := log.New(os.Stdout, "Dump Reader: ", log.LstdFlags)
 	applicationWaitGroup := &sync.WaitGroup{}
-	//
-	type PlayBackFile string
-	providerPlayBackFile := fx.Provide(func(logger *log.Logger, userHomeDir fx2.UserHomeDir) (PlayBackFile, error) {
-		fileName := path.Join(string(userHomeDir), "Data", "MitchData", "20190516173819519_21651.new")
-		if _, err := os.Stat(fileName); err != nil {
-			if os.IsNotExist(err) {
-				logger.Printf("File does not exist. Error: %v\n", err)
-				return "", err
-			}
-		}
-		logger.Printf("PlaybackFileName is %v\n", fileName)
-		return PlayBackFile(fileName), nil
-	})
-	//
+
 
 
 
 	type ICurrentOpenFile io.Reader
 	app := fx.New(
+
 		fx.StartTimeout(fx.DefaultTimeout),
 		fx.StopTimeout(fx.DefaultTimeout),
-		fx2.ProvideLogger(applicationLogger),
-		fx2.OverrideLogger(applicationLogger),
+		fx2.ProvideApplicationLogger(applicationLogger),
+		fx2.ProvideOverrideLogger(applicationLogger),
+		fx2.ProvideApplicationContext(applicationContext, applicationCancel),
 		fx2.ProvideApplicationWaitGroup(applicationWaitGroup),
 		fx2.ProviderUserHomeDir(""),
-		providerPlayBackFile,
+		fx2.ProvidePlayBackFileFromUserFolder(path.Join("Data", "MitchData", "20190516173819519_21651.new")),
+		fx2.ProvideCounters(),
+		fx2.InvokeCreatePrometheusService(),
 		fx.Provide(
-			func(lifecycle fx.Lifecycle, logger *log.Logger, wg *sync.WaitGroup, userHomeDir fx2.UserHomeDir, playBackFile PlayBackFile) (ICurrentOpenFile, error) {
+			func(lifecycle fx.Lifecycle, logger *log.Logger, wg *sync.WaitGroup, userHomeDir fx2.UserHomeDir, playBackFile fx2.PlayBackFile) (ICurrentOpenFile, error) {
 				logger.Printf("Create ICurrentOpenFile....")
 				file, err := os.Open(string(playBackFile))
 				if err != nil {
@@ -56,9 +46,12 @@ func main() {
 				}
 				lifecycle.Append(fx.Hook{
 					OnStart: func(context context.Context) error {
+						logger.Printf("ICurrentOpenFile OnStart")
+
 						return nil
 					},
 					OnStop: func(context context.Context) error {
+						logger.Printf("ICurrentOpenFile OnStop")
 						err := file.Close()
 						if err != nil {
 							logger.Printf("Error on file close. Error: %v\n", err)
@@ -68,32 +61,36 @@ func main() {
 				})
 				return file, nil
 			}),
-		fx.Invoke(
-			func(lifecycle fx.Lifecycle, logger *log.Logger, wg *sync.WaitGroup, currentOpenFile ICurrentOpenFile) error {
-				mitchDataHandler, err := DataHandlers.NewReadMitchDataHandler(
-					func(byteStream []byte) (Streams.IMitchReader, error) {
-						return Streams.NewMitchReader(bytes.NewBuffer(byteStream)), nil
-					})
-				if err != nil {
-					logger.Printf("Error creating mitch handler. Error: %v\n", err)
-					return err
-				}
+		fx.Provide(func(logger *log.Logger, currentOpenFile ICurrentOpenFile, feedCounter MitchFeedReader.IFeedCounter) (*MitchFeedReader.MitchFeedReader, error) {
+			mitchDataHandler, err := DataHandlers.NewReadMitchDataHandler(
+				func(byteStream []byte) (Streams.IMitchReader, error) {
+					return Streams.NewMitchReader(bytes.NewBuffer(byteStream)), nil
+				})
+			if err != nil {
+				logger.Printf("Error creating mitch handler. Error: %v\n", err)
+				return nil, err
+			}
 
-				reader, err := MitchFeedReader.NewMitchFeedReader(logger, currentOpenFile, mitchDataHandler)
-				if err != nil {
-					logger.Printf("Could not create Mitch Reader. Error: %v\n", err)
-					return err
-				}
-				lifecycle.Append(fx.Hook{
-					OnStart: func(context context.Context) error {
-						err := reader.Process(wg)
+			reader, err := MitchFeedReader.NewMitchFeedReader(logger, currentOpenFile, mitchDataHandler, feedCounter)
+			if err != nil {
+				logger.Printf("Could not create Mitch Reader. Error: %v\n", err)
+				return nil, err
+			}
+			return reader, nil
+		}),
+		fx.Invoke(
+			func(lc fx.Lifecycle, logger *log.Logger, wg *sync.WaitGroup, appCtx context.Context, reader *MitchFeedReader.MitchFeedReader) error {
+				lifeCycleContext, lifeCycleCancel := context.WithCancel(appCtx)
+				lc.Append(fx.Hook{
+					OnStart: func(startContext context.Context) error {
+						err := reader.Process(wg, lifeCycleContext, "file", "static")
 						if err != nil {
 							logger.Printf("error: %v", err)
 						}
 						return err
 					},
-					OnStop: func(context context.Context) error {
-
+					OnStop: func(stopContext context.Context) error {
+						lifeCycleCancel()
 						err := reader.Close()
 						if err != nil {
 							logger.Printf("error: %v", err)
@@ -103,6 +100,23 @@ func main() {
 				})
 				return nil
 			}),
+
+
+
+		//fx.Invoke(
+		//	func(lc fx.Lifecycle, appCtx context.Context, appCancel context.CancelFunc) error {
+		//		lc.Append(fx.Hook{
+		//			OnStart: func(startContext context.Context) error {
+		//				go func() {
+		//					time.Sleep(time.Second * 10)
+		//					appCancel()
+		//				}()
+		//				return nil
+		//			},
+		//			OnStop: nil,
+		//		})
+		//		return nil
+		//	}),
 	)
 
 	startTimeout, _ := context.WithTimeout(context.Background(), app.StartTimeout())
@@ -118,6 +132,4 @@ func main() {
 		applicationLogger.Printf("Error: %v", stopError)
 		os.Exit(1)
 	}
-
-
 }

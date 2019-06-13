@@ -12,6 +12,7 @@ type MitchReader struct {
 	Reader io.Reader
 }
 
+//noinspection ALL
 func (self *MitchReader) Read_ReadBytes(size int) (value []byte, n int, err error) {
 	result := make([]byte, size)
 	n, err = self.Reader.Read(result)
