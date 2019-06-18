@@ -14,3 +14,6 @@ type IMitchReader interface {
 	Read_mitch_price08() (value float64, n int, err error)
 	Read_mitch_price04() (float64, int, error)
 }
+type IMitchReaderFactory interface {
+	Create(data []byte) (IMitchReader, error)
+}

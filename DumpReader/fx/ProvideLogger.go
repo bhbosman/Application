@@ -13,4 +13,3 @@ func ProvideApplicationLogger(logger *log.Logger) fx.Option {
 			return logger, nil
 		})
 }
-

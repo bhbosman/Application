@@ -1,6 +1,7 @@
 package Streams
 
 import (
+	"bytes"
 	"encoding/binary"
 	"io"
 	"math"
@@ -13,9 +14,9 @@ type MitchReader struct {
 }
 
 //noinspection ALL
-func (self *MitchReader) Read_ReadBytes(size int) (value []byte, n int, err error) {
+func (self *MitchReader) Read_ReadBytes(buffer []byte, size int) (value []byte, n int, err error) {
 	result := make([]byte, size)
-	n, err = self.Reader.Read(result)
+	n, err = io.ReadAtLeast(self.Reader, result, size)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -141,4 +142,15 @@ func (self *MitchReader) Read_mitch_price08() (value float64, n int, err error) 
 		return 0, 0, e
 	}
 	return float64(v / 100000000), n, e
+}
+
+type MitchReaderFactory struct {
+}
+
+func NewMitchReaderFactory() *MitchReaderFactory {
+	return &MitchReaderFactory{}
+}
+
+func (self *MitchReaderFactory) Create(data []byte) (IMitchReader, error) {
+	return NewMitchReader(bytes.NewBuffer(data)), nil
 }

@@ -26,7 +26,6 @@ type IFeedCounter interface {
 	MessageCounterInc(source string, feedName string) error
 }
 
-
 func NewMitchFeedReader(
 	logger *log.Logger,
 	reader io.Reader,
@@ -38,6 +37,26 @@ func NewMitchFeedReader(
 		DataHandler: dataHandler,
 		feedCounter: feedCounter,
 	}, nil
+}
+
+type StreamData struct {
+	closer func(data []byte) error
+	data   []byte
+}
+
+func NewStreamData(closer func(data []byte) error, data []byte) *StreamData {
+	return &StreamData{closer: closer, data: data}
+}
+
+func (self *StreamData) Close() error {
+	if self.closer != nil {
+		return self.closer(self.data)
+	}
+	return nil
+}
+
+func (self *StreamData) Data() []byte {
+	return self.data
 }
 
 func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, source string, feedName string) error {
@@ -59,7 +78,7 @@ func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, sou
 			case <-ctx.Done():
 				return
 			default:
-				self.feedCounter.MessageCounterInc(source, feedName)
+				_ = self.feedCounter.MessageCounterInc(source, feedName)
 				n, err := GeneratedFiles.UnitLengthFactory.ReadMessageData(&unitLength, &mitchStreamReader)
 				if err != nil {
 					self.logger.Println(fmt.Sprintf("error: %v", err))
@@ -92,55 +111,39 @@ func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, sou
 							}
 							bytesLeft -= int16(n)
 
-							streamBytes, bytesRead, err := mitchStreamReader.Read_ReadBytes(int(bytesLeft))
+							bytesLeftOfMessage := int(messageHeader.Length) - 3
+							streamBytes, bytesRead, err := mitchStreamReader.Read_ReadBytes(nil, bytesLeftOfMessage)
+
+							bytesLeft -= int16(bytesRead)
+
 							if err != nil {
 								self.logger.Println(fmt.Sprintf("length not 3"))
 								return
 							}
-							if bytesRead != int(bytesLeft) {
+							if bytesRead != bytesLeftOfMessage {
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 							}
 
-							_, n, err = self.DataHandler.CreateAndReadData(messageHeader.MessageType, messageHeader.Length, streamBytes)
+							messageFactory, err := self.DataHandler.CreateMessageFactory(messageHeader.MessageType, messageHeader.Length, NewStreamData(nil, streamBytes))
 							if err != nil {
 								if _, ok := err.(*DataHandlers.DataHandlerErrorDidNothing); ok {
-									_, n, err = mitchStreamReader.Read_ReadBytes(int(bytesLeft))
+									_, n, err = mitchStreamReader.Read_ReadBytes(nil, int(bytesLeft))
 									bytesLeft -= int16(n)
 
 									continue
 								}
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 								return
-
 							}
-							bytesLeft -= int16(n)
-
-							if bytesLeft < 0 {
-								self.logger.Println(
-									fmt.Sprintf(
-										"error: %v",
-										NewOverReadError(
-											messageHeader.MessageType,
-											messageHeader.Length,
-											uint16(-bytesLeft),
-											nil)))
-							}
-							if bytesLeft > 0 {
-								self.logger.Println(
-									fmt.Sprintf(
-										"error: %v",
-										NewUnderReadError(
-											messageHeader.MessageType,
-											messageHeader.Length,
-											uint16(bytesLeft),
-											nil)))
+							_, err = messageFactory.Message()
+							if err != nil {
+								fmt.Println(err)
 							}
 						}
 					}
 				}
 			}
 		}
-
 	}()
 
 	return nil

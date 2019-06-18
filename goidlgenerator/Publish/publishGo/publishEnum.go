@@ -52,8 +52,6 @@ func (self publishEnum) Export(
 
 }
 
-
-
 func (self publishEnum) GenerateWriteFunction(
 	writer io.StringWriter,
 	typeNamePrefix string, typeCode uint32) error {
@@ -83,7 +81,6 @@ func (self publishEnum) ExportFactoryDefinition(writer io.StringWriter) {
 	_, _ = writer.WriteString(fmt.Sprintf("\t}\n"))
 	_, _ = writer.WriteString(fmt.Sprintf("\treturn %v(b), n, nil\n", self.data.Identifier))
 	_, _ = writer.WriteString(fmt.Sprintf("}\n"))
-
 
 }
 

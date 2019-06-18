@@ -16,7 +16,3 @@ func ProvideCounters() fx.Option {
 		return counters, counters, nil
 	})
 }
-
-
-
-

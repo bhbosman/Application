@@ -5,21 +5,57 @@ import (
 	"fmt"
 	"go.uber.org/fx"
 	"log"
+	"sync"
 )
 
-func ProvideApplicationContext(ctx context.Context, cancel context.CancelFunc) fx.Option {
-	if ctx == nil || cancel == nil {
-		return fx.Error(fmt.Errorf("context and cancel must be assigned"))
-	}
-	return fx.Provide(func(logger *log.Logger, lifecycle fx.Lifecycle) (context.Context, context.CancelFunc, error) {
+type IApplicationContext interface {
+	Context() context.Context
+	Cancel() context.CancelFunc
+	WaitGroup() *sync.WaitGroup
+}
+
+type ApplicationContext struct {
+	context   context.Context
+	cancel    context.CancelFunc
+	waitGroup *sync.WaitGroup
+}
+
+func (self *ApplicationContext) WaitGroup() *sync.WaitGroup {
+	return self.waitGroup
+}
+
+func (self *ApplicationContext) Context() context.Context {
+	return self.context
+}
+
+func (self *ApplicationContext) Cancel() context.CancelFunc {
+	return self.cancel
+}
+
+func ProvideApplicationContext() fx.Option {
+	return fx.Provide(func(logger *log.Logger, lifecycle fx.Lifecycle) (IApplicationContext, error) {
+		applicationContext := &ApplicationContext{
+			context:   nil,
+			cancel:    nil,
+			waitGroup: nil,
+		}
 		lifecycle.Append(fx.Hook{
-			OnStart: nil,
+			OnStart: func(startContext context.Context) error {
+				ctx, cancel := context.WithCancel(context.Background())
+				wg := &sync.WaitGroup{}
+				if ctx == nil || cancel == nil {
+					return fmt.Errorf("context and cancel must be assigned")
+				}
+				applicationContext.context = ctx
+				applicationContext.cancel = cancel
+				applicationContext.waitGroup = wg
+				return nil
+			},
 			OnStop: func(stopContext context.Context) error {
-				cancel()
+				applicationContext.cancel()
 				return nil
 			},
 		})
-		return ctx, cancel, nil
+		return applicationContext, nil
 	})
 }
-

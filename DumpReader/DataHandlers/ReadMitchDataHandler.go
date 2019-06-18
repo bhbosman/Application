@@ -1,37 +1,81 @@
 package DataHandlers
 
 import (
-	"fmt"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"github.com/bhbosman/Application/Streams"
+	"sync"
 )
 
 type ReadMitchDataHandler struct {
-	GetReaderFunc func(byteStream []byte) (Streams.IMitchReader, error)
+	factory Streams.IMitchReaderFactory
+}
+type IMessageFactory interface {
+	Message() (interface{}, error)
+	MessageType() byte
+	Length() uint16
+}
+type MessageFactory struct {
+	mutex          sync.Mutex
+	messageType    byte
+	length         uint16
+	stream         IStreamData
+	factory        Streams.IMitchReaderFactory
+	createdMessage interface{}
 }
 
-func (self ReadMitchDataHandler) CreateAndReadData(messageType byte, length uint16, stream []byte) (interface{}, int, error) {
-	reader, err := self.GetReaderFunc(stream)
+func (self *MessageFactory) MessageType() byte {
+	return self.messageType
+}
+
+func (self *MessageFactory) Length() uint16 {
+	return self.length
+}
+
+func (self *MessageFactory) Message() (interface{}, error) {
+	if self.createdMessage != nil {
+		return self.createdMessage, nil
+	}
+	self.mutex.Lock()
+	defer self.mutex.Unlock()
+	if self.createdMessage != nil {
+		return self.createdMessage, nil
+	}
+	reader, err := self.factory.Create(self.stream.Data())
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
-	if reader == nil {
-		return nil, 0, fmt.Errorf("GetReaderFunc is nil")
-	}
-
-	data, n, err := GeneratedFiles.CreateAndReadData(messageType, length, reader)
+	data, _, err := GeneratedFiles.CreateAndReadData(self.messageType, self.length, reader)
 	if err != nil {
 		if _, ok := err.(*GeneratedFiles.CreateAndReadDataNotFound); ok {
-			return nil, 0, &DataHandlerErrorDidNothing{}
+			return nil, &DataHandlerErrorDidNothing{}
 		}
-		return nil, 0, err
+		return nil, err
 	}
-	return data, n, nil
+	return data, nil
 }
 
-func NewReadMitchDataHandler(reader func(byteStream []byte) (Streams.IMitchReader, error)) (*ReadMitchDataHandler, error) {
+func NewMessageFactory(
+	messageType byte,
+	length uint16,
+	stream IStreamData,
+	factory Streams.IMitchReaderFactory) *MessageFactory {
+	return &MessageFactory{
+		mutex:          sync.Mutex{},
+		messageType:    messageType,
+		length:         length,
+		stream:         stream,
+		factory:        factory,
+		createdMessage: nil,
+	}
+}
+
+func (self ReadMitchDataHandler) CreateMessageFactory(messageType byte, length uint16, stream IStreamData) (IMessageFactory, error) {
+	return NewMessageFactory(messageType, length, stream, self.factory), nil
+}
+
+func NewReadMitchDataHandler(factory Streams.IMitchReaderFactory) (*ReadMitchDataHandler, error) {
 	return &ReadMitchDataHandler{
-		GetReaderFunc: reader,
+		factory: factory,
 	}, nil
 }

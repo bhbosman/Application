@@ -7,7 +7,7 @@ type Counters struct {
 	messageCounter *prometheus.CounterVec
 }
 
-func (self *Counters) MessageCounterInc(source string, feedName string) error{
+func (self *Counters) MessageCounterInc(source string, feedName string) error {
 	counter := self.messageCounter.WithLabelValues(source, feedName)
 	counter.Inc()
 
@@ -40,9 +40,3 @@ func NewCounters() (*Counters, error) {
 		messageCounter: messagesProcessed,
 	}, nil
 }
-
-
-
-
-
-

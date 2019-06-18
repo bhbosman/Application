@@ -48,13 +48,11 @@ func (self *publishStruct) ExportFactoryDefinition(writer io.StringWriter, typeN
 	_, _ = writer.WriteString(fmt.Sprintf("\n"))
 
 	_, _ = writer.WriteString(fmt.Sprintf("var %sFactory %sFactoryType = %sFactoryType{}\n", self.data.Identifier, self.data.Identifier, self.data.Identifier))
-	if self.data.HasMessageInformation(){
+	if self.data.HasMessageInformation() {
 		_, _ = writer.WriteString(fmt.Sprintf("const %sMessageType byte = 0x%x//%v\n", self.data.Identifier, self.data.MessageType, self.data.MessageType))
 		_, _ = writer.WriteString(fmt.Sprintf("const %sMessageLength uint16 = %v\n", self.data.Identifier, self.data.MessageLength))
 		_, _ = writer.WriteString(fmt.Sprintf("\n"))
 	}
-
-
 
 	_, _ = writer.WriteString(fmt.Sprintf("func(self %sFactoryType) New() (*%s, error) {\n", self.data.Identifier, self.data.Identifier))
 	_, _ = writer.WriteString(fmt.Sprintf("\treturn &%s{}, nil\n", self.data.Identifier))
@@ -250,7 +248,6 @@ func (self publishStruct) GenerateWriteFunction(writer io.StringWriter, typeName
 		_, _ = writer.WriteString(fmt.Sprintf("\n"))
 	})
 }
-
 
 func NewPublishStruct(data *yacc.MitchMessageDefinition) *publishStruct {
 	return &publishStruct{

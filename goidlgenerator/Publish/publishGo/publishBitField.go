@@ -21,7 +21,6 @@ func (self publishBitField) Export(writer io.StringWriter) {
 	typeCode := CalculateCrc(typeNamePrefix)
 	_, _ = writer.WriteString(fmt.Sprintf("// %v Declaration TypeCode: 0x%08x\n", typeNamePrefix, typeCode))
 
-
 	_ = self.GenerateWriteFunction(writer, typeNamePrefix, typeCode)
 	_ = self.GenerateReadFunction(writer, typeNamePrefix, typeCode)
 }

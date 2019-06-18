@@ -14,8 +14,7 @@ func InvokeCreatePrometheusService() fx.Option {
 			lifecycle fx.Lifecycle,
 			logger *log.Logger,
 			counters ICounters,
-			applicationContext context.Context,
-			applicationCancel context.CancelFunc) error {
+			applicationContext IApplicationContext) error {
 
 			logger.Printf("Creating http service for prometheus\n")
 			server := &http.Server{
@@ -46,5 +45,3 @@ func InvokeCreatePrometheusService() fx.Option {
 		})
 
 }
-
-

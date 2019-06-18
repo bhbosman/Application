@@ -14,13 +14,12 @@ type MitchMessageDefinition struct {
 	Next       interfaces.IDefinitionDeclaration `json:"-"`
 
 	MessageLength uint16
-	MessageType byte
+	MessageType   byte
 }
 
 func (self *MitchMessageDefinition) HasMessageInformation() bool {
 	return self.MessageType != 0 && self.MessageLength != 0
 }
-
 
 func (self *MitchMessageDefinition) GetStreamFunctionName() string {
 	return self.Identifier
