@@ -1,4 +1,4 @@
-package fx
+package main
 
 import (
 	"context"
@@ -32,7 +32,7 @@ func (self *ApplicationContext) Cancel() context.CancelFunc {
 	return self.cancel
 }
 
-func ProvideApplicationContext() fx.Option {
+func FxAppProvideApplicationContext() fx.Option {
 	return fx.Provide(func(logger *log.Logger, lifecycle fx.Lifecycle) (IApplicationContext, error) {
 		applicationContext := &ApplicationContext{
 			context:   nil,

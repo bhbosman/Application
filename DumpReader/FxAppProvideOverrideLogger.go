@@ -1,4 +1,4 @@
-package fx
+package main
 
 import (
 	"go.uber.org/fx"
@@ -13,7 +13,7 @@ func (self *loggerWrapper) Printf(format string, v ...interface{}) {
 	self.applicationLogger.Printf(format, v...)
 }
 
-func ProvideFxAppOverrideLogger(logger *log.Logger) fx.Option {
+func FxAppProvideFxAppOverrideLogger(logger *log.Logger) fx.Option {
 	return fx.Logger(&loggerWrapper{
 		applicationLogger: logger,
 	})

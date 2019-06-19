@@ -1,7 +1,7 @@
-package fx
+package main
 
 import "github.com/prometheus/client_golang/prometheus"
 
-type ICounters interface {
+type IPerformanceCounters interface {
 	Gatherer() prometheus.Gatherer
 }

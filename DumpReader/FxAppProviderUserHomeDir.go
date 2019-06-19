@@ -1,4 +1,4 @@
-package fx
+package main
 
 import (
 	"go.uber.org/fx"
@@ -8,7 +8,7 @@ import (
 
 type UserHomeDir string
 
-func ProviderUserHomeDir(path string) fx.Option {
+func FxAppProviderUserHomeDir(path string) fx.Option {
 	if path != "" {
 		return fx.Provide(
 			func(logger *log.Logger) (UserHomeDir, error) {

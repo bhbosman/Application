@@ -3,9 +3,6 @@ package main
 import (
 	"bufio"
 	"context"
-	"github.com/bhbosman/Application/DumpReader/DataHandlers"
-	"github.com/bhbosman/Application/DumpReader/MitchFeedReader"
-	fx2 "github.com/bhbosman/Application/DumpReader/fx"
 	"github.com/bhbosman/Application/Streams"
 	"go.uber.org/fx"
 	"io"
@@ -14,23 +11,21 @@ import (
 	"path"
 )
 
-func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, fx2.IApplicationContext, error) {
-
-	var applicationContext fx2.IApplicationContext
-
+func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationContext, error) {
+	var applicationContext IApplicationContext
 	type ICurrentOpenFile io.Reader
 	return fx.New(
 		fx.StartTimeout(fx.DefaultTimeout),
 		fx.StopTimeout(fx.DefaultTimeout),
-		fx2.ProvideApplicationContext(),
-		fx2.ProvideApplicationLogger(applicationLogger),
-		fx2.ProvideFxAppOverrideLogger(applicationLogger),
-		fx2.ProviderUserHomeDir(""),
-		fx2.ProvidePlayBackFileFromUserFolder(path.Join("Data", "MitchData", "20190516173819519_21651.new")),
-		fx2.ProvideCounters(),
-		fx2.InvokeCreatePrometheusService(),
+		FxAppProvideApplicationContext(),
+		FxAppProvideApplicationLogger(applicationLogger),
+		FxAppProvideFxAppOverrideLogger(applicationLogger),
+		FxAppProviderUserHomeDir(""),
+		FxAppProvidePlayBackFileFromUserFolder(path.Join("Data", "MitchData", "20190516173819519_21651.new")),
+		FxAppProvideCounters(),
+		FxAppInvokeCreatePrometheusService(),
 		fx.Provide(
-			func(lifecycle fx.Lifecycle, logger *log.Logger, userHomeDir fx2.UserHomeDir, playBackFile fx2.PlayBackFile) (ICurrentOpenFile, error) {
+			func(lifecycle fx.Lifecycle, logger *log.Logger, userHomeDir UserHomeDir, playBackFile PlayBackFile) (ICurrentOpenFile, error) {
 				hideActualReader := newHideActualReader()
 				lifecycle.Append(fx.Hook{
 					OnStart: func(context context.Context) error {
@@ -57,14 +52,14 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, fx2.IApplicati
 				})
 				return hideActualReader, nil
 			}),
-		fx.Provide(func(logger *log.Logger, currentOpenFile ICurrentOpenFile, feedCounter MitchFeedReader.IFeedCounter) (*MitchFeedReader.MitchFeedReader, error) {
-			mitchDataHandler, err := DataHandlers.NewReadMitchDataHandler(Streams.NewMitchReaderFactory())
+		fx.Provide(func(logger *log.Logger, currentOpenFile ICurrentOpenFile, feedCounter IFeedCounter) (*MitchFeedReader, error) {
+			mitchDataHandler, err := NewReadMitchDataHandler(Streams.NewMitchReaderFactory())
 			if err != nil {
 				logger.Printf("Error creating mitch handler. Error: %v\n", err)
 				return nil, err
 			}
 
-			reader, err := MitchFeedReader.NewMitchFeedReader(logger, currentOpenFile, mitchDataHandler, feedCounter)
+			reader, err := NewMitchFeedReader(logger, currentOpenFile, mitchDataHandler, feedCounter)
 			if err != nil {
 				logger.Printf("Could not create Mitch Reader. Error: %v\n", err)
 				return nil, err
@@ -72,7 +67,7 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, fx2.IApplicati
 			return reader, nil
 		}),
 		fx.Invoke(
-			func(lc fx.Lifecycle, logger *log.Logger, applicationContext fx2.IApplicationContext, reader *MitchFeedReader.MitchFeedReader) error {
+			func(lc fx.Lifecycle, logger *log.Logger, applicationContext IApplicationContext, reader *MitchFeedReader) error {
 				var lifeCycleContext context.Context
 				var lifeCycleCancel context.CancelFunc
 				lc.Append(fx.Hook{

@@ -1,4 +1,4 @@
-package DataHandlers
+package main
 
 import (
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
@@ -6,14 +6,6 @@ import (
 	"sync"
 )
 
-type ReadMitchDataHandler struct {
-	factory Streams.IMitchReaderFactory
-}
-type IMessageFactory interface {
-	Message() (interface{}, error)
-	MessageType() byte
-	Length() uint16
-}
 type MessageFactory struct {
 	mutex          sync.Mutex
 	messageType    byte
@@ -59,7 +51,7 @@ func NewMessageFactory(
 	messageType byte,
 	length uint16,
 	stream IStreamData,
-	factory Streams.IMitchReaderFactory) *MessageFactory {
+	factory Streams.IMitchReaderFactory) (*MessageFactory, error) {
 	return &MessageFactory{
 		mutex:          sync.Mutex{},
 		messageType:    messageType,
@@ -67,15 +59,5 @@ func NewMessageFactory(
 		stream:         stream,
 		factory:        factory,
 		createdMessage: nil,
-	}
-}
-
-func (self ReadMitchDataHandler) CreateMessageFactory(messageType byte, length uint16, stream IStreamData) (IMessageFactory, error) {
-	return NewMessageFactory(messageType, length, stream, self.factory), nil
-}
-
-func NewReadMitchDataHandler(factory Streams.IMitchReaderFactory) (*ReadMitchDataHandler, error) {
-	return &ReadMitchDataHandler{
-		factory: factory,
 	}, nil
 }

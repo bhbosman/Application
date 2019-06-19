@@ -1,4 +1,4 @@
-package fx
+package main
 
 import (
 	"go.uber.org/fx"
@@ -9,7 +9,7 @@ import (
 
 type PlayBackFile string
 
-func ProvidePlayBackFileFromUserFolder(fileName string) fx.Option {
+func FxAppProvidePlayBackFileFromUserFolder(fileName string) fx.Option {
 	return fx.Provide(func(logger *log.Logger, userHomeDir UserHomeDir) (PlayBackFile, error) {
 		fileName := path.Join(string(userHomeDir), fileName)
 		if _, err := os.Stat(fileName); err != nil {

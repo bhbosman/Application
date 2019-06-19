@@ -1,11 +1,11 @@
-package fx
+package main
 
 import (
 	"go.uber.org/fx"
 	"log"
 )
 
-func ProvideApplicationLogger(logger *log.Logger) fx.Option {
+func FxAppProvideApplicationLogger(logger *log.Logger) fx.Option {
 	return fx.Provide(
 		func() (*log.Logger, error) {
 			logger := logger

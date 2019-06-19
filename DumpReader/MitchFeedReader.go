@@ -1,9 +1,8 @@
-package MitchFeedReader
+package main
 
 import (
 	"context"
 	"fmt"
-	"github.com/bhbosman/Application/DumpReader/DataHandlers"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"github.com/bhbosman/Application/Streams"
 	"io"
@@ -14,7 +13,7 @@ import (
 type MitchFeedReader struct {
 	logger      *log.Logger
 	reader      io.Reader
-	DataHandler DataHandlers.IDataHandler
+	DataHandler IDataHandler
 	feedCounter IFeedCounter
 }
 
@@ -22,14 +21,10 @@ func (self *MitchFeedReader) Close() error {
 	return nil
 }
 
-type IFeedCounter interface {
-	MessageCounterInc(source string, feedName string) error
-}
-
 func NewMitchFeedReader(
 	logger *log.Logger,
 	reader io.Reader,
-	dataHandler DataHandlers.IDataHandler,
+	dataHandler IDataHandler,
 	feedCounter IFeedCounter) (*MitchFeedReader, error) {
 	return &MitchFeedReader{
 		logger:      logger,
@@ -37,26 +32,6 @@ func NewMitchFeedReader(
 		DataHandler: dataHandler,
 		feedCounter: feedCounter,
 	}, nil
-}
-
-type StreamData struct {
-	closer func(data []byte) error
-	data   []byte
-}
-
-func NewStreamData(closer func(data []byte) error, data []byte) *StreamData {
-	return &StreamData{closer: closer, data: data}
-}
-
-func (self *StreamData) Close() error {
-	if self.closer != nil {
-		return self.closer(self.data)
-	}
-	return nil
-}
-
-func (self *StreamData) Data() []byte {
-	return self.data
 }
 
 func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, source string, feedName string) error {
@@ -126,7 +101,7 @@ func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, sou
 
 							messageFactory, err := self.DataHandler.CreateMessageFactory(messageHeader.MessageType, messageHeader.Length, NewStreamData(nil, streamBytes))
 							if err != nil {
-								if _, ok := err.(*DataHandlers.DataHandlerErrorDidNothing); ok {
+								if _, ok := err.(*DataHandlerErrorDidNothing); ok {
 									_, n, err = mitchStreamReader.Read_ReadBytes(nil, int(bytesLeft))
 									bytesLeft -= int16(n)
 

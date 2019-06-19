@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	fx2 "github.com/bhbosman/Application/DumpReader/fx"
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
 	"go.uber.org/fx"
@@ -13,7 +12,7 @@ import (
 
 type RunUi struct {
 	fxApp              *fx.App
-	applicationContext fx2.IApplicationContext
+	applicationContext IApplicationContext
 	uiApp              *tview.Application
 	applicationLogger  *log.Logger
 	setWriter          ISetWriter
@@ -73,7 +72,7 @@ type ISetWriter interface {
 
 func NewRunUi(
 	fxApp *fx.App,
-	applicationContext fx2.IApplicationContext,
+	applicationContext IApplicationContext,
 	applicationLogger *log.Logger,
 	setWriter ISetWriter) *RunUi {
 

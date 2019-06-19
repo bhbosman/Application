@@ -1,24 +1,24 @@
-package fx
+package main
 
 import "github.com/prometheus/client_golang/prometheus"
 
-type Counters struct {
+type PerformanceCounters struct {
 	registry       *prometheus.Registry
 	messageCounter *prometheus.CounterVec
 }
 
-func (self *Counters) MessageCounterInc(source string, feedName string) error {
+func (self *PerformanceCounters) MessageCounterInc(source string, feedName string) error {
 	counter := self.messageCounter.WithLabelValues(source, feedName)
 	counter.Inc()
 
 	return nil
 }
 
-func (self *Counters) Gatherer() prometheus.Gatherer {
+func (self *PerformanceCounters) Gatherer() prometheus.Gatherer {
 	return self.registry
 }
 
-func NewCounters() (*Counters, error) {
+func NewCounters() (*PerformanceCounters, error) {
 	registry := prometheus.NewRegistry()
 	messagesProcessed := prometheus.NewCounterVec(
 		prometheus.CounterOpts{
@@ -35,7 +35,7 @@ func NewCounters() (*Counters, error) {
 		return nil, registerError
 	}
 
-	return &Counters{
+	return &PerformanceCounters{
 		registry:       registry,
 		messageCounter: messagesProcessed,
 	}, nil

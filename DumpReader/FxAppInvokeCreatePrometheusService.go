@@ -1,4 +1,4 @@
-package fx
+package main
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"net/http"
 )
 
-func InvokeCreatePrometheusService() fx.Option {
+func FxAppInvokeCreatePrometheusService() fx.Option {
 	return fx.Invoke(
 		func(
 			lifecycle fx.Lifecycle,
 			logger *log.Logger,
-			counters ICounters,
+			counters IPerformanceCounters,
 			applicationContext IApplicationContext) error {
 
 			logger.Printf("Creating http service for prometheus\n")

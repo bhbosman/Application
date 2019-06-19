@@ -7,7 +7,6 @@ import (
 	"os"
 )
 
-
 type WriterWrapper struct {
 	writer io.Writer
 }
@@ -38,7 +37,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	var runner IRunner
+	var runner IApplicationRunner
 	if !*useUi {
 		runner = NewRunPlainConsole(app, applicationContext, applicationLogger)
 	} else {

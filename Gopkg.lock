@@ -144,12 +144,12 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:ff6b126259880858441d0a43e63c3f2f9071601415e1f34a7f053f90cbef8464"
+  digest = "1:a5158647b553c61877aa9ae74f4015000294e47981e6b8b07525edcbb0747c81"
   name = "go.uber.org/atomic"
   packages = ["."]
   pruneopts = "UT"
-  revision = "3b8db5e93c4c02efbc313e17b2e796b0914a01fb"
-  version = "v1.1.0"
+  revision = "df976f2515e274675050de7b3f42545de80594fd"
+  version = "v1.4.0"
 
 [[projects]]
   digest = "1:2773e4e922e5af534775962ffef08770b8114e177590f7605886528d37417105"

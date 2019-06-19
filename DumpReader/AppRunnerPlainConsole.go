@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	fx2 "github.com/bhbosman/Application/DumpReader/fx"
 	"go.uber.org/fx"
 	"log"
 	"os"
@@ -12,12 +11,12 @@ import (
 type RunPlainConsole struct {
 	app                *fx.App
 	applicationLogger  *log.Logger
-	applicationContext fx2.IApplicationContext
+	applicationContext IApplicationContext
 }
 
 func NewRunPlainConsole(
 	app *fx.App,
-	applicationContext fx2.IApplicationContext,
+	applicationContext IApplicationContext,
 	applicationLogger *log.Logger) *RunPlainConsole {
 	return &RunPlainConsole{
 		app:                app,
