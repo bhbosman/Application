@@ -36,6 +36,8 @@ func (self *MessageFactory) Message() (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	self.stream.Close()
+	self.stream = nil
 
 	data, _, err := GeneratedFiles.CreateAndReadData(self.messageType, self.length, reader)
 	if err != nil {

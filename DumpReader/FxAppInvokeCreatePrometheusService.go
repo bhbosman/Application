@@ -43,5 +43,4 @@ func FxAppInvokeCreatePrometheusService() fx.Option {
 			})
 			return nil
 		})
-
 }
