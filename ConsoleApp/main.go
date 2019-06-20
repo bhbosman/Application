@@ -23,8 +23,8 @@ func main() {
 	screen := func() (content tview.Primitive) {
 
 		list := tview.NewList().ShowSecondaryText(false).
-			AddItem("Start feed", "", '1', nil).
-			AddItem("Stop Feed", "", '2', nil)
+			AddItem("StartService feed", "", '1', nil).
+			AddItem("StopService Feed", "", '2', nil)
 
 		logWriter := tview.NewTextView().
 			SetChangedFunc(func() {
@@ -56,7 +56,7 @@ func main() {
 		return event
 	})
 
-	// Start the application.
+	// StartService the application.
 	if err := app.SetRoot(layout, true).Run(); err != nil {
 		panic(err)
 	}

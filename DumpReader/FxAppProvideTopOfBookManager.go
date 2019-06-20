@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"go.uber.org/fx"
 )
 
@@ -20,26 +19,6 @@ func FxAppProvideTopOfBookManager() fx.Option {
 	})
 }
 
-type FxAppInvokeTopOfBookManagerInput struct {
-	fx.In
-	LifeCycle fx.Lifecycle
-	MessageService IMessageService `name:"TopOfBookManager"`
-}
-
-func FxAppInvokeTopOfBookManager() fx.Option {
-	return fx.Invoke(
-		func(inputData FxAppInvokeTopOfBookManagerInput) error {
-			inputData.LifeCycle.Append(fx.Hook{
-				OnStart: func(startContext context.Context) error {
-					return inputData.MessageService.Start(startContext)
-				},
-				OnStop: func(stopContext context.Context) error {
-					return inputData.MessageService.Stop(stopContext)
-				},
-			})
-			return nil
-		})
-}
 
 
 

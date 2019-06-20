@@ -26,7 +26,7 @@ func NewRunPlainConsole(
 }
 
 func (self *RunPlainConsole) Run() {
-	self.applicationLogger.Printf("Start...\n")
+	self.applicationLogger.Printf("StartService...\n")
 	startTimeout, _ := context.WithTimeout(context.Background(), self.app.StartTimeout())
 	if startError := self.app.Start(startTimeout); startError != nil {
 		self.applicationLogger.Printf("Error: %v", startError)

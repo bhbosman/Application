@@ -32,7 +32,7 @@ func (self *RunUi) Start() {
 		return
 	}
 	self.startTime = time.Now()
-	self.applicationLogger.Printf("Start...\n")
+	self.applicationLogger.Printf("StartService...\n")
 	startTimeout, _ := context.WithTimeout(context.Background(), self.fxApp.StartTimeout())
 	startError := self.fxApp.Start(startTimeout)
 	if startError != nil {
@@ -88,8 +88,8 @@ func NewRunUi(
 	var uiApp = tview.NewApplication()
 	screen := func() (content tview.Primitive) {
 		list := tview.NewList().ShowSecondaryText(false).
-			AddItem("Start feed", "", '1', runUi.Start).
-			AddItem("Stop Feed", "", '2', runUi.Stop)
+			AddItem("StartService feed", "", '1', runUi.Start).
+			AddItem("StopService Feed", "", '2', runUi.Stop)
 		logWriter := tview.NewTextView().
 			SetChangedFunc(func() {
 				uiApp.Draw()

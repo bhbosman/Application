@@ -14,10 +14,14 @@ type IMessageServiceItem interface {
 
 
 }
+
+type IService interface {
+	StopService(ctx context.Context) error
+	StartService(ctx context.Context) error
+}
+
 type IMessageService interface {
 	Push(message IMessageServiceItem)
-	Stop(ctx context.Context) error
-	Start(ctx context.Context) error
 }
 
 type TopOfBookManager struct {
@@ -74,12 +78,12 @@ func NewTopOfBookManager() *TopOfBookManager {
 	return topOfBookManager
 }
 
-func (self *TopOfBookManager) Start(ctx context.Context) error {
+func (self *TopOfBookManager) StartService(ctx context.Context) error {
 	return self.fxApp.Start(ctx)
 
 }
 
-func (self *TopOfBookManager) Stop(ctx context.Context) error {
+func (self *TopOfBookManager) StopService(ctx context.Context) error {
 	return self.fxApp.Stop(ctx)
 }
 
