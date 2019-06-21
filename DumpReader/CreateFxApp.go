@@ -7,8 +7,6 @@ import (
 	"path"
 )
 
-
-
 type ICurrentOpenFile io.Reader
 
 func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationContext, error) {
@@ -17,8 +15,13 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationCo
 	return fx.New(
 		fx.StartTimeout(fx.DefaultTimeout),
 		fx.StopTimeout(fx.DefaultTimeout),
-		FxAppProvideTopOfBookManager(),
-		FxAppInvokeTopOfBookManager(),
+		FxAppProvideSymbolManager(),
+		FxAppInvokeSymbolManager(),
+		fx.Provide(
+			func(logger *log.Logger) (IMitchMessageHandlerRegistrar, error){
+				return NewMitchMessageHandlerRegistrar(logger), nil
+			}),
+
 		FxAppProvideApplicationContext(),
 		FxAppProvideApplicationLogger(applicationLogger),
 		FxAppProvideFxAppOverrideLogger(applicationLogger),
@@ -26,9 +29,9 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationCo
 		FxAppProvidePlayBackFileFromUserFolder(path.Join("Data", "MitchData", "20190516173819519_21651.new")),
 		FxAppProvideCounters(),
 		FxAppInvokeCreatePrometheusService(),
-		FxAppProvideMitchFeedReader(),
+		FxAppProvideMitchFeedProcessor(),
 		FxAppProvideCurrentOpenFile(),
-		FxAppInvokeMitchFeedReader(),
+		FxAppInvokeMitchFeedProcessor(),
 		fx.Populate(&applicationContext),
 		//fx.Invoke(
 		//	func(lc fx.Lifecycle, appCtx context.Context, appCancel context.CancelFunc) error {
@@ -46,3 +49,4 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationCo
 		//	}),
 	), applicationContext, nil
 }
+

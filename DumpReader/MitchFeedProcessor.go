@@ -10,35 +10,40 @@ import (
 	"sync"
 )
 
-type MitchFeedReader struct {
-	logger      *log.Logger
-	reader      io.Reader
-	DataHandler IDataHandler
-	feedCounter IFeedCounter
+type MitchFeedProcessor struct {
+	logger                       *log.Logger
+	reader                       io.Reader
+	dataHandler                  IDataHandler
+	feedCounter                  IFeedCounter
+	MitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar
 }
 
-func (self *MitchFeedReader) Close() error {
+func (self *MitchFeedProcessor) Close() error {
 	return nil
 }
 
-func NewMitchFeedReader(
+func NewMitchFeedProcessor(
 	logger *log.Logger,
 	reader io.Reader,
 	dataHandler IDataHandler,
-	feedCounter IFeedCounter) (*MitchFeedReader, error) {
-	return &MitchFeedReader{
-		logger:      logger,
-		reader:      reader,
-		DataHandler: dataHandler,
-		feedCounter: feedCounter,
+	feedCounter IFeedCounter,
+	mitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar) (*MitchFeedProcessor, error) {
+	return &MitchFeedProcessor{
+		logger:                       logger,
+		reader:                       reader,
+		dataHandler:                  dataHandler,
+		feedCounter:                  feedCounter,
+		MitchMessageHandlerRegistrar: mitchMessageHandlerRegistrar,
 	}, nil
 }
 
-func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, source string, feedName string) error {
+func (self MitchFeedProcessor) Process(wg *sync.WaitGroup, ctx context.Context, source string, feedName string) error {
 	wg.Add(1)
 	go func() {
+		msgCount := 0
 		defer func() {
 			wg.Done()
+			self.logger.Println(">>", msgCount, "<<")
 		}()
 
 		mitchStreamReader := Streams.MitchReader{
@@ -49,6 +54,7 @@ func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, sou
 		messageHeader := GeneratedFiles.MessageHeader{}
 
 		for true {
+			msgCount++
 			select {
 			case <-ctx.Done():
 				return
@@ -99,7 +105,7 @@ func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, sou
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 							}
 
-							messageFactory, err := self.DataHandler.CreateMessageFactory(messageHeader.MessageType, messageHeader.Length, NewStreamData(nil, streamBytes))
+							messageFactory, err := self.dataHandler.CreateMessageFactory(messageHeader.MessageType, messageHeader.Length, NewStreamData(nil, streamBytes))
 							if err != nil {
 								if _, ok := err.(*DataHandlerErrorDidNothing); ok {
 									_, n, err = mitchStreamReader.Read_ReadBytes(nil, int(bytesLeft))
@@ -110,7 +116,7 @@ func (self MitchFeedReader) Process(wg *sync.WaitGroup, ctx context.Context, sou
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 								return
 							}
-							_, err = messageFactory.Message()
+							err = self.MitchMessageHandlerRegistrar.ProcessMessage(wg, messageFactory)
 							if err != nil {
 								fmt.Println(err)
 							}

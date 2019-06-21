@@ -11,10 +11,10 @@ type FxAppInvokeMitchFeedReaderInput struct {
 	Lifecycle          fx.Lifecycle
 	Logger             *log.Logger
 	ApplicationContext IApplicationContext
-	Reader             *MitchFeedReader
+	Reader             *MitchFeedProcessor
 }
 
-func FxAppInvokeMitchFeedReader() fx.Option {
+func FxAppInvokeMitchFeedProcessor() fx.Option {
 	return fx.Invoke(
 		func(inputData FxAppInvokeMitchFeedReaderInput) error {
 			var lifeCycleContext context.Context
