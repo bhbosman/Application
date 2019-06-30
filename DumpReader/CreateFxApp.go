@@ -17,11 +17,10 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationCo
 		fx.StopTimeout(fx.DefaultTimeout),
 		FxAppProvideSymbolManager(),
 		FxAppInvokeSymbolManager(),
-		fx.Provide(
-			func(logger *log.Logger) (IMitchMessageHandlerRegistrar, error){
-				return NewMitchMessageHandlerRegistrar(logger), nil
-			}),
-
+		FxAppProvideTimerServiceManager(),
+		FxAppInvokeTimerServiceManager(),
+		FxAppProvideMitchMessageHandlerRegistrar(),
+		FxAppProvideMissingSequencesManager(),
 		FxAppProvideApplicationContext(),
 		FxAppProvideApplicationLogger(applicationLogger),
 		FxAppProvideFxAppOverrideLogger(applicationLogger),
@@ -49,4 +48,3 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationCo
 		//	}),
 	), applicationContext, nil
 }
-

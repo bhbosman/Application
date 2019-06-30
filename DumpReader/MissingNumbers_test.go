@@ -1,14 +1,46 @@
 package main
 
 import (
+	"container/list"
 	"github.com/stretchr/testify/assert"
+	"log"
 	"math"
+	"os"
 	"testing"
 )
 
-func TestNewMissingSequences(t *testing.T) {
+func TestNewMissingSequencesWithInValidSubject(t *testing.T) {
 	getSut := func() *MissingSequences {
-		return NewMissingSequences()
+		result := &MissingSequences{
+			List:   list.New(),
+			logger: log.New(os.Stdout, "", 0),
+		}
+		result.List.PushBack(&struct {
+		}{})
+		return result
+	}
+
+	t.Run("Create", func(t *testing.T) {
+		sut := getSut()
+		assert.NotNil(t, sut)
+	})
+
+	t.Run("Create", func(t *testing.T) {
+		sut := getSut()
+		assert.NotNil(t, sut)
+
+		err := sut.Seen(10)
+		assert.Error(t, err)
+
+		err = sut.SeenArray([]int32{10})
+		assert.Error(t, err)
+	})
+
+}
+
+func TestNewMissingSequencesWithValidSubject(t *testing.T) {
+	getSut := func() *MissingSequences {
+		return NewMissingSequences(log.New(os.Stdout, "", 0))
 	}
 
 	t.Run("Check Init", func(t *testing.T) {
@@ -180,13 +212,12 @@ func TestNewMissingSequences(t *testing.T) {
 
 	})
 
-
 	t.Run("Missing", func(t *testing.T) {
 		sut := getSut()
 		assert.NoError(t, sut.SeenArray([]int32{10, 1122, 12333}))
 		assert.Equal(t, 4, sut.List.Len())
 		missing, err := sut.Missing()
-		assert.NoError(t,err)
+		assert.NoError(t, err)
 		assert.Equal(t, 4, len(missing))
 
 		assert.Equal(t, int32(1), missing[0].beginSequence)
@@ -195,14 +226,19 @@ func TestNewMissingSequences(t *testing.T) {
 		assert.Equal(t, int32(11), missing[1].beginSequence)
 		assert.Equal(t, int32(1121), missing[1].endSequence)
 
-
 		assert.Equal(t, int32(1123), missing[2].beginSequence)
 		assert.Equal(t, int32(12332), missing[2].endSequence)
 
 		assert.Equal(t, int32(12334), missing[3].beginSequence)
 		assert.Equal(t, int32(math.MaxInt32), missing[3].endSequence)
 
+	})
 
+	t.Run("anotehr", func(t *testing.T) {
+
+		sut := getSut()
+		assert.NoError(t, sut.Seen(10))
+		assert.NoError(t, sut.Seen(9))
 
 	})
 }

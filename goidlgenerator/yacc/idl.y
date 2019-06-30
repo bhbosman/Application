@@ -188,7 +188,7 @@ literal :
 		$$ = newConstantValueWithNoLength($1, interfaces.Int64)
 	}
 	| Character_literal{
-        	$$ = newConstantValue($1, interfaces.Char,1)
+		$$ = newConstantValue([]byte($1)[0], interfaces.Char,1)
         }
 
 
@@ -285,7 +285,8 @@ struct_def :
 		def := NewMitchMessageDefinition($2, 0, 0)
 		$$ = def
 	}
-	| Rwstruct '<' positive_int_const ',' positive_int_const '>' Identifier '{' member '}'{
+	|
+	Rwstruct '<' positive_int_const ',' positive_int_const '>' Identifier '{' member '}'{
 		def := NewMitchMessageDefinition($7, $3, $5)
 		member := $9
 		for member != nil {
@@ -302,9 +303,6 @@ struct_def :
 		def := NewMitchMessageDefinition($7, $3, $5)
 		$$ = def
 	}
-
-
-
 
 member :
 	type_spec declarator ';'{

@@ -7,16 +7,15 @@ import (
 	"github.com/bhbosman/Application/Streams"
 	"io"
 	"log"
-	"sync"
 )
 
 type MitchFeedProcessor struct {
-	logger      *log.Logger
-	reader      io.Reader
-	dataHandler IDataHandler
-	feedCounter IFeedCounter
-	registrar   IMitchMessageHandlerRegistrar
-	seq *MissingSequences
+	logger                  *log.Logger
+	reader                  io.Reader
+	dataHandler             IDataHandler
+	feedCounter             IFeedCounter
+	registrar               IMitchMessageHandlerRegistrar
+	missingSequencesManager IMissingSequencesManager
 }
 
 func (self *MitchFeedProcessor) Close() error {
@@ -28,36 +27,32 @@ func NewMitchFeedProcessor(
 	reader io.Reader,
 	dataHandler IDataHandler,
 	feedCounter IFeedCounter,
-	mitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar) (*MitchFeedProcessor, error) {
+	mitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar,
+	missingSequencesManager IMissingSequencesManager) (*MitchFeedProcessor, error) {
 	return &MitchFeedProcessor{
-		logger:      logger,
-		reader:      reader,
-		dataHandler: dataHandler,
-		feedCounter: feedCounter,
-		registrar:   mitchMessageHandlerRegistrar,
-		seq:         NewMissingSequences(),
+		logger:                  logger,
+		reader:                  reader,
+		dataHandler:             dataHandler,
+		feedCounter:             feedCounter,
+		registrar:               mitchMessageHandlerRegistrar,
+		missingSequencesManager: missingSequencesManager,
 	}, nil
 }
 
-func (self MitchFeedProcessor) Process(wg *sync.WaitGroup, ctx context.Context, source string, feedName string) error {
-	wg.Add(1)
+func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, source string, feedName string) error {
+	_ = wg.AddOne()
 	go func() {
 		msgCount := 0
 		defer func() {
-			wg.Done()
+			_ = wg.Done()
 			self.logger.Println(">>", msgCount, "<<")
-			miss, _ := self.seq.Missing()
+			miss, _ := self.missingSequencesManager.Missing(source, feedName)
 			self.logger.Println(">>", miss, "<<")
 
 			messageCounts := self.registrar.GetMessageCounts()
-			for _, messageCount := range messageCounts{
+			for _, messageCount := range messageCounts {
 				self.logger.Printf(">> 0x%x: %v\n", messageCount.MessageType(), messageCount.MessageCount())
 			}
-
-
-
-
-
 		}()
 
 		mitchStreamReader := Streams.MitchReader{
@@ -91,7 +86,6 @@ func (self MitchFeedProcessor) Process(wg *sync.WaitGroup, ctx context.Context, 
 
 				}
 				bytesLeft -= int16(n)
-				err = self.seq.Seen(int32(unitHeader.SequenceNumber))
 				if err != nil {
 					self.logger.Println(err)
 				}
@@ -134,9 +128,25 @@ func (self MitchFeedProcessor) Process(wg *sync.WaitGroup, ctx context.Context, 
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 								return
 							}
-							err = self.registrar.ProcessMessage(wg, messageFactory)
+
+							err = self.registrar.ProcessMessage(
+								wg,
+								messageFactory,
+								NewMessageSource(
+									int(unitHeader.SequenceNumber),
+									source,
+									feedName))
+
+							markMessageAsSeen := true
 							if err != nil {
-								fmt.Println(err)
+								self.logger.Printf("Error calling registrar.ProcessMessage(). Error : %v", err)
+								markMessageAsSeen = false
+							}
+							if markMessageAsSeen{
+								err = self.missingSequencesManager.Seen(source, feedName, int32(unitHeader.SequenceNumber))
+								if err != nil {
+									self.logger.Printf("Error marking message as seen. Error : %v", err)
+								}
 							}
 						}
 					}
@@ -147,3 +157,4 @@ func (self MitchFeedProcessor) Process(wg *sync.WaitGroup, ctx context.Context, 
 
 	return nil
 }
+

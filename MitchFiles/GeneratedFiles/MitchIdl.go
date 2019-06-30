@@ -391,8 +391,8 @@ type TEventCode byte
 
 //noinspection ALL
 const (
-	TEventCode_EndOfDay   = 'C' // default value: byte('C')
-	TEventCode_StartOfDay = 'O' // default value: byte('O')
+	TEventCode_EndOfDay   = 67 // char value: 'C'
+	TEventCode_StartOfDay = 79 // char value: 'O'
 )
 
 type TEventCodeFactoryType struct {
@@ -531,9 +531,9 @@ type SymbolDirectorySymbolStatus byte
 
 //noinspection ALL
 const (
-	SymbolDirectorySymbolStatus_Halted    = 'H' // default value: byte('H')
-	SymbolDirectorySymbolStatus_Suspended = 'S' // default value: byte('S')
-	SymbolDirectorySymbolStatus_Inactive  = 'a' // default value: byte('a')
+	SymbolDirectorySymbolStatus_Halted    = 72 // char value: 'H'
+	SymbolDirectorySymbolStatus_Suspended = 83 // char value: 'S'
+	SymbolDirectorySymbolStatus_Inactive  = 97 // char value: 'a'
 )
 
 type SymbolDirectorySymbolStatusFactoryType struct {
@@ -562,8 +562,8 @@ type SymbolDirectoryOptionType byte
 
 //noinspection ALL
 const (
-	SymbolDirectoryOptionType_CallOption = 'C' // default value: byte('C')
-	SymbolDirectoryOptionType_PutOption  = 'P' // default value: byte('P')
+	SymbolDirectoryOptionType_CallOption = 67 // char value: 'C'
+	SymbolDirectoryOptionType_PutOption  = 80 // char value: 'P'
 )
 
 type SymbolDirectoryOptionTypeFactoryType struct {
@@ -634,8 +634,8 @@ type SymbolDirectorySettlementMethod byte
 
 //noinspection ALL
 const (
-	SymbolDirectorySettlementMethod_Cash     = 'C' // default value: byte('C')
-	SymbolDirectorySettlementMethod_Physical = 'P' // default value: byte('P')
+	SymbolDirectorySettlementMethod_Cash     = 67 // char value: 'C'
+	SymbolDirectorySettlementMethod_Physical = 80 // char value: 'P'
 )
 
 type SymbolDirectorySettlementMethodFactoryType struct {
@@ -1098,24 +1098,24 @@ type SymbolStatusTradingStatus byte
 
 //noinspection ALL
 const (
-	SymbolStatusTradingStatus_Halt                    = 'H' // default value: byte('H')
-	SymbolStatusTradingStatus_RegularTrading          = 'T' // default value: byte('T')
-	SymbolStatusTradingStatus_OpeningAuctionCall      = 'a' // default value: byte('a')
-	SymbolStatusTradingStatus_PostClose               = 'b' // default value: byte('b')
-	SymbolStatusTradingStatus_MarketClose             = 'c' // default value: byte('c')
-	SymbolStatusTradingStatus_ClosingAuctionCall      = 'd' // default value: byte('d')
-	SymbolStatusTradingStatus_VolatilityAuctionCall   = 'e' // default value: byte('e')
-	SymbolStatusTradingStatus_EODVolumeAuctionCall    = 'E' // default value: byte('E')
-	SymbolStatusTradingStatus_ReOpeningAuctionCall    = 'f' // default value: byte('f')
-	SymbolStatusTradingStatus_Pause                   = 'l' // default value: byte('l')
-	SymbolStatusTradingStatus_FuturesCloseOut         = 'p' // default value: byte('p')
-	SymbolStatusTradingStatus_ClosingPriceCross       = 's' // default value: byte('s')
-	SymbolStatusTradingStatus_IntraDayAuctionCall     = 'u' // default value: byte('u')
-	SymbolStatusTradingStatus_EndTradeReporting       = 'v' // default value: byte('v')
-	SymbolStatusTradingStatus_NoActiveSession         = 'w' // default value: byte('w')
-	SymbolStatusTradingStatus_EndOfPostClose          = 'x' // default value: byte('x')
-	SymbolStatusTradingStatus_StarOofTrading          = 'y' // default value: byte('y')
-	SymbolStatusTradingStatus_ClosingPricePublication = 'z' // default value: byte('z')
+	SymbolStatusTradingStatus_Halt                    = 72  // char value: 'H'
+	SymbolStatusTradingStatus_RegularTrading          = 84  // char value: 'T'
+	SymbolStatusTradingStatus_OpeningAuctionCall      = 97  // char value: 'a'
+	SymbolStatusTradingStatus_PostClose               = 98  // char value: 'b'
+	SymbolStatusTradingStatus_MarketClose             = 99  // char value: 'c'
+	SymbolStatusTradingStatus_ClosingAuctionCall      = 100 // char value: 'd'
+	SymbolStatusTradingStatus_VolatilityAuctionCall   = 101 // char value: 'e'
+	SymbolStatusTradingStatus_EODVolumeAuctionCall    = 69  // char value: 'E'
+	SymbolStatusTradingStatus_ReOpeningAuctionCall    = 102 // char value: 'f'
+	SymbolStatusTradingStatus_Pause                   = 108 // char value: 'l'
+	SymbolStatusTradingStatus_FuturesCloseOut         = 112 // char value: 'p'
+	SymbolStatusTradingStatus_ClosingPriceCross       = 115 // char value: 's'
+	SymbolStatusTradingStatus_IntraDayAuctionCall     = 117 // char value: 'u'
+	SymbolStatusTradingStatus_EndTradeReporting       = 118 // char value: 'v'
+	SymbolStatusTradingStatus_NoActiveSession         = 119 // char value: 'w'
+	SymbolStatusTradingStatus_EndOfPostClose          = 120 // char value: 'x'
+	SymbolStatusTradingStatus_StarOofTrading          = 121 // char value: 'y'
+	SymbolStatusTradingStatus_ClosingPricePublication = 122 // char value: 'z'
 )
 
 type SymbolStatusTradingStatusFactoryType struct {
@@ -1486,8 +1486,8 @@ type OrderSide byte
 
 //noinspection ALL
 const (
-	OrderSide_BuyOrder  = 'B' // default value: byte('B')
-	OrderSide_SellOrder = 'S' // default value: byte('S')
+	OrderSide_BuyOrder  = 66 // char value: 'B'
+	OrderSide_SellOrder = 83 // char value: 'S'
 )
 
 type OrderSideFactoryType struct {
@@ -4703,18 +4703,18 @@ type TStatisticsMessageOpenCloseIndicator byte
 
 //noinspection ALL
 const (
-	TStatisticsMessageOpenCloseIndicator_UT             = 'A' // default value: byte('A')
-	TStatisticsMessageOpenCloseIndicator_AT             = 'B' // default value: byte('B')
-	TStatisticsMessageOpenCloseIndicator_MidOfBBO       = 'C' // default value: byte('C')
-	TStatisticsMessageOpenCloseIndicator_LastAT         = 'D' // default value: byte('D')
-	TStatisticsMessageOpenCloseIndicator_LastUT         = 'E' // default value: byte('E')
-	TStatisticsMessageOpenCloseIndicator_Manual         = 'F' // default value: byte('F')
-	TStatisticsMessageOpenCloseIndicator_Vwap           = 'H' // default value: byte('H')
-	TStatisticsMessageOpenCloseIndicator_PreviousClose  = 'I' // default value: byte('I')
-	TStatisticsMessageOpenCloseIndicator_Zero           = 'J' // default value: byte('J')
-	TStatisticsMessageOpenCloseIndicator_BestBid        = 'U' // default value: byte('U')
-	TStatisticsMessageOpenCloseIndicator_BestOffer      = 'V' // default value: byte('V')
-	TStatisticsMessageOpenCloseIndicator_ReferencePrice = 'Y' // default value: byte('Y')
+	TStatisticsMessageOpenCloseIndicator_UT             = 65 // char value: 'A'
+	TStatisticsMessageOpenCloseIndicator_AT             = 66 // char value: 'B'
+	TStatisticsMessageOpenCloseIndicator_MidOfBBO       = 67 // char value: 'C'
+	TStatisticsMessageOpenCloseIndicator_LastAT         = 68 // char value: 'D'
+	TStatisticsMessageOpenCloseIndicator_LastUT         = 69 // char value: 'E'
+	TStatisticsMessageOpenCloseIndicator_Manual         = 70 // char value: 'F'
+	TStatisticsMessageOpenCloseIndicator_Vwap           = 72 // char value: 'H'
+	TStatisticsMessageOpenCloseIndicator_PreviousClose  = 73 // char value: 'I'
+	TStatisticsMessageOpenCloseIndicator_Zero           = 74 // char value: 'J'
+	TStatisticsMessageOpenCloseIndicator_BestBid        = 85 // char value: 'U'
+	TStatisticsMessageOpenCloseIndicator_BestOffer      = 86 // char value: 'V'
+	TStatisticsMessageOpenCloseIndicator_ReferencePrice = 89 // char value: 'Y'
 )
 
 type TStatisticsMessageOpenCloseIndicatorFactoryType struct {

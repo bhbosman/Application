@@ -22,7 +22,11 @@ func FxAppInvokeMitchFeedProcessor() fx.Option {
 			inputData.Lifecycle.Append(fx.Hook{
 				OnStart: func(startContext context.Context) error {
 					lifeCycleContext, lifeCycleCancel = context.WithCancel(inputData.ApplicationContext.Context())
-					err := inputData.Reader.Process(inputData.ApplicationContext.WaitGroup(), lifeCycleContext, "file", "static")
+					err := inputData.Reader.Process(
+						NewWaitGroupDefaultImpl(inputData.ApplicationContext.WaitGroup()),
+						lifeCycleContext,
+						"file",
+						"static")
 					if err != nil {
 						inputData.Logger.Printf("error: %v", err)
 					}

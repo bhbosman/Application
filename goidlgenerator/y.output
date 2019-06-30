@@ -147,7 +147,7 @@ state 14
 state 15
 	typedef_dcl:  Rwtypedef type_declarator.    (52)
 
-	.  reduce 52 (src line 359)
+	.  reduce 52 (src line 357)
 
 
 state 16
@@ -313,19 +313,19 @@ state 37
 	any_declarators:  any_declarators.',' any_declarators 
 
 	','  shift 60
-	.  reduce 53 (src line 363)
+	.  reduce 53 (src line 361)
 
 
 state 38
 	any_declarators:  simple_declarator.    (56)
 
-	.  reduce 56 (src line 373)
+	.  reduce 56 (src line 371)
 
 
 state 39
 	any_declarators:  array_declarator.    (57)
 
-	.  reduce 57 (src line 377)
+	.  reduce 57 (src line 375)
 
 
 state 40
@@ -333,7 +333,7 @@ state 40
 	simple_declarator:  Identifier.    (51)
 
 	'['  shift 63
-	.  reduce 51 (src line 354)
+	.  reduce 51 (src line 352)
 
 	fixed_array_sizes  goto 61
 	fixed_array_size  goto 62
@@ -343,7 +343,7 @@ state 41
 	any_declarators:  any_declarators.',' any_declarators 
 
 	','  shift 60
-	.  reduce 54 (src line 367)
+	.  reduce 54 (src line 365)
 
 
 state 42
@@ -351,7 +351,7 @@ state 42
 	any_declarators:  any_declarators.',' any_declarators 
 
 	','  shift 60
-	.  reduce 55 (src line 370)
+	.  reduce 55 (src line 368)
 
 
 state 43
@@ -531,14 +531,14 @@ state 61
 	fixed_array_sizes:  fixed_array_sizes.fixed_array_size 
 
 	'['  shift 63
-	.  reduce 47 (src line 336)
+	.  reduce 47 (src line 334)
 
 	fixed_array_size  goto 78
 
 state 62
 	fixed_array_sizes:  fixed_array_size.    (48)
 
-	.  reduce 48 (src line 341)
+	.  reduce 48 (src line 339)
 
 
 state 63
@@ -578,7 +578,7 @@ state 65
 state 66
 	simple_declarator:  Identifier.    (51)
 
-	.  reduce 51 (src line 354)
+	.  reduce 51 (src line 352)
 
 
 state 67
@@ -596,7 +596,7 @@ state 68
 	declarator:  declarator.',' declarator 
 
 	','  shift 84
-	.  reduce 45 (src line 329)
+	.  reduce 45 (src line 327)
 
 
 state 69
@@ -604,7 +604,7 @@ state 69
 	declarator:  simple_declarator.    (60)
 
 	'='  shift 85
-	.  reduce 60 (src line 388)
+	.  reduce 60 (src line 386)
 
 
 state 70
@@ -692,13 +692,13 @@ state 77
 	any_declarators:  any_declarators ',' any_declarators.    (58)
 
 	','  shift 60
-	.  reduce 58 (src line 380)
+	.  reduce 58 (src line 378)
 
 
 state 78
 	fixed_array_sizes:  fixed_array_sizes fixed_array_size.    (49)
 
-	.  reduce 49 (src line 345)
+	.  reduce 49 (src line 343)
 
 
 state 79
@@ -725,7 +725,7 @@ state 81
 state 82
 	enum_dcl:  Rwenum Identifier '{' enumerator '}'.    (44)
 
-	.  reduce 44 (src line 319)
+	.  reduce 44 (src line 317)
 
 
 state 83
@@ -788,7 +788,7 @@ state 87
 	RwMitchUInt16  shift 29
 	RwMitchUInt32  shift 30
 	RwMitchUInt64  shift 31
-	.  reduce 43 (src line 313)
+	.  reduce 43 (src line 311)
 
 	member  goto 87
 	type_spec  goto 72
@@ -822,7 +822,7 @@ state 90
 state 91
 	fixed_array_size:  '[' positive_int_const ']'.    (50)
 
-	.  reduce 50 (src line 349)
+	.  reduce 50 (src line 347)
 
 
 state 92
@@ -838,7 +838,7 @@ state 93
 	enumerator:  enumerator ',' enumerator.    (46)
 
 	','  shift 83
-	.  reduce 46 (src line 331)
+	.  reduce 46 (src line 329)
 
 
 94: shift/reduce conflict (shift 84(0), red'n 61(0)) on ','
@@ -847,19 +847,19 @@ state 94
 	declarator:  declarator ',' declarator.    (61)
 
 	','  shift 84
-	.  reduce 61 (src line 391)
+	.  reduce 61 (src line 389)
 
 
 state 95
 	declarator:  simple_declarator '=' literal.    (59)
 
-	.  reduce 59 (src line 384)
+	.  reduce 59 (src line 382)
 
 
 state 96
 	member:  type_spec declarator ';'.    (42)
 
-	.  reduce 42 (src line 309)
+	.  reduce 42 (src line 307)
 
 
 state 97
@@ -952,7 +952,7 @@ state 103
 state 104
 	struct_def:  Rwstruct '<' positive_int_const ',' positive_int_const '>' Identifier '{' '}'.    (41)
 
-	.  reduce 41 (src line 301)
+	.  reduce 41 (src line 302)
 
 
 state 105

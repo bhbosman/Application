@@ -14,10 +14,6 @@ type constantValue struct {
 }
 
 func GetExportValue(value interfaces.IConstantValue) string {
-	if value.ValueKind() == interfaces.Char {
-		return fmt.Sprintf("'%v'", value.Value())
-	}
-
 	return fmt.Sprintf("%v", value.Value())
 }
 

@@ -4,5 +4,5 @@ type IConstantValue interface {
 	Value() interface{}
 	ValueKind() Kind
 	MaxLength() int
-	GetExportValue() string
+	//GetExportValue() string
 }

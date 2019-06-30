@@ -1,9 +1,7 @@
-package yaccIdlTests
+package yacc
 
 import (
 	"bufio"
-	"github.com/bhbosman/Application/goidlgenerator/IdlDefinedTypes"
-	. "github.com/bhbosman/Application/goidlgenerator/yacc"
 	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
@@ -22,7 +20,6 @@ func TestEnums(t *testing.T) {
 		ctx := createContext()
 		idlExprLex, _ := NewIdlExprLex(
 			reader,
-			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
 				Verbose:        verbose})
@@ -41,7 +38,6 @@ func TestEnums(t *testing.T) {
 		ctx := createContext()
 		idlExprLex, _ := NewIdlExprLex(
 			reader,
-			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
 				Verbose:        verbose})
@@ -60,7 +56,6 @@ func TestEnums(t *testing.T) {
 		ctx := createContext()
 		idlExprLex, _ := NewIdlExprLex(
 			reader,
-			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
 				Verbose:        verbose})
@@ -80,7 +75,6 @@ func TestEnums(t *testing.T) {
 		ctx := createContext()
 		idlExprLex, _ := NewIdlExprLex(
 			reader,
-			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
 				Verbose:        verbose})
@@ -99,7 +93,6 @@ func TestEnums(t *testing.T) {
 		ctx := createContext()
 		idlExprLex, _ := NewIdlExprLex(
 			reader,
-			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
 				Verbose:        verbose})
@@ -120,7 +113,6 @@ func TestEnums(t *testing.T) {
 		ctx := createContext()
 		idlExprLex, _ := NewIdlExprLex(
 			reader,
-			IdlDefinedTypes.NewIdlNativeTypeInformation(),
 			NewIdlExprLexParams{
 				IdlExprContext: ctx,
 				Verbose:        verbose})

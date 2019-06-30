@@ -4,11 +4,11 @@ import (
 	"container/list"
 	"fmt"
 	"log"
-	"sync"
+
 )
 
 type MessageTypeRegistrar struct {
-	l *list.List
+	l            *list.List
 	messageCount int
 }
 
@@ -16,7 +16,7 @@ func (self *MessageTypeRegistrar) Add(processor IMitchDataProcessor) {
 	self.l.PushBack(processor)
 }
 
-func (self *MessageTypeRegistrar) ProcessMessage(group *sync.WaitGroup, factory IMessageFactory) error {
+func (self *MessageTypeRegistrar) ProcessMessage(group IWaitGroup, factory IMessageFactory) error {
 	self.messageCount++
 	for e := self.l.Front(); e != nil; e = e.Next() {
 		mitchDataProcessor, ok := e.Value.(IMitchDataProcessor)
@@ -25,7 +25,7 @@ func (self *MessageTypeRegistrar) ProcessMessage(group *sync.WaitGroup, factory 
 		}
 		func(mitchDataProcessor IMitchDataProcessor) {
 			item := NewMitchProcessingItem(group, factory)
-			err := item.Add()
+			err := item.AddOne()
 			if err != nil {
 
 			}
@@ -54,18 +54,18 @@ type MitchMessageHandlerRegistrar struct {
 
 type messageCountImpl struct {
 	messageType byte
-	count int
+	count       int
 }
 
-func (self *messageCountImpl) MessageType() byte{
+func (self *messageCountImpl) MessageType() byte {
 	return self.messageType
 }
 
-func (self *messageCountImpl) MessageCount() int{
+func (self *messageCountImpl) MessageCount() int {
 	return self.count
 }
 
-func (self *MitchMessageHandlerRegistrar) GetMessageCounts() [] IMessageCount {
+func (self *MitchMessageHandlerRegistrar) GetMessageCounts() []IMessageCount {
 	var result []IMessageCount
 	for key, value := range self.MessageHandlers {
 		result = append(result, &messageCountImpl{
@@ -93,7 +93,7 @@ func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager IMitchDataProcess
 	return nil
 }
 
-func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg *sync.WaitGroup, messageFactory IMessageFactory) error {
+func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, source IMessageSource) error {
 	handler, ok := self.MessageHandlers[messageFactory.MessageType()]
 	if !ok {
 

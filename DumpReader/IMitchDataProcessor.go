@@ -5,4 +5,3 @@ type IMitchDataProcessor interface {
 	//IService
 	DeclareInterestInMessages() ([]byte, error)
 }
-

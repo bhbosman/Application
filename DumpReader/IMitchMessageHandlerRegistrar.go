@@ -1,16 +1,18 @@
 package main
 
-import "sync"
-
 type IMessageCount interface {
 	MessageType() byte
 	MessageCount() int
+}
 
+type IMessageSource interface {
+	Sequence() int
+	Source() string
+	FeedName() string
 }
 
 type IMitchMessageHandlerRegistrar interface {
-	ProcessMessage(wg *sync.WaitGroup, messageFactory IMessageFactory) error
+	ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, messageSource IMessageSource) error
 	RegisterFeed(manager IMitchDataProcessor) error
-	GetMessageCounts()[] IMessageCount
+	GetMessageCounts() []IMessageCount
 }
-

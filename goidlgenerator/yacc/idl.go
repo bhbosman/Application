@@ -97,7 +97,7 @@ const IdlExprEofCode = 1
 const IdlExprErrCode = 2
 const IdlExprInitialStackSize = 16
 
-//line yacc/idl.y:395
+//line yacc/idl.y:393
 
 //line yacctab:1
 var IdlExprExca = [...]int{
@@ -706,7 +706,7 @@ IdlExprdefault:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
 //line yacc/idl.y:190
 		{
-			IdlExprVAL.ConstValue = newConstantValue(IdlExprDollar[1].StringValue, interfaces.Char, 1)
+			IdlExprVAL.ConstValue = newConstantValue([]byte(IdlExprDollar[1].StringValue)[0], interfaces.Char, 1)
 		}
 	case 18:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
@@ -869,7 +869,7 @@ IdlExprdefault:
 		}
 	case 40:
 		IdlExprDollar = IdlExprS[IdlExprpt-10 : IdlExprpt+1]
-//line yacc/idl.y:288
+//line yacc/idl.y:289
 		{
 			def := NewMitchMessageDefinition(IdlExprDollar[7].Identifier, IdlExprDollar[3].IntegerValue, IdlExprDollar[5].IntegerValue)
 			member := IdlExprDollar[9].Member
@@ -885,26 +885,26 @@ IdlExprdefault:
 		}
 	case 41:
 		IdlExprDollar = IdlExprS[IdlExprpt-9 : IdlExprpt+1]
-//line yacc/idl.y:301
+//line yacc/idl.y:302
 		{
 			def := NewMitchMessageDefinition(IdlExprDollar[7].Identifier, IdlExprDollar[3].IntegerValue, IdlExprDollar[5].IntegerValue)
 			IdlExprVAL.DefinitionDeclaration = def
 		}
 	case 42:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:310
+//line yacc/idl.y:308
 		{
 			IdlExprVAL.Member = NewMember(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator, nil)
 		}
 	case 43:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:313
+//line yacc/idl.y:311
 		{
 			IdlExprVAL.Member = NewMember(IdlExprDollar[1].Member.DefinedType, IdlExprDollar[1].Member.Declarator, IdlExprDollar[2].Member)
 		}
 	case 44:
 		IdlExprDollar = IdlExprS[IdlExprpt-5 : IdlExprpt+1]
-//line yacc/idl.y:320
+//line yacc/idl.y:318
 		{
 			def := NewEnumDcl(IdlExprDollar[2].Identifier)
 			decl := IdlExprDollar[4].Declarator
@@ -916,102 +916,102 @@ IdlExprdefault:
 		}
 	case 45:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:330
+//line yacc/idl.y:328
 		{
 		}
 	case 46:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:331
+//line yacc/idl.y:329
 		{
 			IdlExprDollar[1].Declarator.SetNext(IdlExprDollar[3].Declarator)
 		}
 	case 47:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:337
+//line yacc/idl.y:335
 		{
 
 		}
 	case 48:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:342
+//line yacc/idl.y:340
 		{
 
 		}
 	case 49:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:345
+//line yacc/idl.y:343
 		{
 
 		}
 	case 50:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:350
+//line yacc/idl.y:348
 		{
 		}
 	case 51:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:355
+//line yacc/idl.y:353
 		{
 			IdlExprVAL.Identifier = IdlExprDollar[1].Identifier
 		}
 	case 52:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:360
+//line yacc/idl.y:358
 		{
 			IdlExprVAL.DefinitionDeclaration = IdlExprDollar[2].DefinitionDeclaration
 		}
 	case 53:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:364
+//line yacc/idl.y:362
 		{
 			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator)
 		}
 	case 54:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:367
+//line yacc/idl.y:365
 		{
 			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinedType, IdlExprDollar[2].Declarator)
 		}
 	case 55:
 		IdlExprDollar = IdlExprS[IdlExprpt-2 : IdlExprpt+1]
-//line yacc/idl.y:370
+//line yacc/idl.y:368
 		{
 			IdlExprVAL.DefinitionDeclaration = Newtypedef_dcl(IdlExprDollar[1].DefinitionDeclaration, IdlExprDollar[2].Declarator)
 		}
 	case 56:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:374
+//line yacc/idl.y:372
 		{
 			IdlExprVAL.Declarator = NewDeclarator(IdlExprDollar[1].Identifier, nil)
 		}
 	case 57:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:377
+//line yacc/idl.y:375
 		{
 
 		}
 	case 58:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:380
+//line yacc/idl.y:378
 		{
 			IdlExprDollar[1].Declarator.SetNext(IdlExprDollar[3].Declarator)
 			IdlExprVAL.Declarator = IdlExprDollar[1].Declarator
 		}
 	case 59:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:385
+//line yacc/idl.y:383
 		{
 			IdlExprVAL.Declarator = NewDeclarator(IdlExprDollar[1].Identifier, IdlExprDollar[3].ConstValue)
 		}
 	case 60:
 		IdlExprDollar = IdlExprS[IdlExprpt-1 : IdlExprpt+1]
-//line yacc/idl.y:388
+//line yacc/idl.y:386
 		{
 			IdlExprVAL.Declarator = NewDeclarator(IdlExprDollar[1].Identifier, nil)
 		}
 	case 61:
 		IdlExprDollar = IdlExprS[IdlExprpt-3 : IdlExprpt+1]
-//line yacc/idl.y:391
+//line yacc/idl.y:389
 		{
 			IdlExprDollar[1].Declarator.SetNext(IdlExprDollar[3].Declarator)
 			IdlExprVAL.Declarator = IdlExprDollar[1].Declarator

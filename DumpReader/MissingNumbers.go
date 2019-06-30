@@ -4,29 +4,20 @@ import (
 	"container/list"
 	"fmt"
 	"go.uber.org/multierr"
+	"log"
 
 	"math"
 )
 
-type MissingSequenceItem struct {
-	beginSequence int32
-	endSequence   int32
-}
-
-func NewMissingSequenceItem(beginSequence int32, endSequence int32) *MissingSequenceItem {
-	return &MissingSequenceItem{
-		beginSequence: beginSequence,
-		endSequence:   endSequence,
-	}
-}
-
 type MissingSequences struct {
-	List *list.List
+	List   *list.List
+	logger *log.Logger
 }
 
-func NewMissingSequences() *MissingSequences {
+func NewMissingSequences(logger *log.Logger) *MissingSequences {
 	result := &MissingSequences{
-		List: list.New(),
+		List:   list.New(),
+		logger: logger,
 	}
 	return result.init()
 }
@@ -73,6 +64,7 @@ func (self *MissingSequences) Seen(sequence int32) error {
 	if element != nil && blockValue != nil {
 		if sequence == blockValue.endSequence && sequence == blockValue.beginSequence {
 			self.List.Remove(element)
+			self.logger.Printf("Gap filled up on feed. Sequence %v\n", sequence)
 			return nil
 		}
 		if sequence == blockValue.beginSequence {
@@ -83,6 +75,7 @@ func (self *MissingSequences) Seen(sequence int32) error {
 			blockValue.beginSequence--
 			return nil
 		}
+		self.logger.Printf("Gap detected on feed. Sequence %v\n", sequence)
 		tempValue := blockValue.endSequence
 		blockValue.endSequence = sequence - 1
 		self.List.InsertAfter(NewMissingSequenceItem(sequence+1, tempValue), element)

@@ -12,6 +12,7 @@ type FxAppProvideMitchFeedReaderInput struct {
 	CurrentOpenFile              ICurrentOpenFile
 	FeedCounter                  IFeedCounter
 	MitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar
+	Seq                          IMissingSequencesManager
 }
 
 func FxAppProvideMitchFeedProcessor() fx.Option {
@@ -27,7 +28,8 @@ func FxAppProvideMitchFeedProcessor() fx.Option {
 			inputData.CurrentOpenFile,
 			mitchDataHandler,
 			inputData.FeedCounter,
-			inputData.MitchMessageHandlerRegistrar)
+			inputData.MitchMessageHandlerRegistrar,
+			inputData.Seq)
 		if err != nil {
 			inputData.Logger.Printf("Could not create Mitch Reader. Error: %v\n", err)
 			return nil, err

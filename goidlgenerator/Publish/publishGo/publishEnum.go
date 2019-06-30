@@ -26,13 +26,27 @@ func (self publishEnum) ExportDefinition(writer io.StringWriter) {
 				_, _ = writer.WriteString(fmt.Sprintf("\t%v_%v\n", self.data.Identifier, decl.Identifier()))
 			}
 		} else {
+			value := defaultValue.Value()
+			switch v := value.(type) {
+			case *byte:
+			case byte:
+				_, _ = writer.WriteString(fmt.Sprintf(
+					"\t%v_%v  = %v // char value: '%v'\n ",
+					self.data.Identifier,
+					decl.Identifier(),
+					v,
+					string(v)))
 
-			_, _ = writer.WriteString(fmt.Sprintf(
-				"\t%v_%v  = %v // default value: byte(%v)\n ",
-				self.data.Identifier,
-				decl.Identifier(),
-				defaultValue.GetExportValue(),
-				defaultValue.GetExportValue()))
+			default:
+				_, _ = writer.WriteString(fmt.Sprintf(
+					"\t%v_%v  = %v // default value: byte(%v)\n ",
+					self.data.Identifier,
+					decl.Identifier(),
+					v,
+					v))
+
+			}
+
 		}
 	}
 	_, _ = writer.WriteString(fmt.Sprintf(")\n"))

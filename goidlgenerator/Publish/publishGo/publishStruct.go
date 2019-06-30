@@ -184,7 +184,7 @@ func (self *publishStruct) ExportDefinition(writer io.StringWriter, typeNamePref
 					member.Declarator.Identifier(),
 					returnType,
 					ss,
-					defaultValue.GetExportValue()))
+					defaultValue.Value()))
 			}
 		}
 		_, _ = writer.WriteString(fmt.Sprintf("}\n"))
