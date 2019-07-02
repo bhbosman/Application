@@ -118,7 +118,13 @@ func (self *Manager) handleAddOrderMessage(message *GeneratedFiles.AddOrderMessa
 		return err
 	}
 
-	return self.DealWithUnAllocated(instrumentOrderBook, message.OrderId, messageSource, message)
+	err = self.DealWithUnAllocated(instrumentOrderBook, message.OrderId, messageSource, message)
+	if err != nil {
+		if _, ok := err.(*CheckSequenceError);ok{
+			return self.RemoveOrderID(message.OrderId)
+		}
+	}
+	return err
 }
 
 func (self *Manager) handleOrderDeletedMessage(message *GeneratedFiles.OrderDeletedMessage, messageSource Managers.IMessageSource) error {
@@ -129,8 +135,8 @@ func (self *Manager) handleOrderDeletedMessage(message *GeneratedFiles.OrderDele
 		}
 		return err
 	}
+	self.RemoveOrderID(message.OrderID)
 	return self.DealWithUnAllocated(book, message.OrderID, messageSource, message)
-
 }
 
 func (self *Manager) handleOrderModifiedMessage(message *GeneratedFiles.OrderModifiedMessage, messageSource Managers.IMessageSource) error {
@@ -242,5 +248,12 @@ func (self *Manager) RemoveUnAllocatedMessage(orderID uint64) error {
 	self.mutex.Lock()
 	defer self.mutex.Unlock()
 	delete(self.UnAllocated, orderID)
+	return nil
+}
+
+func (self *Manager) RemoveOrderID(orderID uint64) error{
+	self.mutex.Lock()
+	defer self.mutex.Unlock()
+	delete(self.OrderIDs, orderID)
 	return nil
 }

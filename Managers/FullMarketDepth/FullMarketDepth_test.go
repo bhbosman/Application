@@ -1,6 +1,7 @@
 package FullMarketDepth
 
 import (
+	"fmt"
 	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"github.com/golang/mock/gomock"
@@ -96,7 +97,10 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				messageSource: NewMessageSource(1, "", ""),
 			},
 			wantErr: false,
-			verify:  nil,
+			verify: func(self *Manager) {
+				assert.Len(t, self.OrderIDs, 1)
+				assert.Len(t, self.UnAllocated, 0)
+			},
 		},
 		{
 			name: "002: Send Add order after delete received",
@@ -136,7 +140,10 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				messageSource: NewMessageSource(1, "", ""),
 			},
 			wantErr: false,
-			verify:  nil,
+			verify: func(self *Manager) {
+				assert.Len(t, self.OrderIDs, 0)
+				assert.Len(t, self.UnAllocated, 0)
+			},
 		},
 
 		{
@@ -177,7 +184,10 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				messageSource: NewMessageSource(1, "", ""),
 			},
 			wantErr: false,
-			verify:  nil,
+			verify: func(self *Manager) {
+				assert.Len(t, self.OrderIDs, 1)
+				assert.Len(t, self.UnAllocated, 0)
+			},
 		},
 
 		{
@@ -218,7 +228,10 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				messageSource: NewMessageSource(1, "", ""),
 			},
 			wantErr: false,
-			verify:  nil,
+			verify: func(self *Manager) {
+				assert.Len(t, self.OrderIDs, 1)
+				assert.Len(t, self.UnAllocated, 0)
+			},
 		},
 
 		{
@@ -259,7 +272,10 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				messageSource: NewMessageSource(1, "", ""),
 			},
 			wantErr: false,
-			verify:  nil,
+			verify: func(self *Manager) {
+				assert.Len(t, self.OrderIDs, 1)
+				assert.Len(t, self.UnAllocated, 0)
+			},
 		},
 
 		{
@@ -294,8 +310,11 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				},
 				messageSource: NewMessageSource(1, "", ""),
 			},
-			wantErr: true,
-			verify:  nil,
+			wantErr: false,
+			verify: func(self *Manager) {
+				assert.Len(t, self.OrderIDs, 0)
+				assert.Len(t, self.UnAllocated, 0)
+			},
 		},
 
 		{
@@ -328,7 +347,8 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 
 
 	}
-	for _, tt := range tests {
+	for index, tt := range tests {
+		fmt.Println(index)
 		t.Run(tt.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			self := tt.createSut(ctrl)
