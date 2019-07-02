@@ -1,4 +1,4 @@
-package main
+package MissingSequences
 
 import (
 	"container/list"
@@ -47,8 +47,8 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		sut := getSut()
 		assert.Equal(t, 1, sut.List.Len())
 		value := sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(1), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(1), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 	})
 
 	t.Run("Remove 1", func(t *testing.T) {
@@ -56,8 +56,8 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.NoError(t, sut.Seen(1))
 		assert.Equal(t, 1, sut.List.Len())
 		value := sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(2), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(2), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 	})
 	t.Run("Remove 10", func(t *testing.T) {
 		sut := getSut()
@@ -65,12 +65,12 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.Equal(t, 2, sut.List.Len())
 
 		value := sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(1), value.beginSequence)
-		assert.Equal(t, int32(9), value.endSequence)
+		assert.Equal(t, int32(1), value.BeginSequence)
+		assert.Equal(t, int32(9), value.EndSequence)
 
 		value = sut.List.Front().Next().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(11), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(11), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 	})
 
 	t.Run("Remove 5  3  1 2 4", func(t *testing.T) {
@@ -80,58 +80,58 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.Equal(t, 2, sut.List.Len())
 
 		value := sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(1), value.beginSequence)
-		assert.Equal(t, int32(4), value.endSequence)
+		assert.Equal(t, int32(1), value.BeginSequence)
+		assert.Equal(t, int32(4), value.EndSequence)
 
 		value = sut.List.Front().Next().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(6), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(6), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 		//
 		assert.NoError(t, sut.Seen(3))
 		assert.Equal(t, 3, sut.List.Len())
 		value = sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(1), value.beginSequence)
-		assert.Equal(t, int32(2), value.endSequence)
+		assert.Equal(t, int32(1), value.BeginSequence)
+		assert.Equal(t, int32(2), value.EndSequence)
 
 		value = sut.List.Front().Next().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(4), value.beginSequence)
-		assert.Equal(t, int32(4), value.endSequence)
+		assert.Equal(t, int32(4), value.BeginSequence)
+		assert.Equal(t, int32(4), value.EndSequence)
 
 		value = sut.List.Front().Next().Next().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(6), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(6), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 		//
 		assert.NoError(t, sut.Seen(1))
 		assert.Equal(t, 3, sut.List.Len())
 		value = sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(2), value.beginSequence)
-		assert.Equal(t, int32(2), value.endSequence)
+		assert.Equal(t, int32(2), value.BeginSequence)
+		assert.Equal(t, int32(2), value.EndSequence)
 
 		value = sut.List.Front().Next().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(4), value.beginSequence)
-		assert.Equal(t, int32(4), value.endSequence)
+		assert.Equal(t, int32(4), value.BeginSequence)
+		assert.Equal(t, int32(4), value.EndSequence)
 
 		value = sut.List.Front().Next().Next().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(6), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(6), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 		//
 		assert.NoError(t, sut.Seen(2))
 		assert.Equal(t, 2, sut.List.Len())
 
 		value = sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(4), value.beginSequence)
-		assert.Equal(t, int32(4), value.endSequence)
+		assert.Equal(t, int32(4), value.BeginSequence)
+		assert.Equal(t, int32(4), value.EndSequence)
 
 		value = sut.List.Front().Next().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(6), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(6), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 
 		assert.NoError(t, sut.Seen(4))
 		assert.Equal(t, 1, sut.List.Len())
 
 		value = sut.List.Front().Value.(*MissingSequenceItem)
-		assert.Equal(t, int32(6), value.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), value.endSequence)
+		assert.Equal(t, int32(6), value.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), value.EndSequence)
 	})
 
 	t.Run("Double see", func(t *testing.T) {
@@ -148,8 +148,8 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.NotNil(t, e)
 		assert.NotNil(t, v)
 
-		assert.Equal(t, int32(1), v.beginSequence)
-		assert.Equal(t, int32(9), v.endSequence)
+		assert.Equal(t, int32(1), v.BeginSequence)
+		assert.Equal(t, int32(9), v.EndSequence)
 	})
 
 	t.Run("Unseen value", func(t *testing.T) {
@@ -160,8 +160,8 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, e)
 		assert.NotNil(t, v)
-		assert.Equal(t, int32(1), v.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), v.endSequence)
+		assert.Equal(t, int32(1), v.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), v.EndSequence)
 		assert.Equal(t, 1, sut.List.Len())
 	})
 
@@ -174,8 +174,8 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, e)
 		assert.NotNil(t, v)
-		assert.Equal(t, int32(10), v.beginSequence)
-		assert.Equal(t, int32(10), v.endSequence)
+		assert.Equal(t, int32(10), v.BeginSequence)
+		assert.Equal(t, int32(10), v.EndSequence)
 		assert.Equal(t, 3, sut.List.Len())
 
 		assert.NoError(t, sut.UnSeen(9))
@@ -183,8 +183,8 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, e)
 		assert.NotNil(t, v)
-		assert.Equal(t, int32(1), v.beginSequence)
-		assert.Equal(t, int32(10), v.endSequence)
+		assert.Equal(t, int32(1), v.BeginSequence)
+		assert.Equal(t, int32(10), v.EndSequence)
 		assert.Equal(t, 2, sut.List.Len())
 
 		assert.NoError(t, sut.UnSeen(11))
@@ -192,8 +192,8 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, e)
 		assert.NotNil(t, v)
-		assert.Equal(t, int32(1), v.beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), v.endSequence)
+		assert.Equal(t, int32(1), v.BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), v.EndSequence)
 		assert.Equal(t, 1, sut.List.Len())
 	})
 
@@ -220,17 +220,17 @@ func TestNewMissingSequencesWithValidSubject(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, 4, len(missing))
 
-		assert.Equal(t, int32(1), missing[0].beginSequence)
-		assert.Equal(t, int32(9), missing[0].endSequence)
+		assert.Equal(t, int32(1), missing[0].BeginSequence)
+		assert.Equal(t, int32(9), missing[0].EndSequence)
 
-		assert.Equal(t, int32(11), missing[1].beginSequence)
-		assert.Equal(t, int32(1121), missing[1].endSequence)
+		assert.Equal(t, int32(11), missing[1].BeginSequence)
+		assert.Equal(t, int32(1121), missing[1].EndSequence)
 
-		assert.Equal(t, int32(1123), missing[2].beginSequence)
-		assert.Equal(t, int32(12332), missing[2].endSequence)
+		assert.Equal(t, int32(1123), missing[2].BeginSequence)
+		assert.Equal(t, int32(12332), missing[2].EndSequence)
 
-		assert.Equal(t, int32(12334), missing[3].beginSequence)
-		assert.Equal(t, int32(math.MaxInt32), missing[3].endSequence)
+		assert.Equal(t, int32(12334), missing[3].BeginSequence)
+		assert.Equal(t, int32(math.MaxInt32), missing[3].EndSequence)
 
 	})
 

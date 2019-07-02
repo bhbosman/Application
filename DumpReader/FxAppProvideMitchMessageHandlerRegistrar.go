@@ -11,4 +11,3 @@ func FxAppProvideMitchMessageHandlerRegistrar() fx.Option {
 			return NewMitchMessageHandlerRegistrar(logger), nil
 		})
 }
-

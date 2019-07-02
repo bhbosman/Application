@@ -25,7 +25,17 @@ func (self *publishGolang) Export(params Publish.ExportParams) error {
 	_, _ = sb.WriteString(fmt.Sprintf("\n"))
 	_, _ = sb.WriteString(fmt.Sprintf("// Declared typed\n"))
 	for _, declaredType := range params.DeclaredTypes {
-		_, _ = sb.WriteString(fmt.Sprintf("// %v\n", declaredType.GetName()))
+		switch v := declaredType.(type) {
+		case *yacc.MitchMessageDefinition:
+			if v.HasMessageInformation() {
+				_, _ = sb.WriteString(fmt.Sprintf("// %s MessageType: 0x%x(%v)\n", v.Identifier, v.MessageType, v.MessageType))
+			}
+			break
+		default:
+			_, _ = sb.WriteString(fmt.Sprintf("// %v\n", declaredType.GetName()))
+			break
+		}
+
 	}
 	_, _ = sb.WriteString(fmt.Sprintf("// \n"))
 	for _, declaredType := range params.DeclaredTypes {

@@ -13,7 +13,6 @@ import (
 
 const eof = 0
 
-
 type IdlExprLex struct {
 	InputStream     io.ByteScanner
 	CollDfa         []DFA.IDfa
@@ -107,8 +106,6 @@ func (x *IdlExprLex) Lex(yylval *IdlExprSymType) int {
 func (x *IdlExprLex) Error(s string) {
 	log.Printf("parse error: %s at (%d,%d).", s, x.Row, x.Col)
 }
-
-
 
 func NewIdlExprLex(
 	inputStream io.ByteScanner,

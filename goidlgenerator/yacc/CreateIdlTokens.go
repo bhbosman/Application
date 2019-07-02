@@ -59,4 +59,3 @@ func CreateIdlTokens() ([]DFA.IDfa, error) {
 
 	return collDfa, nil
 }
-

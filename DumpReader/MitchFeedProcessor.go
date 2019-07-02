@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/bhbosman/Application/Managers/FullMarketDepth"
+	"github.com/bhbosman/Application/Managers/MissingSequence"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"github.com/bhbosman/Application/Streams"
 	"io"
@@ -15,7 +17,7 @@ type MitchFeedProcessor struct {
 	dataHandler             IDataHandler
 	feedCounter             IFeedCounter
 	registrar               IMitchMessageHandlerRegistrar
-	missingSequencesManager IMissingSequencesManager
+	missingSequencesManager MissingSequence.IMissingSequencesManager
 }
 
 func (self *MitchFeedProcessor) Close() error {
@@ -28,7 +30,7 @@ func NewMitchFeedProcessor(
 	dataHandler IDataHandler,
 	feedCounter IFeedCounter,
 	mitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar,
-	missingSequencesManager IMissingSequencesManager) (*MitchFeedProcessor, error) {
+	missingSequencesManager MissingSequence.IMissingSequencesManager) (*MitchFeedProcessor, error) {
 	return &MitchFeedProcessor{
 		logger:                  logger,
 		reader:                  reader,
@@ -132,7 +134,7 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 							err = self.registrar.ProcessMessage(
 								wg,
 								messageFactory,
-								NewMessageSource(
+								FullMarketDepth.NewMessageSource(
 									int(unitHeader.SequenceNumber),
 									source,
 									feedName))
@@ -142,7 +144,7 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 								self.logger.Printf("Error calling registrar.ProcessMessage(). Error : %v", err)
 								markMessageAsSeen = false
 							}
-							if markMessageAsSeen{
+							if markMessageAsSeen {
 								err = self.missingSequencesManager.Seen(source, feedName, int32(unitHeader.SequenceNumber))
 								if err != nil {
 									self.logger.Printf("Error marking message as seen. Error : %v", err)
@@ -157,4 +159,3 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 
 	return nil
 }
-

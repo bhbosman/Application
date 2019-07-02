@@ -26,15 +26,16 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:939e23f904cb50168a21dc38ca60b432a0e57482bed803fdae94223821dcad59"
+  digest = "1:a4cc3042bb30046fa7da2c88bd8f0210b173198ea70a146d0413db475cf5b41d"
   name = "github.com/gdamore/tcell"
   packages = [
     ".",
     "terminfo",
+    "terminfo/dynamic",
   ]
   pruneopts = "UT"
-  revision = "b5d0c1ac570211e469f43ff88c0c6aa4b56cc99a"
-  version = "v1.1.2"
+  revision = "061f3f89b01ffb73e0b6a6812de029714fda9e81"
+  version = "v1.1.4"
 
 [[projects]]
   digest = "1:318f1c959a8a740366fce4b1e1eb2fd914036b4af58fbd0a003349b305f118ad"
@@ -109,23 +110,23 @@
   version = "v0.6.0"
 
 [[projects]]
-  digest = "1:403b810b43500b5b0a9a24a47347e31dc2783ccae8cf97c891b46f5b0496fa1a"
+  digest = "1:366f5aa02ff6c1e2eccce9ca03a22a6d983da89eecff8a89965401764534eb7c"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
     "internal/fs",
   ]
   pruneopts = "UT"
-  revision = "833678b5bb319f2d20a475cb165c6cc59c2cc77c"
-  version = "v0.0.2"
+  revision = "3f98efb27840a48a7a2898ec80be07674d19f9c8"
+  version = "v0.0.3"
 
 [[projects]]
   branch = "master"
-  digest = "1:37be77f9d38ff1975ef6db719011f9bf20c68f7c77eaa901ceafd44b5611cd1e"
+  digest = "1:ddae63c6b711a5db066a67db30519ab5f0428fe86a92dcaee095ee6c2941752a"
   name = "github.com/rivo/tview"
   packages = ["."]
   pruneopts = "UT"
-  revision = "b62197ade4121742db57ebd456b1f4d84f2b35dc"
+  revision = "17ae69181737310e5598fa3dad835d26e137378b"
 
 [[projects]]
   branch = "master"
@@ -186,11 +187,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8f972f69302dc445784e85939b240f80c649c52894f6f02b3ca9df77c3fde6a0"
+  digest = "1:afb5346f71acefc3da7ad800f952cb2bcdb762194b05304bbf54d7f9490e31c5"
   name = "golang.org/x/sys"
-  packages = ["windows"]
+  packages = [
+    "unix",
+    "windows",
+  ]
   pruneopts = "UT"
-  revision = "516e3c20635fbe39539f7ed361a15c51fec29cd8"
+  revision = "04f50cda93cbb67f2afa353c52f342100e80e625"
 
 [[projects]]
   digest = "1:cc38c2209a6c1f94debdfd96934865a258eac2f905a8d3f8fd56e7d0cfb85edd"

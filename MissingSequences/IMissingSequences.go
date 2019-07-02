@@ -1,4 +1,4 @@
-package main
+package MissingSequences
 
 type IMissingSequences interface {
 	Missing() ([]MissingSequenceItem, error)

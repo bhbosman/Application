@@ -3,8 +3,8 @@ package main
 import (
 	"container/list"
 	"fmt"
+	"github.com/bhbosman/Application/Managers"
 	"log"
-
 )
 
 type MessageTypeRegistrar struct {
@@ -12,19 +12,19 @@ type MessageTypeRegistrar struct {
 	messageCount int
 }
 
-func (self *MessageTypeRegistrar) Add(processor IMitchDataProcessor) {
+func (self *MessageTypeRegistrar) Add(processor Managers.IMitchDataProcessor) {
 	self.l.PushBack(processor)
 }
 
-func (self *MessageTypeRegistrar) ProcessMessage(group IWaitGroup, factory IMessageFactory) error {
+func (self *MessageTypeRegistrar) ProcessMessage(group IWaitGroup, factory IMessageFactory, messageSource Managers.IMessageSource) error {
 	self.messageCount++
 	for e := self.l.Front(); e != nil; e = e.Next() {
-		mitchDataProcessor, ok := e.Value.(IMitchDataProcessor)
+		mitchDataProcessor, ok := e.Value.(Managers.IMitchDataProcessor)
 		if !ok {
 			return fmt.Errorf("Count not get interface IMitchDataProcessor\n")
 		}
-		func(mitchDataProcessor IMitchDataProcessor) {
-			item := NewMitchProcessingItem(group, factory)
+		func(mitchDataProcessor Managers.IMitchDataProcessor) {
+			item := NewMitchProcessingItem(group, factory, messageSource)
 			err := item.AddOne()
 			if err != nil {
 
@@ -76,7 +76,7 @@ func (self *MitchMessageHandlerRegistrar) GetMessageCounts() []IMessageCount {
 	return result
 }
 
-func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager IMitchDataProcessor) error {
+func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager Managers.IMitchDataProcessor) error {
 	messages, err := manager.DeclareInterestInMessages()
 	if err != nil {
 		return err
@@ -93,7 +93,7 @@ func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager IMitchDataProcess
 	return nil
 }
 
-func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, source IMessageSource) error {
+func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, messageSource Managers.IMessageSource) error {
 	handler, ok := self.MessageHandlers[messageFactory.MessageType()]
 	if !ok {
 
@@ -101,7 +101,7 @@ func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageF
 		handler = NewMessageTypeRegistrar()
 		self.MessageHandlers[messageFactory.MessageType()] = handler
 	}
-	return handler.ProcessMessage(wg, messageFactory)
+	return handler.ProcessMessage(wg, messageFactory, messageSource)
 
 }
 

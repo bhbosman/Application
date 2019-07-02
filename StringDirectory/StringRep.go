@@ -10,6 +10,5 @@ func NewStringRep(s string) *StringRep {
 
 	v := crc32.ChecksumIEEE([]byte(s))
 
-
-	return &StringRep{v:v}
+	return &StringRep{v: v}
 }

@@ -1,4 +1,4 @@
-package main
+package MissingSequences
 
 import (
 	"container/list"
@@ -27,8 +27,8 @@ func (self *MissingSequences) Missing() ([]MissingSequenceItem, error) {
 
 	for e := self.List.Front(); e != nil; e = e.Next() {
 		result = append(result, MissingSequenceItem{
-			beginSequence: e.Value.(*MissingSequenceItem).beginSequence,
-			endSequence:   e.Value.(*MissingSequenceItem).endSequence,
+			BeginSequence: e.Value.(*MissingSequenceItem).BeginSequence,
+			EndSequence:   e.Value.(*MissingSequenceItem).EndSequence,
 		})
 	}
 	return result, nil
@@ -62,22 +62,22 @@ func (self *MissingSequences) Seen(sequence int32) error {
 		return err
 	}
 	if element != nil && blockValue != nil {
-		if sequence == blockValue.endSequence && sequence == blockValue.beginSequence {
+		if sequence == blockValue.EndSequence && sequence == blockValue.BeginSequence {
 			self.List.Remove(element)
 			self.logger.Printf("Gap filled up on feed. Sequence %v\n", sequence)
 			return nil
 		}
-		if sequence == blockValue.beginSequence {
-			blockValue.beginSequence++
+		if sequence == blockValue.BeginSequence {
+			blockValue.BeginSequence++
 			return nil
 		}
-		if sequence == blockValue.endSequence {
-			blockValue.beginSequence--
+		if sequence == blockValue.EndSequence {
+			blockValue.BeginSequence--
 			return nil
 		}
 		self.logger.Printf("Gap detected on feed. Sequence %v\n", sequence)
-		tempValue := blockValue.endSequence
-		blockValue.endSequence = sequence - 1
+		tempValue := blockValue.EndSequence
+		blockValue.EndSequence = sequence - 1
 		self.List.InsertAfter(NewMissingSequenceItem(sequence+1, tempValue), element)
 	}
 	return nil
@@ -91,22 +91,22 @@ func (self *MissingSequences) UnSeen(sequence int32) error {
 
 	insertedElement, err := func(element *list.Element, blockValue *MissingSequenceItem) (*list.Element, error) {
 		if element != nil && blockValue != nil {
-			if blockValue.beginSequence-1 == sequence {
-				blockValue.beginSequence--
+			if blockValue.BeginSequence-1 == sequence {
+				blockValue.BeginSequence--
 				return element, nil
 			}
-			if blockValue.endSequence+1 == sequence {
-				blockValue.endSequence++
+			if blockValue.EndSequence+1 == sequence {
+				blockValue.EndSequence++
 				return element, nil
 			}
-			if blockValue.beginSequence <= sequence && sequence <= blockValue.endSequence {
+			if blockValue.BeginSequence <= sequence && sequence <= blockValue.EndSequence {
 				return element, nil
 			}
 		}
 
 		newBlockValue := NewMissingSequenceItem(sequence, sequence)
 		for e := self.List.Front(); e != nil; e = e.Next() {
-			if e.Value.(*MissingSequenceItem).beginSequence > newBlockValue.beginSequence {
+			if e.Value.(*MissingSequenceItem).BeginSequence > newBlockValue.BeginSequence {
 				return self.List.InsertBefore(newBlockValue, e), nil
 			}
 		}
@@ -118,8 +118,8 @@ func (self *MissingSequences) UnSeen(sequence int32) error {
 	if insertedElement.Next() != nil {
 		blockA := insertedElement.Value.(*MissingSequenceItem)
 		blockB := insertedElement.Next().Value.(*MissingSequenceItem)
-		if blockA.endSequence+1 == blockB.beginSequence {
-			blockA.endSequence = insertedElement.Next().Value.(*MissingSequenceItem).endSequence
+		if blockA.EndSequence+1 == blockB.BeginSequence {
+			blockA.EndSequence = insertedElement.Next().Value.(*MissingSequenceItem).EndSequence
 			self.List.Remove(insertedElement.Next())
 		}
 	}
@@ -134,22 +134,22 @@ func (self *MissingSequences) init() *MissingSequences {
 func (self *MissingSequences) findBlock(sequence int32, lookForProximity bool) (*list.Element, *MissingSequenceItem, error) {
 	for e := self.List.Front(); e != nil; e = e.Next() {
 		if blockValue, ok := e.Value.(*MissingSequenceItem); ok {
-			if blockValue.beginSequence <= sequence && sequence <= blockValue.endSequence {
+			if blockValue.BeginSequence <= sequence && sequence <= blockValue.EndSequence {
 				return e, blockValue, nil
 			}
 			if lookForProximity {
-				if blockValue.beginSequence != 1 {
-					if blockValue.beginSequence-1 <= sequence && sequence <= blockValue.endSequence {
+				if blockValue.BeginSequence != 1 {
+					if blockValue.BeginSequence-1 <= sequence && sequence <= blockValue.EndSequence {
 						return e, blockValue, nil
 					}
 				}
-				if blockValue.beginSequence != int32(math.MaxInt32) {
-					if blockValue.beginSequence <= sequence && sequence <= blockValue.endSequence+1 {
+				if blockValue.BeginSequence != int32(math.MaxInt32) {
+					if blockValue.BeginSequence <= sequence && sequence <= blockValue.EndSequence+1 {
 						return e, blockValue, nil
 					}
 				}
 			}
-			if blockValue.beginSequence > sequence {
+			if blockValue.BeginSequence > sequence {
 				return nil, nil, nil
 			}
 		} else {

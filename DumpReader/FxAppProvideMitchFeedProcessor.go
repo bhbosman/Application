@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/bhbosman/Application/Managers/MissingSequence"
 	"github.com/bhbosman/Application/Streams"
 	"go.uber.org/fx"
 	"log"
@@ -12,7 +13,7 @@ type FxAppProvideMitchFeedReaderInput struct {
 	CurrentOpenFile              ICurrentOpenFile
 	FeedCounter                  IFeedCounter
 	MitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar
-	Seq                          IMissingSequencesManager
+	Seq                          MissingSequence.IMissingSequencesManager
 }
 
 func FxAppProvideMitchFeedProcessor() fx.Option {

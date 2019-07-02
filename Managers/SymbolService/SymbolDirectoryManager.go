@@ -1,19 +1,23 @@
-package main
+package SymbolService
 
 import (
+	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"log"
 )
 
 type SymbolDirectoryManager struct {
-	ch     chan IMessageServiceItem
 	logger *log.Logger
 }
 
-func NewSymbolDirectoryManager(logger *log.Logger) *SymbolDirectoryManager {
+func NewSymbolDirectoryManager(logger *log.Logger) (Managers.IMitchDataProcessor, error) {
 	return &SymbolDirectoryManager{
 		logger: logger,
-	}
+	}, nil
+}
+
+func (self *SymbolDirectoryManager) Close() error {
+	return nil
 }
 
 func (self *SymbolDirectoryManager) DeclareInterestInMessages() ([]byte, error) {
@@ -23,23 +27,8 @@ func (self *SymbolDirectoryManager) DeclareInterestInMessages() ([]byte, error) 
 	}, nil
 }
 
-func (self *SymbolDirectoryManager) Push(message IMessageServiceItem) {
-	ch := self.ch
-	if ch != nil {
-		err := message.AddOne()
-		if err != nil {
-			return
-		}
-		ch <- message
-	}
-}
-
-func (self *SymbolDirectoryManager) HandleSymbolDirectoryMessage(item *GeneratedFiles.SymbolDirectoryMessage) error {
-	return nil
-}
-
-func (self *SymbolDirectoryManager) processMessage(item IMessageServiceItem) error {
-	msg, err := item.Message()
+func (self *SymbolDirectoryManager) Push(message Managers.IMessageServiceItem) error {
+	msg, err := message.Message()
 	if err != nil {
 		return err
 	}
@@ -49,6 +38,11 @@ func (self *SymbolDirectoryManager) processMessage(item IMessageServiceItem) err
 	case *GeneratedFiles.SymbolStatusMessage:
 		return self.HandleSymbolStatusMessage(v)
 	}
+	return nil
+
+}
+
+func (self *SymbolDirectoryManager) HandleSymbolDirectoryMessage(item *GeneratedFiles.SymbolDirectoryMessage) error {
 	return nil
 }
 

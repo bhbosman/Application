@@ -7,53 +7,50 @@ import "time"
 import "github.com/bhbosman/Application/Streams"
 
 // Declared typed
-// UnitLength
-// UnitHeader
-// MessageHeader
-// TimeMessage
+// TimeMessage MessageType: 0x54(84)
 // TEventCode
-// SystemEventMessage
+// SystemEventMessage MessageType: 0x53(83)
 // SymbolDirectorySymbolStatus
 // SymbolDirectoryOptionType
 // SymbolDirectoryFlags
 // SymbolDirectorySubBook
 // SymbolDirectorySettlementMethod
-// SymbolDirectoryMessage
+// SymbolDirectoryMessage MessageType: 0x52(82)
 // SymbolStatusTradingStatus
 // SymbolStatusSessionChangeReason
 // SymbolStatusBookType
 // SymbolStatusMessageFlags
-// SymbolStatusMessage
+// SymbolStatusMessage MessageType: 0x48(72)
 // OrderSide
 // AddOrderFlags
-// AddOrderMessage
+// AddOrderMessage MessageType: 0x41(65)
 // AddAttributedOrderFlags
-// AddAttributedOrderMessage
-// OrderDeletedMessage
+// AddAttributedOrderMessage MessageType: 0x46(70)
+// OrderDeletedMessage MessageType: 0x44(68)
 // OrderModifiedFlags
-// OrderModifiedMessage
+// OrderModifiedMessage MessageType: 0x55(85)
 // OrderBookClearSubBook
 // OrderBookClearBookType
-// OrderBookClearMessage
-// OrderExecutedMessage
-// OrderExecutedWithPriceSizeMessage
+// OrderBookClearMessage MessageType: 0x79(121)
+// OrderExecutedMessage MessageType: 0x45(69)
+// OrderExecutedWithPriceSizeMessage MessageType: 0x43(67)
 // TradeMessageFlags
 // TradeMessageSubBook
-// TradeMessage
-// AuctionTradeMessage
-// OffBookTradeMessage
-// TradeBreakMessage
+// TradeMessage MessageType: 0x50(80)
+// AuctionTradeMessage MessageType: 0x51(81)
+// OffBookTradeMessage MessageType: 0x78(120)
+// TradeBreakMessage MessageType: 0x42(66)
 // RecoveryTradeMessageFlags
 // RecoveryTradeMessageSubBook
-// RecoveryTradeMessage
-// AuctionInfoMessage
+// RecoveryTradeMessage MessageType: 0x76(118)
+// AuctionInfoMessage MessageType: 0x49(73)
 // TStatisticsMessageOpenCloseIndicator
 // TStatisticsMessageSubBook
-// StatisticsMessage
-// ExtendedStatisticsMessage
-// NewsMessage
+// StatisticsMessage MessageType: 0x77(119)
+// ExtendedStatisticsMessage MessageType: 0x80(128)
+// NewsMessage MessageType: 0x75(117)
 // TopOfBookMessageSubBook
-// TopOfBookMessage
+// TopOfBookMessage MessageType: 0x71(113)
 //
 // UnitLength Declaration TypeCode: 0x4722da65
 type UnitLength struct {

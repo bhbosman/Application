@@ -1,13 +1,13 @@
-package main
+package MissingSequences
 
 type MissingSequenceItem struct {
-	beginSequence int32
-	endSequence   int32
+	BeginSequence int32
+	EndSequence   int32
 }
 
 func NewMissingSequenceItem(beginSequence int32, endSequence int32) *MissingSequenceItem {
 	return &MissingSequenceItem{
-		beginSequence: beginSequence,
-		endSequence:   endSequence,
+		BeginSequence: beginSequence,
+		EndSequence:   endSequence,
 	}
 }

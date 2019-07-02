@@ -1,12 +1,13 @@
 package main
 
-import "sync"
+import (
+	"sync"
+)
 
 type IWaitGroup interface {
 	AddOne() error
-	Done()error
+	Done() error
 }
-
 
 type WaitGroupDefaultImpl struct {
 	wg *sync.WaitGroup
@@ -18,17 +19,13 @@ func NewWaitGroupDefaultImpl(wg *sync.WaitGroup) *WaitGroupDefaultImpl {
 	}
 }
 
-func (self *WaitGroupDefaultImpl) AddOne() error{
+func (self *WaitGroupDefaultImpl) AddOne() error {
 	self.wg.Add(1)
 	return nil
 }
 
-func (self *WaitGroupDefaultImpl) Done() error{
+func (self *WaitGroupDefaultImpl) Done() error {
 	self.wg.Done()
 	return nil
 }
 
-type IMessageServiceItem interface {
-	IWaitGroup
-	Message() (interface{}, error)
-}

@@ -15,10 +15,14 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationCo
 	return fx.New(
 		fx.StartTimeout(fx.DefaultTimeout),
 		fx.StopTimeout(fx.DefaultTimeout),
-		FxAppProvideSymbolManager(),
-		FxAppInvokeSymbolManager(),
-		FxAppProvideTimerServiceManager(),
-		FxAppInvokeTimerServiceManager(),
+		FxAppProvideTimeServiceManager(),
+		FxAppProvideSymbolDirectoryManager(),
+		FxAppProvideFullMarketDepthManager(),
+
+		FxAppInvokeTimeServiceManager(),
+		FxAppInvokeSymbolDirectoryManager(),
+		FxAppInvokeFullMarketDepthManager(),
+
 		FxAppProvideMitchMessageHandlerRegistrar(),
 		FxAppProvideMissingSequencesManager(),
 		FxAppProvideApplicationContext(),

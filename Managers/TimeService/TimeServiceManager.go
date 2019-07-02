@@ -1,19 +1,17 @@
-package main
+package TimeService
 
 import (
+	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"log"
 )
 
 type TimeServiceManager struct {
-	ch     chan IMessageServiceItem
 	logger *log.Logger
 }
 
-func NewTimeServiceManager(logger *log.Logger) *TimeServiceManager {
-	return &TimeServiceManager{
-		logger: logger,
-	}
+func (self *TimeServiceManager) Close() error {
+	return nil
 }
 
 func (self *TimeServiceManager) DeclareInterestInMessages() ([]byte, error) {
@@ -22,19 +20,11 @@ func (self *TimeServiceManager) DeclareInterestInMessages() ([]byte, error) {
 	}, nil
 }
 
-func (self *TimeServiceManager) Push(message IMessageServiceItem) {
-	ch := self.ch
-	if ch != nil {
-		err := message.AddOne()
-		if err != nil {
-			return
-		}
-		ch <- message
-	}
+func (self *TimeServiceManager) Push(message Managers.IMessageServiceItem) error {
+	return self.processMessage(message)
 }
 
-
-func (self *TimeServiceManager) processMessage(item IMessageServiceItem) error {
+func (self *TimeServiceManager) processMessage(item Managers.IMessageServiceItem) error {
 	msg, err := item.Message()
 	if err != nil {
 		return err
@@ -48,4 +38,10 @@ func (self *TimeServiceManager) processMessage(item IMessageServiceItem) error {
 
 func (self *TimeServiceManager) HandleTimeMessageMessage(message *GeneratedFiles.TimeMessage) error {
 	return nil
+}
+
+func NewTimeServiceManager(logger *log.Logger) (Managers.IMitchDataProcessor, error) {
+	return &TimeServiceManager{
+		logger: logger,
+	}, nil
 }
