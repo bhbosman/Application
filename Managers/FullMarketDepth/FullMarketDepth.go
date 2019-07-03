@@ -14,15 +14,19 @@ type Manager struct {
 	InstrumentBooks map[uint32]IInstrumentOrderBook
 	OrderIDs        map[uint64]IInstrumentOrderBook
 	UnAllocated     map[uint64]ILastMessageForOrder
+	newInstrumentOrderBook func() IInstrumentOrderBook
 }
 
 func NewManager(logger *log.Logger) (*Manager, error) {
 	return &Manager{
-		logger:          logger,
-		mutex:           sync.RWMutex{},
-		InstrumentBooks: make(map[uint32]IInstrumentOrderBook),
-		OrderIDs:        make(map[uint64]IInstrumentOrderBook),
-		UnAllocated:     make(map[uint64]ILastMessageForOrder),
+		logger:                 logger,
+		mutex:                  sync.RWMutex{},
+		InstrumentBooks:        make(map[uint32]IInstrumentOrderBook),
+		OrderIDs:               make(map[uint64]IInstrumentOrderBook),
+		UnAllocated:            make(map[uint64]ILastMessageForOrder),
+		newInstrumentOrderBook: func() IInstrumentOrderBook {
+			return NewInstrumentOrderBook()
+		},
 	}, nil
 }
 
@@ -91,7 +95,7 @@ func (self *Manager) CreateOrderBook(InstrumentID uint32) IInstrumentOrderBook {
 	}
 
 	// create new book
-	book := NewInstrumentOrderBook()
+	book := self.newInstrumentOrderBook()
 	self.InstrumentBooks[InstrumentID] = book
 	return book
 
@@ -135,7 +139,10 @@ func (self *Manager) handleOrderDeletedMessage(message *GeneratedFiles.OrderDele
 		}
 		return err
 	}
-	self.RemoveOrderID(message.OrderID)
+	err = self.RemoveOrderID(message.OrderID)
+	if err != nil {
+
+	}
 	return self.DealWithUnAllocated(book, message.OrderID, messageSource, message)
 }
 

@@ -1,7 +1,6 @@
 package FullMarketDepth
 
 import (
-	"fmt"
 	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 )
@@ -40,24 +39,6 @@ func (self *InstrumentOrderBook) handleAddOrderMessage(message *GeneratedFiles.A
 	return nil
 }
 
-type CheckSequenceError struct {
-	clearSequence int
-	messageSequence int
-}
-
-func NewCheckSequenceError(clearSequence int, messageSequence int) *CheckSequenceError {
-	return &CheckSequenceError{
-		clearSequence: clearSequence,
-		messageSequence: messageSequence,
-	}
-}
-
-func (self CheckSequenceError) Error() string {
-	return fmt.Sprintf(
-		"check sequence failed - message disregarded. Last clearance at seq %v. This message at seq %v\n",
-		self.clearSequence,
-		self.messageSequence)
-}
 
 func (self *InstrumentOrderBook) CheckSequence(sequence int) error {
 	if sequence > self.lastClearMessageSequence{

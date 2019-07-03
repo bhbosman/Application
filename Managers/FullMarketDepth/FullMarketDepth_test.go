@@ -1,7 +1,6 @@
 package FullMarketDepth
 
 import (
-	"fmt"
 	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"github.com/golang/mock/gomock"
@@ -12,12 +11,13 @@ import (
 )
 
 func TestManager_DeclareInterestInMessages(t *testing.T) {
-	tests := []struct {
+	type test = struct {
 		name      string
 		createSut func() *Manager
 		want      []byte
 		wantErr   bool
-	}{
+	}
+	tests := []test{
 		{
 			name: "",
 			createSut: func() *Manager {
@@ -56,15 +56,26 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 		message       *GeneratedFiles.AddOrderMessage
 		messageSource Managers.IMessageSource
 	}
-	tests := []struct {
-		name      string
+	type test = struct {
 		createSut func(controller *gomock.Controller) *Manager
 		args      args
 		wantErr   bool
-		verify func(self *Manager)
-	}{
-		{
-			name: "001: Send Add order on empty order book",
+		verify    func(self *Manager)
+	}
+
+	f := func(tt test) {
+		ctrl := gomock.NewController(t)
+		self := tt.createSut(ctrl)
+		if err := self.handleAddOrderMessage(tt.args.message, tt.args.messageSource); (err != nil) != tt.wantErr {
+			t.Errorf("Manager.handleAddOrderMessage() error = %v, wantErr %v", err, tt.wantErr)
+		}
+		ctrl.Finish()
+		if tt.verify != nil {
+			tt.verify(self)
+		}
+	}
+	t.Run("001: Send Add order on empty order book", func(t *testing.T) {
+		t1 := test{
 			createSut: func(controller *gomock.Controller) *Manager {
 				result, _ := NewManager(&log.Logger{})
 				instrumentBookMock := NewMockIInstrumentOrderBook(controller)
@@ -101,9 +112,11 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				assert.Len(t, self.OrderIDs, 1)
 				assert.Len(t, self.UnAllocated, 0)
 			},
-		},
-		{
-			name: "002: Send Add order after delete received",
+		}
+		f(t1)
+	})
+	t.Run("002: Send Add order after delete received", func(t *testing.T) {
+		t1 := test{
 			createSut: func(controller *gomock.Controller) *Manager {
 				result, _ := NewManager(&log.Logger{})
 				instrumentBookMock := NewMockIInstrumentOrderBook(controller)
@@ -144,10 +157,11 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				assert.Len(t, self.OrderIDs, 0)
 				assert.Len(t, self.UnAllocated, 0)
 			},
-		},
-
-		{
-			name: "003: Send Add order after modified",
+		}
+		f(t1)
+	})
+	t.Run("003: Send Add order after modified", func(t *testing.T) {
+		t1 := test{
 			createSut: func(controller *gomock.Controller) *Manager {
 				result, _ := NewManager(&log.Logger{})
 				instrumentBookMock := NewMockIInstrumentOrderBook(controller)
@@ -188,10 +202,12 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				assert.Len(t, self.OrderIDs, 1)
 				assert.Len(t, self.UnAllocated, 0)
 			},
-		},
+		}
+		f(t1)
+	})
 
-		{
-			name: "004: Send Add order after execution",
+	t.Run("004: Send Add order after execution", func(t *testing.T) {
+		t1 := test{
 			createSut: func(controller *gomock.Controller) *Manager {
 				result, _ := NewManager(&log.Logger{})
 				instrumentBookMock := NewMockIInstrumentOrderBook(controller)
@@ -232,10 +248,12 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				assert.Len(t, self.OrderIDs, 1)
 				assert.Len(t, self.UnAllocated, 0)
 			},
-		},
+		}
+		f(t1)
+	})
+	t.Run("005: Send Add order after prize size execution", func(t *testing.T) {
+		t1 := test{
 
-		{
-			name: "005: Send Add order after prize size execution",
 			createSut: func(controller *gomock.Controller) *Manager {
 				result, _ := NewManager(&log.Logger{})
 				instrumentBookMock := NewMockIInstrumentOrderBook(controller)
@@ -276,21 +294,23 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				assert.Len(t, self.OrderIDs, 1)
 				assert.Len(t, self.UnAllocated, 0)
 			},
-		},
-
-		{
-			name: "006: Send Add order after clear instruction",
+		}
+		f(t1)
+	})
+	t.Run("006: Send Add order after clear instruction", func(t *testing.T) {
+		t1 := test{
 			createSut: func(controller *gomock.Controller) *Manager {
 				result, _ := NewManager(&log.Logger{})
-				instrumentBookMock := NewInstrumentOrderBook()
-				_ = instrumentBookMock.Push(
-					&GeneratedFiles.OrderBookClearMessage{
-						Nanosecond:   0,
-						InstrumentID: 1000,
-						SubBook:      0,
-						BookType:     0,
-					},
-					NewMessageSource(2, "", ""))
+
+				instrumentBookMock := NewMockIInstrumentOrderBook(controller)
+				instrumentBookMock.
+					EXPECT().
+					Push(gomock.Any(), gomock.Any()).
+					Times(1).DoAndReturn(
+					func(message interface{}, messageSource Managers.IMessageSource) error {
+						assert.IsType(t, &GeneratedFiles.AddOrderMessage{}, message)
+						return NewCheckSequenceError(2, 1)
+					})
 				result.InstrumentBooks[1000] = instrumentBookMock
 				return result
 			},
@@ -315,12 +335,25 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 				assert.Len(t, self.OrderIDs, 0)
 				assert.Len(t, self.UnAllocated, 0)
 			},
-		},
-
-		{
-			name: "007: Send Add with no orderbook",
+		}
+		f(t1)
+	})
+	t.Run("007: Send Add with no orderbook", func(t *testing.T) {
+		t1 := test{
 			createSut: func(controller *gomock.Controller) *Manager {
 				result, _ := NewManager(&log.Logger{})
+				result.newInstrumentOrderBook = func() IInstrumentOrderBook {
+					instrumentBookMock := NewMockIInstrumentOrderBook(controller)
+					instrumentBookMock.
+						EXPECT().
+						Push(gomock.Any(), gomock.Any()).
+						Times(1).DoAndReturn(
+						func(message interface{}, messageSource Managers.IMessageSource) error {
+							assert.IsType(t, &GeneratedFiles.AddOrderMessage{}, message)
+							return nil
+						})
+					return instrumentBookMock
+				}
 				return result
 			},
 			args: args{
@@ -343,23 +376,7 @@ func TestManager_handleAddOrderMessage(t *testing.T) {
 			verify: func(self *Manager) {
 				assert.Len(t, self.InstrumentBooks, 1)
 			},
-		},
-
-
-	}
-	for index, tt := range tests {
-		fmt.Println(index)
-		t.Run(tt.name, func(t *testing.T) {
-			ctrl := gomock.NewController(t)
-			self := tt.createSut(ctrl)
-			if err := self.handleAddOrderMessage(tt.args.message, tt.args.messageSource); (err != nil) != tt.wantErr {
-				t.Errorf("Manager.handleAddOrderMessage() error = %v, wantErr %v", err, tt.wantErr)
-			}
-			ctrl.Finish()
-			if tt.verify != nil{
-				tt.verify(self)
-			}
-
-		})
-	}
+		}
+		f(t1)
+	})
 }
