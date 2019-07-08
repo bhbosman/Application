@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/Streams"
 )
 
@@ -8,7 +9,7 @@ type ReadMitchDataHandler struct {
 	factory Streams.IMitchReaderFactory
 }
 
-func (self ReadMitchDataHandler) CreateMessageFactory(messageType byte, length uint16, stream IStreamData) (IMessageFactory, error) {
+func (self ReadMitchDataHandler) CreateMessageFactory(messageType int, length uint16, stream IStreamData) (Managers.IMessageFactory, error) {
 	return NewMessageFactory(messageType, length, stream, self.factory)
 }
 

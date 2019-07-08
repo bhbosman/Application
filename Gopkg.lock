@@ -130,11 +130,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:ddae63c6b711a5db066a67db30519ab5f0428fe86a92dcaee095ee6c2941752a"
+  digest = "1:7c790c6a72cd7dede17af6adc7ac76a8e672268f4277a7c0e0065d6a12765ad7"
   name = "github.com/rivo/tview"
   packages = ["."]
   pruneopts = "UT"
-  revision = "17ae69181737310e5598fa3dad835d26e137378b"
+  revision = "c0e09651e41d957d283b36d386d51b54eeb33c92"
 
 [[projects]]
   branch = "master"

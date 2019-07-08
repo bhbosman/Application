@@ -6032,3 +6032,30 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 	}
 	return nil, 0, &CreateAndReadDataNotFound{MessageType: messageType}
 }
+
+// All Message types
+func AllMessageTypes() []byte {
+	return []byte{
+		TimeMessageMessageType,
+		SystemEventMessageMessageType,
+		SymbolDirectoryMessageMessageType,
+		SymbolStatusMessageMessageType,
+		AddOrderMessageMessageType,
+		AddAttributedOrderMessageMessageType,
+		OrderDeletedMessageMessageType,
+		OrderModifiedMessageMessageType,
+		OrderBookClearMessageMessageType,
+		OrderExecutedMessageMessageType,
+		OrderExecutedWithPriceSizeMessageMessageType,
+		TradeMessageMessageType,
+		AuctionTradeMessageMessageType,
+		OffBookTradeMessageMessageType,
+		TradeBreakMessageMessageType,
+		RecoveryTradeMessageMessageType,
+		AuctionInfoMessageMessageType,
+		StatisticsMessageMessageType,
+		ExtendedStatisticsMessageMessageType,
+		NewsMessageMessageType,
+		TopOfBookMessageMessageType,
+	}
+}

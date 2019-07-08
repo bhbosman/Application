@@ -1,6 +1,6 @@
 package MissingSequences
 
 type IMissingSequences interface {
-	Missing() ([]MissingSequenceItem, error)
-	Seen(sequence int32) error
+	Missing() (MissingSequenceItemArray, error)
+	Seen(sequence uint64) error
 }

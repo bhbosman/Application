@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/bhbosman/Application/Managers/FullMarketDepth"
-	"github.com/bhbosman/Application/Managers/MissingSequence"
+	"github.com/bhbosman/Application/Managers"
+	"github.com/bhbosman/Application/MissingSequences"
+
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"github.com/bhbosman/Application/Streams"
 	"io"
@@ -16,8 +17,8 @@ type MitchFeedProcessor struct {
 	reader                  io.Reader
 	dataHandler             IDataHandler
 	feedCounter             IFeedCounter
-	registrar               IMitchMessageHandlerRegistrar
-	missingSequencesManager MissingSequence.IMissingSequencesManager
+	registrar               Managers.IMitchMessageHandlerRegistrar
+	missingSequencesManager MissingSequences.IMissingSequencesManager
 }
 
 func (self *MitchFeedProcessor) Close() error {
@@ -29,8 +30,8 @@ func NewMitchFeedProcessor(
 	reader io.Reader,
 	dataHandler IDataHandler,
 	feedCounter IFeedCounter,
-	mitchMessageHandlerRegistrar IMitchMessageHandlerRegistrar,
-	missingSequencesManager MissingSequence.IMissingSequencesManager) (*MitchFeedProcessor, error) {
+	mitchMessageHandlerRegistrar Managers.IMitchMessageHandlerRegistrar,
+	missingSequencesManager MissingSequences.IMissingSequencesManager) (*MitchFeedProcessor, error) {
 	return &MitchFeedProcessor{
 		logger:                  logger,
 		reader:                  reader,
@@ -119,7 +120,7 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 							}
 
-							messageFactory, err := self.dataHandler.CreateMessageFactory(messageHeader.MessageType, messageHeader.Length, NewStreamData(nil, streamBytes))
+							messageFactory, err := self.dataHandler.CreateMessageFactory(int(messageHeader.MessageType), messageHeader.Length, NewStreamData(nil, streamBytes))
 							if err != nil {
 								if _, ok := err.(*DataHandlerErrorDidNothing); ok {
 									_, n, err = mitchStreamReader.Read_ReadBytes(nil, int(bytesLeft))
@@ -134,8 +135,8 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 							err = self.registrar.ProcessMessage(
 								wg,
 								messageFactory,
-								FullMarketDepth.NewMessageSource(
-									int(unitHeader.SequenceNumber),
+								Managers.NewMessageSource(
+									uint64(unitHeader.SequenceNumber),
 									source,
 									feedName))
 
@@ -145,7 +146,7 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 								markMessageAsSeen = false
 							}
 							if markMessageAsSeen {
-								err = self.missingSequencesManager.Seen(source, feedName, int32(unitHeader.SequenceNumber))
+								err = self.missingSequencesManager.Seen(source, feedName, uint64(unitHeader.SequenceNumber))
 								if err != nil {
 									self.logger.Printf("Error marking message as seen. Error : %v", err)
 								}

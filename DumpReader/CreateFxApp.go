@@ -1,6 +1,10 @@
 package main
 
 import (
+	"github.com/bhbosman/Application/Managers/CheckOrderNumbers"
+	"github.com/bhbosman/Application/Managers/MissingSequenceManager"
+	"github.com/bhbosman/Application/Managers/TimeService"
+	"github.com/bhbosman/Application/PubSub"
 	"go.uber.org/fx"
 	"io"
 	"log"
@@ -15,14 +19,16 @@ func CreateFxApplication(applicationLogger *log.Logger) (*fx.App, IApplicationCo
 	return fx.New(
 		fx.StartTimeout(fx.DefaultTimeout),
 		fx.StopTimeout(fx.DefaultTimeout),
-		FxAppProvideTimeServiceManager(),
+		TimeService.FxAppProvide(),
 		FxAppProvideSymbolDirectoryManager(),
-		FxAppProvideFullMarketDepthManager(),
-
-		FxAppInvokeTimeServiceManager(),
+		PubSub.FxAppProvide(),
+		PubSub.FxAppInvoke(),
+		MissingSequenceManager.FxAppProvide(),
+		MissingSequenceManager.FxAppInvoke(),
+		CheckOrderNumbers.FxAppProvide(),
+		CheckOrderNumbers.FxAppInvoke(),
+		TimeService.FxAppInvoke(),
 		FxAppInvokeSymbolDirectoryManager(),
-		FxAppInvokeFullMarketDepthManager(),
-
 		FxAppProvideMitchMessageHandlerRegistrar(),
 		FxAppProvideMissingSequencesManager(),
 		FxAppProvideApplicationContext(),

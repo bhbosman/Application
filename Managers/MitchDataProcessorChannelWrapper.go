@@ -1,10 +1,12 @@
-package main
-
-import "github.com/bhbosman/Application/Managers"
+package Managers
 
 type MitchDataProcessorChannelWrapper struct {
-	next Managers.IMitchDataProcessor
-	ch   chan Managers.IMessageServiceItem
+	next IMitchDataProcessor
+	ch   chan IMessageServiceItem
+}
+
+func (self *MitchDataProcessorChannelWrapper) Process() error {
+	return nil
 }
 
 func (self *MitchDataProcessorChannelWrapper) Close() error {
@@ -12,14 +14,14 @@ func (self *MitchDataProcessorChannelWrapper) Close() error {
 	return self.next.Close()
 }
 
-func NewMitchDataProcessorChannelWrapper(next Managers.IMitchDataProcessor) (Managers.IMitchDataProcessor, error) {
+func NewMitchDataProcessorChannelWrapper(next IMitchDataProcessor) (IMitchDataProcessor, error) {
 	result := &MitchDataProcessorChannelWrapper{
 		next: next,
-		ch:   make(chan Managers.IMessageServiceItem, 1024),
+		ch:   make(chan IMessageServiceItem, 1024),
 	}
 	go func(mitchDataProcessorChannelWrapper *MitchDataProcessorChannelWrapper) {
 		for message := range mitchDataProcessorChannelWrapper.ch {
-			func(message Managers.IMessageServiceItem) {
+			func(message IMessageServiceItem) {
 				defer func() {
 					err := message.Done()
 					if err != nil {
@@ -28,15 +30,18 @@ func NewMitchDataProcessorChannelWrapper(next Managers.IMitchDataProcessor) (Man
 				}()
 				err := result.next.Push(message)
 				if err != nil {
-
+				}
+				if len(mitchDataProcessorChannelWrapper.ch) == 0 {
+					result.next.Process()
 				}
 			}(message)
+
 		}
 	}(result)
 	return result, nil
 }
 
-func (self *MitchDataProcessorChannelWrapper) Push(message Managers.IMessageServiceItem) error {
+func (self *MitchDataProcessorChannelWrapper) Push(message IMessageServiceItem) error {
 	err := message.AddOne()
 	if err != nil {
 
@@ -46,6 +51,6 @@ func (self *MitchDataProcessorChannelWrapper) Push(message Managers.IMessageServ
 	return nil
 }
 
-func (self *MitchDataProcessorChannelWrapper) DeclareInterestInMessages() ([]byte, error) {
+func (self *MitchDataProcessorChannelWrapper) DeclareInterestInMessages() ([]int, error) {
 	return self.next.DeclareInterestInMessages()
 }

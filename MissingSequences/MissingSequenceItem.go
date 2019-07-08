@@ -1,11 +1,11 @@
 package MissingSequences
 
 type MissingSequenceItem struct {
-	BeginSequence int32
-	EndSequence   int32
+	BeginSequence uint64
+	EndSequence   uint64
 }
 
-func NewMissingSequenceItem(beginSequence int32, endSequence int32) *MissingSequenceItem {
+func NewMissingSequenceItem(beginSequence uint64, endSequence uint64) *MissingSequenceItem {
 	return &MissingSequenceItem{
 		BeginSequence: beginSequence,
 		EndSequence:   endSequence,

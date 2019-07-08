@@ -35,8 +35,8 @@ func (self *publishGolang) Export(params Publish.ExportParams) error {
 			_, _ = sb.WriteString(fmt.Sprintf("// %v\n", declaredType.GetName()))
 			break
 		}
-
 	}
+
 	_, _ = sb.WriteString(fmt.Sprintf("// \n"))
 	for _, declaredType := range params.DeclaredTypes {
 		declaredType.GetName()
@@ -100,20 +100,25 @@ func (self *publishGolang) Export(params Publish.ExportParams) error {
 	_, _ = sb.WriteString(fmt.Sprintf("\t}\n"))
 
 	_, _ = sb.WriteString(fmt.Sprintf("\treturn nil, 0, &CreateAndReadDataNotFound{MessageType: messageType,}\n"))
-	_, _ = sb.WriteString(fmt.Sprintf("}"))
+	_, _ = sb.WriteString(fmt.Sprintf("}\n"))
 
-	//for _, declaredType := range params.DeclaredTypes {
-	//	if definition, ok := declaredType.(*yacc.MitchMessageDefinition); ok {
-	//		publish := NewPublishStruct(definition)
-	//		err := publish.Export(sb)
-	//		asasaif err != nil {
-	//			result = multierr.Append(result, err)
-	//		}
-	//		continue
-	//	}
-	//
-	//}
+	_, _ = sb.WriteString(fmt.Sprintf("// All Message types\n"))
+	_, _ = sb.WriteString(fmt.Sprintf("func AllMessageTypes() []byte{\n"))
+	_, _ = sb.WriteString(fmt.Sprintf("\treturn []byte{\n"))
+	for _, declaredType := range params.DeclaredTypes {
+		switch v := declaredType.(type) {
+		case *yacc.MitchMessageDefinition:
+			if v.HasMessageInformation() {
+				_, _ = sb.WriteString(fmt.Sprintf("\t\t%sMessageType,\n", v.Identifier))
+			}
+			break
+		default:
 
+			break
+		}
+	}
+	_, _ = sb.WriteString(fmt.Sprintf("\t}\n"))
+	_, _ = sb.WriteString(fmt.Sprintf("}\n"))
 	_ = sb.Flush()
 
 	return result

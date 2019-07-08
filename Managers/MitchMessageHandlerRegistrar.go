@@ -1,9 +1,8 @@
-package main
+package Managers
 
 import (
 	"container/list"
 	"fmt"
-	"github.com/bhbosman/Application/Managers"
 	"log"
 )
 
@@ -12,18 +11,18 @@ type MessageTypeRegistrar struct {
 	messageCount int
 }
 
-func (self *MessageTypeRegistrar) Add(processor Managers.IMitchDataProcessor) {
+func (self *MessageTypeRegistrar) Add(processor IMitchDataProcessor) {
 	self.l.PushBack(processor)
 }
 
-func (self *MessageTypeRegistrar) ProcessMessage(group IWaitGroup, factory IMessageFactory, messageSource Managers.IMessageSource) error {
+func (self *MessageTypeRegistrar) ProcessMessage(group IWaitGroup, factory IMessageFactory, messageSource IMessageSource) error {
 	self.messageCount++
 	for e := self.l.Front(); e != nil; e = e.Next() {
-		mitchDataProcessor, ok := e.Value.(Managers.IMitchDataProcessor)
+		mitchDataProcessor, ok := e.Value.(IMitchDataProcessor)
 		if !ok {
 			return fmt.Errorf("Count not get interface IMitchDataProcessor\n")
 		}
-		func(mitchDataProcessor Managers.IMitchDataProcessor) {
+		func(mitchDataProcessor IMitchDataProcessor) {
 			item := NewMitchProcessingItem(group, factory, messageSource)
 			err := item.AddOne()
 			if err != nil {
@@ -48,16 +47,16 @@ func NewMessageTypeRegistrar() *MessageTypeRegistrar {
 }
 
 type MitchMessageHandlerRegistrar struct {
-	MessageHandlers map[byte]*MessageTypeRegistrar
+	MessageHandlers map[int]*MessageTypeRegistrar
 	logger          *log.Logger
 }
 
 type messageCountImpl struct {
-	messageType byte
+	messageType int
 	count       int
 }
 
-func (self *messageCountImpl) MessageType() byte {
+func (self *messageCountImpl) MessageType() int {
 	return self.messageType
 }
 
@@ -76,7 +75,7 @@ func (self *MitchMessageHandlerRegistrar) GetMessageCounts() []IMessageCount {
 	return result
 }
 
-func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager Managers.IMitchDataProcessor) error {
+func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager IMitchDataProcessor) error {
 	messages, err := manager.DeclareInterestInMessages()
 	if err != nil {
 		return err
@@ -93,7 +92,7 @@ func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager Managers.IMitchDa
 	return nil
 }
 
-func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, messageSource Managers.IMessageSource) error {
+func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, messageSource IMessageSource) error {
 	handler, ok := self.MessageHandlers[messageFactory.MessageType()]
 	if !ok {
 
@@ -107,7 +106,7 @@ func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageF
 
 func NewMitchMessageHandlerRegistrar(logger *log.Logger) *MitchMessageHandlerRegistrar {
 	return &MitchMessageHandlerRegistrar{
-		MessageHandlers: make(map[byte]*MessageTypeRegistrar),
+		MessageHandlers: make(map[int]*MessageTypeRegistrar),
 		logger:          logger,
 	}
 }

@@ -28,4 +28,3 @@ func (self *WaitGroupDefaultImpl) Done() error {
 	self.wg.Done()
 	return nil
 }
-

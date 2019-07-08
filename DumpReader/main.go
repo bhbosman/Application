@@ -32,7 +32,7 @@ func main() {
 	} else {
 		loggerOutput = os.Stdout
 	}
-	applicationLogger := log.New(loggerOutput, "Dump Reader: ", log.LstdFlags)
+	applicationLogger := log.New(loggerOutput, "Dump Reader: ", log.Ldate|log.Ltime|log.Lmicroseconds)
 	app, applicationContext, err := CreateFxApplication(applicationLogger)
 	if err != nil {
 		panic(err)

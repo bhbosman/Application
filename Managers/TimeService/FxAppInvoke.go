@@ -1,4 +1,4 @@
-package main
+package TimeService
 
 import (
 	"context"
@@ -7,18 +7,18 @@ import (
 	"log"
 )
 
-func FxAppInvokeFullMarketDepthManager() fx.Option {
+func FxAppInvoke() fx.Option {
 	type InputType struct {
 		fx.In
-		FullMarketDepthManager Managers.IMitchDataProcessor `name:"FullMarketDepthManager"`
+		TimeServiceManager Managers.IMitchDataProcessor `name:"TimeServiceManager"`
 	}
 	return fx.Invoke(
 		func(lifecycle fx.Lifecycle, logger *log.Logger, input InputType) error {
 			lifecycle.Append(fx.Hook{
 				OnStart: nil,
 				OnStop: func(stopContext context.Context) error {
-					logger.Println("FullMarketDepthManager")
-					return input.FullMarketDepthManager.Close()
+					logger.Println("Closing TimeServiceManager")
+					return input.TimeServiceManager.Close()
 				},
 			})
 			return nil

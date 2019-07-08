@@ -2,26 +2,26 @@ package Mitch
 
 import "io"
 
-type MitchStreamReader struct {
+type StreamReader struct {
 	reader     io.ReadCloser
 	messageMap map[byte]func() (interface{}, error)
 }
 
-func (self *MitchStreamReader) Close() error {
+func (self *StreamReader) Close() error {
 	err := self.reader.Close()
 	return err
 }
 
-func NewMitchStreamReader(reader io.ReadCloser) (*MitchStreamReader, error) {
+func NewMitchStreamReader(reader io.ReadCloser) (*StreamReader, error) {
 
 	messageMap := make(map[byte]func() (interface{}, error))
-	return &MitchStreamReader{
+	return &StreamReader{
 		reader:     reader,
 		messageMap: messageMap,
 	}, nil
 }
 
-func (self *MitchStreamReader) ReadMessage() error {
+func (self *StreamReader) ReadMessage() error {
 	lengthBytes := []byte{0, 0}
 	for {
 		n, e := self.reader.Read(lengthBytes)

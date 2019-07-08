@@ -1,20 +1,20 @@
-package main
+package MissingSequenceManager
 
 import (
 	"github.com/bhbosman/Application/Managers"
-	"github.com/bhbosman/Application/Managers/SymbolService"
+	"github.com/bhbosman/Application/PubSub"
 	"go.uber.org/fx"
 	"log"
 )
 
-func FxAppProvideSymbolDirectoryManager() fx.Option {
+func FxAppProvide() fx.Option {
 	type ReturnType struct {
 		fx.Out
-		SymbolDirectoryManager Managers.IMitchDataProcessor `name:"SymbolDirectoryManager"`
+		FullMarketDepthManager Managers.IMitchDataProcessor `name:"MissingSequenceManager"`
 	}
 	return fx.Provide(
-		func(logger *log.Logger, mitchMessageHandlerRegistrar Managers.IMitchMessageHandlerRegistrar) (ReturnType, error) {
-			nextHandler, err := SymbolService.NewSymbolDirectoryManager(logger)
+		func(publisher PubSub.IPublisher, logger *log.Logger, mitchMessageHandlerRegistrar Managers.IMitchMessageHandlerRegistrar) (ReturnType, error) {
+			nextHandler, err := NewManager(logger, publisher)
 			if err != nil {
 				return ReturnType{}, err
 			}
@@ -28,7 +28,7 @@ func FxAppProvideSymbolDirectoryManager() fx.Option {
 				return ReturnType{}, err
 			}
 			return ReturnType{
-				SymbolDirectoryManager: handler,
+				FullMarketDepthManager: handler,
 			}, nil
 		})
 }

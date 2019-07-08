@@ -1,4 +1,4 @@
-package main
+package CheckOrderNumbers
 
 import (
 	"context"
@@ -7,18 +7,18 @@ import (
 	"log"
 )
 
-func FxAppInvokeTimeServiceManager() fx.Option {
+func FxAppInvoke() fx.Option {
 	type InputType struct {
 		fx.In
-		TimeServiceManager Managers.IMitchDataProcessor `name:"TimeServiceManager"`
+		FullMarketDepthManager Managers.IMitchDataProcessor `name:"CheckOrderNumbers"`
 	}
 	return fx.Invoke(
 		func(lifecycle fx.Lifecycle, logger *log.Logger, input InputType) error {
 			lifecycle.Append(fx.Hook{
 				OnStart: nil,
 				OnStop: func(stopContext context.Context) error {
-					logger.Println("Closing TimeServiceManager")
-					return input.TimeServiceManager.Close()
+					logger.Println("CheckOrderNumbers")
+					return input.FullMarketDepthManager.Close()
 				},
 			})
 			return nil

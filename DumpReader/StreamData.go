@@ -10,12 +10,13 @@ func NewStreamData(closer func(data []byte) error, data []byte) *StreamData {
 }
 
 func (self *StreamData) Close() error {
-	var err error = nil
-	if self.closer != nil {
-		err = self.closer(self.data)
-	}
-	self.data = nil
-	return err
+	//var err error = nil
+	//if self.closer != nil {
+	//	err = self.closer(self.data)
+	//}
+	//self.data = nil
+	//return err
+	return nil
 }
 
 func (self *StreamData) Data() []byte {

@@ -8,14 +8,14 @@ import (
 
 type MessageFactory struct {
 	mutex          sync.Mutex
-	messageType    byte
+	messageType    int
 	length         uint16
 	stream         IStreamData
 	factory        Streams.IMitchReaderFactory
 	createdMessage interface{}
 }
 
-func (self *MessageFactory) MessageType() byte {
+func (self *MessageFactory) MessageType() int {
 	return self.messageType
 }
 
@@ -38,19 +38,18 @@ func (self *MessageFactory) Message() (interface{}, error) {
 	}
 	self.stream.Close()
 	self.stream = nil
-
-	data, _, err := GeneratedFiles.CreateAndReadData(self.messageType, self.length, reader)
+	self.createdMessage, _, err = GeneratedFiles.CreateAndReadData(byte(self.messageType), self.length, reader)
 	if err != nil {
 		if _, ok := err.(*GeneratedFiles.CreateAndReadDataNotFound); ok {
 			return nil, &DataHandlerErrorDidNothing{}
 		}
 		return nil, err
 	}
-	return data, nil
+	return self.createdMessage, nil
 }
 
 func NewMessageFactory(
-	messageType byte,
+	messageType int,
 	length uint16,
 	stream IStreamData,
 	factory Streams.IMitchReaderFactory) (*MessageFactory, error) {

@@ -2,9 +2,11 @@ package MissingSequences
 
 import (
 	"container/list"
+	"encoding/json"
 	"fmt"
 	"go.uber.org/multierr"
 	"log"
+	"strings"
 
 	"math"
 )
@@ -22,7 +24,16 @@ func NewMissingSequences(logger *log.Logger) *MissingSequences {
 	return result.init()
 }
 
-func (self *MissingSequences) Missing() ([]MissingSequenceItem, error) {
+type MissingSequenceItemArray []MissingSequenceItem
+
+func (receiver MissingSequenceItemArray) String() string {
+	sb := strings.Builder{}
+	b, _ := json.MarshalIndent(receiver, "", "")
+	sb.Write(b)
+	return sb.String()
+}
+
+func (self *MissingSequences) Missing() (MissingSequenceItemArray, error) {
 	var result []MissingSequenceItem
 
 	for e := self.List.Front(); e != nil; e = e.Next() {
@@ -34,7 +45,7 @@ func (self *MissingSequences) Missing() ([]MissingSequenceItem, error) {
 	return result, nil
 }
 
-func (self *MissingSequences) SeenArray(sequenceArray []int32) error {
+func (self *MissingSequences) SeenArray(sequenceArray []uint64) error {
 	var errResult error = nil
 	for _, sequence := range sequenceArray {
 		err := self.Seen(sequence)
@@ -45,7 +56,7 @@ func (self *MissingSequences) SeenArray(sequenceArray []int32) error {
 	return errResult
 }
 
-func (self *MissingSequences) UnSeenArray(sequenceArray []int32) error {
+func (self *MissingSequences) UnSeenArray(sequenceArray []uint64) error {
 	var errResult error = nil
 	for _, sequence := range sequenceArray {
 		err := self.UnSeen(sequence)
@@ -56,7 +67,7 @@ func (self *MissingSequences) UnSeenArray(sequenceArray []int32) error {
 	return errResult
 }
 
-func (self *MissingSequences) Seen(sequence int32) error {
+func (self *MissingSequences) Seen(sequence uint64) error {
 	element, blockValue, err := self.findBlock(sequence, false)
 	if err != nil {
 		return err
@@ -83,7 +94,7 @@ func (self *MissingSequences) Seen(sequence int32) error {
 	return nil
 }
 
-func (self *MissingSequences) UnSeen(sequence int32) error {
+func (self *MissingSequences) UnSeen(sequence uint64) error {
 	element, blockValue, err := self.findBlock(sequence, true)
 	if err != nil {
 		return err
@@ -103,7 +114,6 @@ func (self *MissingSequences) UnSeen(sequence int32) error {
 				return element, nil
 			}
 		}
-
 		newBlockValue := NewMissingSequenceItem(sequence, sequence)
 		for e := self.List.Front(); e != nil; e = e.Next() {
 			if e.Value.(*MissingSequenceItem).BeginSequence > newBlockValue.BeginSequence {
@@ -127,11 +137,11 @@ func (self *MissingSequences) UnSeen(sequence int32) error {
 }
 
 func (self *MissingSequences) init() *MissingSequences {
-	self.List.PushBack(NewMissingSequenceItem(1, math.MaxInt32))
+	self.List.PushBack(NewMissingSequenceItem(1, math.MaxUint64))
 	return self
 }
 
-func (self *MissingSequences) findBlock(sequence int32, lookForProximity bool) (*list.Element, *MissingSequenceItem, error) {
+func (self *MissingSequences) findBlock(sequence uint64, lookForProximity bool) (*list.Element, *MissingSequenceItem, error) {
 	for e := self.List.Front(); e != nil; e = e.Next() {
 		if blockValue, ok := e.Value.(*MissingSequenceItem); ok {
 			if blockValue.BeginSequence <= sequence && sequence <= blockValue.EndSequence {
@@ -143,7 +153,7 @@ func (self *MissingSequences) findBlock(sequence int32, lookForProximity bool) (
 						return e, blockValue, nil
 					}
 				}
-				if blockValue.BeginSequence != int32(math.MaxInt32) {
+				if blockValue.BeginSequence != uint64(math.MaxUint64) {
 					if blockValue.BeginSequence <= sequence && sequence <= blockValue.EndSequence+1 {
 						return e, blockValue, nil
 					}
