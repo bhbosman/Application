@@ -8,12 +8,12 @@ import (
 )
 
 type KeyBucket struct {
-	key               string
-	logger            *log.Logger
-	mutex             sync.RWMutex
-	routes            map[string]IInterConnector
-	uniqueNumber      UniqueNumber.IGenerator
-	newInterConnector func(key string, receiver IKeyBucketReceiver, logger *log.Logger) (*InterConnector, error)
+	key               string                                                                                     `json:"key"`
+	logger            *log.Logger                                                                                `json:"-"`
+	mutex             sync.RWMutex                                                                               `json:"-"`
+	routes            map[string]IInterConnector                                                                 `json:"routes"`
+	uniqueNumber      UniqueNumber.IGenerator                                                                    `json:"-"`
+	newInterConnector func(key string, receiver IKeyBucketReceiver, logger *log.Logger) (*InterConnector, error) `json:"-"`
 }
 
 func (self *KeyBucket) UnRegister(key string) error {
@@ -29,7 +29,7 @@ func (self *KeyBucket) UnRegister(key string) error {
 	return nil
 }
 
-func NewKeyBucket(key string, logger *log.Logger, uniqueNumber UniqueNumber.IGenerator) (*KeyBucket, error) {
+func NewKeyBucket(key string, logger *log.Logger, uniqueNumber UniqueNumber.IGenerator) *KeyBucket {
 	return &KeyBucket{
 		key:          key,
 		logger:       logger,
@@ -39,7 +39,7 @@ func NewKeyBucket(key string, logger *log.Logger, uniqueNumber UniqueNumber.IGen
 		newInterConnector: func(key string, receiver IKeyBucketReceiver, logger *log.Logger) (connector *InterConnector, e error) {
 			return NewInterConnector(key, receiver, logger)
 		},
-	}, nil
+	}
 }
 
 func (self *KeyBucket) Register(receiver IKeyBucketReceiver) (IInterConnector, error) {
@@ -74,7 +74,7 @@ func (self *KeyBucket) Register(receiver IKeyBucketReceiver) (IInterConnector, e
 }
 
 func (self *KeyBucket) Close() error {
-	for _, value := range self.routes{
+	for _, value := range self.routes {
 		err := value.Close()
 		if err != nil {
 
@@ -94,7 +94,7 @@ func (self *KeyBucket) Publish(data interface{}) error {
 		connectorList = make([]IInterConnector, n, n)
 		i := 0
 		for _, value := range self.routes {
-			connectorList[0] = value
+			connectorList[i] = value
 			i++
 		}
 	})
@@ -112,6 +112,7 @@ func (self *KeyBucket) Publish(data interface{}) error {
 			for _, key := range errKeys {
 				err := self.UnRegister(key)
 				if err != nil {
+					self.logger.Printf("Could not Unregister. Error: %v", err)
 				}
 			}
 		}

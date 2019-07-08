@@ -45,7 +45,6 @@ func TestInterConnector_Close(t *testing.T) {
 			wantErr: false,
 		},
 
-
 		{
 			name: "with receiver throwing error",
 			fields: fields{
@@ -150,3 +149,4 @@ func TestInterConnector_receiver(t *testing.T) {
 		})
 	}
 }
+

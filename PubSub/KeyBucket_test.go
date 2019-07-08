@@ -132,13 +132,10 @@ func TestKeyBucket_ReadLockScope(t *testing.T) {
 
 func TestKeyBucket_Close(t *testing.T) {
 	createSut := func(controller *gomock.Controller, init func(controller *gomock.Controller, bucket *KeyBucket)) (*KeyBucket, error) {
-		result, err := NewKeyBucket(
+		result := NewKeyBucket(
 			"test",
 			log.New(os.Stdout, "", log.LstdFlags),
 			UniqueNumber.NewUniqueNumberGenerator())
-		if err != nil {
-			return nil, err
-		}
 		if init != nil {
 			init(controller, result)
 		}
@@ -199,13 +196,10 @@ func TestKeyBucket_Close(t *testing.T) {
 
 func TestKeyBucket_Register(t *testing.T) {
 	createSut := func(controller *gomock.Controller, newInterConnector func(key string, receiver IKeyBucketReceiver, logger *log.Logger) (*InterConnector, error)) (*KeyBucket, error) {
-		result, err := NewKeyBucket(
+		result := NewKeyBucket(
 			"test",
 			log.New(os.Stdout, "", log.LstdFlags),
 			UniqueNumber.NewUniqueNumberGenerator())
-		if err != nil {
-			return nil, err
-		}
 		if newInterConnector != nil {
 			result.newInterConnector = newInterConnector
 		}
@@ -281,13 +275,10 @@ func TestKeyBucket_Register(t *testing.T) {
 func TestKeyBucket_UnRegister(t *testing.T) {
 
 	createSut := func(controller *gomock.Controller) (*KeyBucket, IInterConnector, error) {
-		result, err := NewKeyBucket(
+		result := NewKeyBucket(
 			"test",
 			log.New(os.Stdout, "", log.LstdFlags),
 			UniqueNumber.NewUniqueNumberGenerator())
-		if err != nil {
-			return nil, nil, err
-		}
 		receiver := NewMockIKeyBucketReceiver(controller)
 		ic, _ := result.Register(receiver)
 		return result, ic, nil
@@ -322,13 +313,10 @@ func TestKeyBucket_UnRegister(t *testing.T) {
 
 func TestKeyBucket_Publish(t *testing.T) {
 	createSut := func(controller *gomock.Controller, init func(controller *gomock.Controller, bucket *KeyBucket)) (*KeyBucket, error) {
-		result, err := NewKeyBucket(
+		result := NewKeyBucket(
 			"test",
 			log.New(os.Stdout, "", log.LstdFlags),
 			UniqueNumber.NewUniqueNumberGenerator())
-		if err != nil {
-			return nil, err
-		}
 		if init != nil {
 			init(controller, result)
 		}

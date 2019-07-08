@@ -13,8 +13,16 @@ type Publisher struct {
 	logger                *log.Logger
 	keys                  map[string]IKeyBucket
 	nullBucket            IKeyBucket
-	newKeyBucket          func(key string) (IKeyBucket, error)
+	newKeyBucket          func(key string) IKeyBucket
 	uniqueNumberGenerator UniqueNumber.IGenerator
+}
+
+func (self *Publisher) Register(key string, receiver IKeyBucketReceiver) {
+	panic("implement me")
+}
+
+func (self *Publisher) UnRegister(key string, receiverKey string) {
+	panic("implement me")
 }
 
 func (self *Publisher) ReadLockScope(cb func()) {
@@ -33,7 +41,7 @@ func (self *Publisher) LockScope(cb func()) {
 }
 
 func (self *Publisher) Publish(key string, data interface{}) error {
-	bucket := self.FindBucket(key)
+	bucket := self.FindBucket(key, true)
 	return bucket.Publish(data)
 }
 
@@ -51,8 +59,8 @@ func (self *Publisher) Close() error {
 	return errResult
 }
 
-func (self *Publisher) FindBucket(key string) IKeyBucket {
-	var result IKeyBucket = nil
+func (self *Publisher) FindBucket(key string, produceNullBucker bool) IKeyBucket {
+	var result IKeyBucket
 	ok := false
 	self.ReadLockScope(func() {
 		result, ok = self.keys[key]
@@ -60,28 +68,22 @@ func (self *Publisher) FindBucket(key string) IKeyBucket {
 	if ok {
 		return result
 	}
-	return self.nullBucket
+	if produceNullBucker {
+		return self.nullBucket
+	}
+	return nil
 }
 
 func (self *Publisher) CreateBucket(key string) (IKeyBucket, error) {
 	if key == "" {
 		return nil, fmt.Errorf("key can not be empty")
 	}
-	result, err := self.newKeyBucket(key)
-	if err != nil {
-		return nil, err
-	}
+	result := self.newKeyBucket(key)
 	self.LockScope(func() {
 		self.keys[key] = result
 	})
 	return result, nil
 }
-
-//func NewBucket(key string) IKeyBucket {
-//	return &KeyBucket{
-//		routes: list.New(),
-//	}
-//}
 
 func NewPublisher(logger *log.Logger, uniqueNumberGenerator UniqueNumber.IGenerator) (*Publisher, error) {
 	return &Publisher{
@@ -89,7 +91,7 @@ func NewPublisher(logger *log.Logger, uniqueNumberGenerator UniqueNumber.IGenera
 		logger:     logger,
 		keys:       make(map[string]IKeyBucket),
 		nullBucket: newNullBucket(),
-		newKeyBucket: func(key string) (IKeyBucket, error) {
+		newKeyBucket: func(key string) IKeyBucket {
 			return NewKeyBucket(key, logger, uniqueNumberGenerator)
 		},
 		uniqueNumberGenerator: uniqueNumberGenerator,
