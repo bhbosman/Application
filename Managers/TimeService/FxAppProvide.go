@@ -2,6 +2,7 @@ package TimeService
 
 import (
 	"github.com/bhbosman/Application/Managers"
+	"github.com/bhbosman/Application/PubSub"
 	"go.uber.org/fx"
 	"log"
 )
@@ -12,20 +13,12 @@ func FxAppProvide() fx.Option {
 		TimeServiceManager Managers.IMitchDataProcessor `name:"TimeServiceManager"`
 	}
 	return fx.Provide(
-		func(logger *log.Logger, mitchMessageHandlerRegistrar Managers.IMitchMessageHandlerRegistrar) (ReturnType, error) {
+		func(logger *log.Logger, publisher PubSub.IPublisher) (ReturnType, error) {
 			nextHandler, err := NewTimeServiceManager(logger)
 			if err != nil {
 				return ReturnType{}, err
 			}
-
-			handler, err := Managers.NewMitchDataProcessorChannelWrapper(nextHandler)
-			if err != nil {
-				return ReturnType{}, err
-			}
-			err = mitchMessageHandlerRegistrar.RegisterFeed(handler)
-			if err != nil {
-				return ReturnType{}, err
-			}
+			handler := Managers.NewMitchDataProcessorChannelWrapper(nextHandler, publisher)
 			return ReturnType{
 				TimeServiceManager: handler,
 			}, nil

@@ -51,7 +51,7 @@ func (self *CheckOrderNumbers) Process() error {
 				}(self.Sequence, missing[0].BeginSequence)
 				lowestNumberOnFeed := NewLowestNumberOnFeed(source, feedName, gapsDetected, lowestNumber)
 				key := fmt.Sprintf("seq_gaps/%v/%v", source, feedName)
-				err := self.publisher.Publish(key, lowestNumberOnFeed)
+				err := self.publisher.Publish("SeqManager", key, lowestNumberOnFeed)
 				return err
 			})
 		if err != nil {
@@ -69,7 +69,7 @@ func (self *CheckOrderNumbers) Push(message Managers.IMessageServiceItem) error 
 	}
 
 	switch message.MessageType() {
-	case int(GeneratedFiles.TimeMessageMessageType):
+	case GeneratedFiles.TimeMessage_MessageType:
 		break
 	default:
 		return nil
@@ -92,15 +92,8 @@ func (self *CheckOrderNumbers) Close() error {
 	return nil
 }
 
-func (self *CheckOrderNumbers) DeclareInterestInMessages() ([]int, error) {
-	values := GeneratedFiles.AllMessageTypes()
-
-	result := make([]int, len(values), len(values))
-	for i, v := range values {
-		result[i] = int(v)
-	}
-	return result, nil
-
+func (self *CheckOrderNumbers) DeclareInterestInMessages() []int {
+	return GeneratedFiles.AllMessageTypes()
 }
 
 func (self *CheckOrderNumbers) HandleTimeMessage(message *GeneratedFiles.TimeMessage, source Managers.IMessageSource) error {

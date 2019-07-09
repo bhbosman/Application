@@ -8,20 +8,24 @@ import (
 
 type InterConnector struct {
 	logger         *log.Logger
-	icKey          string             `json:"key"`
-	icReceiver     IKeyBucketReceiver `json:"receiver"`
-	icReceiverType string             `json:"receiver_type"`
+	icKey          string                `json:"key"`
+	icReceiver     ISubKeyBucketReceiver `json:"receiver"`
+	icReceiverType string                `json:"receiver_type"`
+}
+
+func (self *InterConnector) receiverDescription() string {
+	return self.icReceiverType
 }
 
 func (self *InterConnector) String() string {
 	return fmt.Sprintf("InterConnector: (key: %v, receiver type %v)", self.icKey, self.icReceiverType)
 }
 
-func (self *InterConnector) receiver() IKeyBucketReceiver {
+func (self *InterConnector) receiver() ISubKeyBucketReceiver {
 	return self.icReceiver
 }
 
-func (self *InterConnector) key() string {
+func (self *InterConnector) Key() string {
 	return self.icKey
 }
 
@@ -36,7 +40,7 @@ func (self *InterConnector) Close() error {
 	return nil
 }
 
-func NewInterConnector(key string, receiver IKeyBucketReceiver, logger *log.Logger) (*InterConnector, error) {
+func NewInterConnector(key string, receiver ISubKeyBucketReceiver, logger *log.Logger) (*InterConnector, error) {
 	return &InterConnector{
 		logger:         logger,
 		icKey:          key,

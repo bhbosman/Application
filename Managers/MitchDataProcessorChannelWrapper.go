@@ -1,8 +1,19 @@
 package Managers
 
+import (
+	"github.com/bhbosman/Application/Messages"
+	"github.com/bhbosman/Application/PubSub"
+	"strconv"
+)
+
 type MitchDataProcessorChannelWrapper struct {
-	next IMitchDataProcessor
-	ch   chan IMessageServiceItem
+	publisher PubSub.IPublisher
+	next      IMitchDataProcessor
+	ch        chan Messages.IMessageServiceItem
+}
+
+func (self *MitchDataProcessorChannelWrapper) Handle(data interface{}) error {
+	return nil
 }
 
 func (self *MitchDataProcessorChannelWrapper) Process() error {
@@ -11,17 +22,24 @@ func (self *MitchDataProcessorChannelWrapper) Process() error {
 
 func (self *MitchDataProcessorChannelWrapper) Close() error {
 	close(self.ch)
+	self.publisher.UnRegisterReceiver(self)
 	return self.next.Close()
 }
 
-func NewMitchDataProcessorChannelWrapper(next IMitchDataProcessor) (IMitchDataProcessor, error) {
+func NewMitchDataProcessorChannelWrapper(next IMitchDataProcessor, publisher PubSub.IPublisher) IMitchDataProcessor {
 	result := &MitchDataProcessorChannelWrapper{
-		next: next,
-		ch:   make(chan IMessageServiceItem, 1024),
+		publisher: publisher,
+		next:      next,
+		ch:        make(chan Messages.IMessageServiceItem, 1024),
+	}
+	msgTypes := next.DeclareInterestInMessages()
+	for _, msgType := range msgTypes {
+
+		_, _ = publisher.Register(MitchFeed, strconv.Itoa(msgType), result)
 	}
 	go func(mitchDataProcessorChannelWrapper *MitchDataProcessorChannelWrapper) {
 		for message := range mitchDataProcessorChannelWrapper.ch {
-			func(message IMessageServiceItem) {
+			func(message Messages.IMessageServiceItem) {
 				defer func() {
 					err := message.Done()
 					if err != nil {
@@ -32,16 +50,18 @@ func NewMitchDataProcessorChannelWrapper(next IMitchDataProcessor) (IMitchDataPr
 				if err != nil {
 				}
 				if len(mitchDataProcessorChannelWrapper.ch) == 0 {
-					result.next.Process()
+					err := result.next.Process()
+					if err != nil {
+
+					}
 				}
 			}(message)
-
 		}
 	}(result)
-	return result, nil
+	return result
 }
 
-func (self *MitchDataProcessorChannelWrapper) Push(message IMessageServiceItem) error {
+func (self *MitchDataProcessorChannelWrapper) Push(message Messages.IMessageServiceItem) error {
 	err := message.AddOne()
 	if err != nil {
 
@@ -51,6 +71,6 @@ func (self *MitchDataProcessorChannelWrapper) Push(message IMessageServiceItem) 
 	return nil
 }
 
-func (self *MitchDataProcessorChannelWrapper) DeclareInterestInMessages() ([]int, error) {
+func (self *MitchDataProcessorChannelWrapper) DeclareInterestInMessages() []int {
 	return self.next.DeclareInterestInMessages()
 }

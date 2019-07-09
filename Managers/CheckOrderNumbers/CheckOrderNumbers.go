@@ -50,16 +50,16 @@ func (self *CheckOrderNumbers) Close() error {
 	return nil
 }
 
-func (self *CheckOrderNumbers) DeclareInterestInMessages() ([]int, error) {
+func (self *CheckOrderNumbers) DeclareInterestInMessages() []int {
 	return []int{
-		int(GeneratedFiles.TimeMessageMessageType),
-		int(GeneratedFiles.AddOrderMessageMessageType),
-		int(GeneratedFiles.OrderDeletedMessageMessageType),
-		int(GeneratedFiles.OrderModifiedMessageMessageType),
-		int(GeneratedFiles.OrderBookClearMessageMessageType),
-		int(GeneratedFiles.OrderExecutedMessageMessageType),
-		int(GeneratedFiles.OrderExecutedWithPriceSizeMessageMessageType),
-	}, nil
+		GeneratedFiles.TimeMessage_MessageType,
+		GeneratedFiles.AddOrderMessage_MessageType,
+		GeneratedFiles.OrderDeletedMessage_MessageType,
+		GeneratedFiles.OrderModifiedMessage_MessageType,
+		GeneratedFiles.OrderBookClearMessage_MessageType,
+		GeneratedFiles.OrderExecutedMessage_MessageType,
+		GeneratedFiles.OrderExecutedWithPriceSizeMessage_MessageType,
+	}
 }
 
 func (self *CheckOrderNumbers) HandleTimeMessage(message *GeneratedFiles.TimeMessage, source Managers.IMessageSource) error {

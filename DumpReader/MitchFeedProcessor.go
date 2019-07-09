@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/MissingSequences"
-
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
+	"github.com/bhbosman/Application/PubSub"
 	"github.com/bhbosman/Application/Streams"
 	"io"
 	"log"
+	"strconv"
 )
 
 type MitchFeedProcessor struct {
@@ -17,8 +18,8 @@ type MitchFeedProcessor struct {
 	reader                  io.Reader
 	dataHandler             IDataHandler
 	feedCounter             IFeedCounter
-	registrar               Managers.IMitchMessageHandlerRegistrar
 	missingSequencesManager MissingSequences.IMissingSequencesManager
+	publisher               PubSub.IPublisher
 }
 
 func (self *MitchFeedProcessor) Close() error {
@@ -30,15 +31,15 @@ func NewMitchFeedProcessor(
 	reader io.Reader,
 	dataHandler IDataHandler,
 	feedCounter IFeedCounter,
-	mitchMessageHandlerRegistrar Managers.IMitchMessageHandlerRegistrar,
+	publisher PubSub.IPublisher,
 	missingSequencesManager MissingSequences.IMissingSequencesManager) (*MitchFeedProcessor, error) {
 	return &MitchFeedProcessor{
 		logger:                  logger,
 		reader:                  reader,
 		dataHandler:             dataHandler,
 		feedCounter:             feedCounter,
-		registrar:               mitchMessageHandlerRegistrar,
 		missingSequencesManager: missingSequencesManager,
+		publisher:               publisher,
 	}, nil
 }
 
@@ -51,11 +52,6 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 			self.logger.Println(">>", msgCount, "<<")
 			miss, _ := self.missingSequencesManager.Missing(source, feedName)
 			self.logger.Println(">>", miss, "<<")
-
-			messageCounts := self.registrar.GetMessageCounts()
-			for _, messageCount := range messageCounts {
-				self.logger.Printf(">> 0x%x: %v\n", messageCount.MessageType(), messageCount.MessageCount())
-			}
 		}()
 
 		mitchStreamReader := Streams.MitchReader{
@@ -132,13 +128,10 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 								return
 							}
 
-							err = self.registrar.ProcessMessage(
-								wg,
-								messageFactory,
-								Managers.NewMessageSource(
-									uint64(unitHeader.SequenceNumber),
-									source,
-									feedName))
+							err = self.publisher.Publish(Managers.MitchFeed, strconv.Itoa(int(messageHeader.MessageType)), messageFactory)
+							if err != nil {
+
+							}
 
 							markMessageAsSeen := true
 							if err != nil {

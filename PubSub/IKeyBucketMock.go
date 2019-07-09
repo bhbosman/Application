@@ -5,6 +5,7 @@
 package PubSub
 
 import (
+	Messages "github.com/bhbosman/Application/Messages"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -47,44 +48,84 @@ func (mr *MockIKeyBucketMockRecorder) Close() *gomock.Call {
 }
 
 // Publish mocks base method
-func (m *MockIKeyBucket) Publish(data interface{}) error {
+func (m *MockIKeyBucket) Publish(subKey string, waitGroup Messages.IWaitGroup, data interface{}) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Publish", data)
+	ret := m.ctrl.Call(m, "Publish", subKey, waitGroup, data)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Publish indicates an expected call of Publish
-func (mr *MockIKeyBucketMockRecorder) Publish(data interface{}) *gomock.Call {
+func (mr *MockIKeyBucketMockRecorder) Publish(subKey, waitGroup, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Publish", reflect.TypeOf((*MockIKeyBucket)(nil).Publish), data)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Publish", reflect.TypeOf((*MockIKeyBucket)(nil).Publish), subKey, waitGroup, data)
 }
 
 // Register mocks base method
-func (m *MockIKeyBucket) Register(receiver IKeyBucketReceiver) (IInterConnector, error) {
+func (m *MockIKeyBucket) Register(subKey string, receiver ISubKeyBucketReceiver) (IInterConnector, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Register", receiver)
+	ret := m.ctrl.Call(m, "Register", subKey, receiver)
 	ret0, _ := ret[0].(IInterConnector)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Register indicates an expected call of Register
-func (mr *MockIKeyBucketMockRecorder) Register(receiver interface{}) *gomock.Call {
+func (mr *MockIKeyBucketMockRecorder) Register(subKey, receiver interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockIKeyBucket)(nil).Register), receiver)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockIKeyBucket)(nil).Register), subKey, receiver)
 }
 
 // UnRegister mocks base method
-func (m *MockIKeyBucket) UnRegister(key string) error {
+func (m *MockIKeyBucket) UnRegister(subKey, receiverKey string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UnRegister", key)
+	ret := m.ctrl.Call(m, "UnRegister", subKey, receiverKey)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UnRegister indicates an expected call of UnRegister
-func (mr *MockIKeyBucketMockRecorder) UnRegister(key interface{}) *gomock.Call {
+func (mr *MockIKeyBucketMockRecorder) UnRegister(subKey, receiverKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnRegister", reflect.TypeOf((*MockIKeyBucket)(nil).UnRegister), key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnRegister", reflect.TypeOf((*MockIKeyBucket)(nil).UnRegister), subKey, receiverKey)
+}
+
+// UnRegisterReceiver mocks base method
+func (m *MockIKeyBucket) UnRegisterReceiver(receiver ISubKeyBucketReceiver) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "UnRegisterReceiver", receiver)
+}
+
+// UnRegisterReceiver indicates an expected call of UnRegisterReceiver
+func (mr *MockIKeyBucketMockRecorder) UnRegisterReceiver(receiver interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnRegisterReceiver", reflect.TypeOf((*MockIKeyBucket)(nil).UnRegisterReceiver), receiver)
+}
+
+// Count mocks base method
+func (m *MockIKeyBucket) Count() int {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Count")
+	ret0, _ := ret[0].(int)
+	return ret0
+}
+
+// Count indicates an expected call of Count
+func (mr *MockIKeyBucketMockRecorder) Count() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Count", reflect.TypeOf((*MockIKeyBucket)(nil).Count))
+}
+
+// Key mocks base method
+func (m *MockIKeyBucket) Key() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Key")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// Key indicates an expected call of Key
+func (mr *MockIKeyBucketMockRecorder) Key() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Key", reflect.TypeOf((*MockIKeyBucket)(nil).Key))
 }

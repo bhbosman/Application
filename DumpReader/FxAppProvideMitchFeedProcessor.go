@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/bhbosman/Application/Managers"
 	"github.com/bhbosman/Application/MissingSequences"
+	"github.com/bhbosman/Application/PubSub"
 	"github.com/bhbosman/Application/Streams"
 	"go.uber.org/fx"
 	"log"
@@ -10,11 +10,11 @@ import (
 
 type FxAppProvideMitchFeedReaderInput struct {
 	fx.In
-	Logger                       *log.Logger
-	CurrentOpenFile              ICurrentOpenFile
-	FeedCounter                  IFeedCounter
-	MitchMessageHandlerRegistrar Managers.IMitchMessageHandlerRegistrar
-	Seq                          MissingSequences.IMissingSequencesManager
+	Logger          *log.Logger
+	CurrentOpenFile ICurrentOpenFile
+	FeedCounter     IFeedCounter
+	Seq             MissingSequences.IMissingSequencesManager
+	Publisher       PubSub.IPublisher
 }
 
 func FxAppProvideMitchFeedProcessor() fx.Option {
@@ -30,8 +30,9 @@ func FxAppProvideMitchFeedProcessor() fx.Option {
 			inputData.CurrentOpenFile,
 			mitchDataHandler,
 			inputData.FeedCounter,
-			inputData.MitchMessageHandlerRegistrar,
-			inputData.Seq)
+			inputData.Publisher,
+			inputData.Seq,
+		)
 		if err != nil {
 			inputData.Logger.Printf("Could not create Mitch Reader. Error: %v\n", err)
 			return nil, err

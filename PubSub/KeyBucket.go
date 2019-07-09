@@ -2,79 +2,131 @@ package PubSub
 
 import (
 	"fmt"
+	"github.com/bhbosman/Application/Messages"
 	"github.com/bhbosman/Application/UniqueNumber"
 	"log"
 	"sync"
 )
 
 type KeyBucket struct {
-	key               string                                                                                     `json:"key"`
-	logger            *log.Logger                                                                                `json:"-"`
-	mutex             sync.RWMutex                                                                               `json:"-"`
-	routes            map[string]IInterConnector                                                                 `json:"routes"`
-	uniqueNumber      UniqueNumber.IGenerator                                                                    `json:"-"`
-	newInterConnector func(key string, receiver IKeyBucketReceiver, logger *log.Logger) (*InterConnector, error) `json:"-"`
-}
-
-func (self *KeyBucket) UnRegister(key string) error {
-	ok := false
-	self.ReadLockScope(func() {
-		_, ok = self.routes[key]
-	})
-	if ok {
-		self.LockScope(func() {
-			delete(self.routes, key)
-		})
-	}
-	return nil
+	key           string
+	subKeys       map[string]ISubKeyBucket
+	logger        *log.Logger
+	uniqueNumber  UniqueNumber.IGenerator
+	nullSubBucket ISubKeyBucket
+	mutex         sync.RWMutex
 }
 
 func NewKeyBucket(key string, logger *log.Logger, uniqueNumber UniqueNumber.IGenerator) *KeyBucket {
 	return &KeyBucket{
-		key:          key,
-		logger:       logger,
-		mutex:        sync.RWMutex{},
-		routes:       make(map[string]IInterConnector),
-		uniqueNumber: uniqueNumber,
-		newInterConnector: func(key string, receiver IKeyBucketReceiver, logger *log.Logger) (connector *InterConnector, e error) {
-			return NewInterConnector(key, receiver, logger)
-		},
+		key:           key,
+		subKeys:       make(map[string]ISubKeyBucket),
+		logger:        logger,
+		uniqueNumber:  uniqueNumber,
+		nullSubBucket: newSubNullBucket(),
+		mutex:         sync.RWMutex{},
 	}
 }
 
-func (self *KeyBucket) Register(receiver IKeyBucketReceiver) (IInterConnector, error) {
+func (self *KeyBucket) Key() string {
+	return self.key
+}
+
+func (self *KeyBucket) UnRegisterReceiver(receiver ISubKeyBucketReceiver) {
+	keys := make([]string, 0, 10)
+	for key, value := range self.subKeys {
+		value.UnRegisterReceiver(receiver)
+		if value.Count() == 0 {
+			keys = append(keys, key)
+		}
+	}
+	if len(keys) > 0 {
+		for _, key := range keys {
+			if value, ok := self.subKeys[key]; ok {
+				self.LockScope(func() {
+					if value.Count() == 0 {
+						delete(self.subKeys, key)
+					}
+				})
+			}
+		}
+	}
+}
+
+func (self *KeyBucket) Count() int {
+	return len(self.subKeys)
+}
+
+func (self *KeyBucket) UnRegister(subKey string, receiverKey string) error {
+	ok := false
+	var subKeyBucket ISubKeyBucket
+	self.ReadLockScope(func() {
+		subKeyBucket, ok = self.subKeys[subKey]
+	})
+	if ok {
+		err := subKeyBucket.UnRegister(receiverKey)
+		if err != nil {
+
+		}
+		if subKeyBucket.Count() == 0 {
+			self.LockScope(func() {
+				delete(self.subKeys, subKey)
+			})
+		}
+	}
+	return nil
+}
+
+func (self *KeyBucket) FindCreateAndAddSubKeyBucket(subKey string) (ISubKeyBucket, error) {
+	result := self.FindSubKeyBucket(subKey, false)
+	if result != nil {
+		return result, nil
+	}
+	return self.CreateAndAddSubKeyBucket(subKey)
+}
+
+func (self *KeyBucket) FindSubKeyBucket(subKey string, produceNulSubKeyBucket bool) ISubKeyBucket {
+	var result ISubKeyBucket
+	ok := false
+	self.ReadLockScope(func() {
+		result, ok = self.subKeys[subKey]
+	})
+	if ok {
+		return result
+	}
+	if produceNulSubKeyBucket {
+		return self.nullSubBucket
+	}
+	return nil
+
+}
+
+func (self *KeyBucket) CreateAndAddSubKeyBucket(subKey string) (ISubKeyBucket, error) {
+	if subKey == "" {
+		return nil, fmt.Errorf("key can not be empty")
+	}
+	self.logger.Printf("Create SubKeyBucket(%v, %v\n)", self.key, subKey)
+	result := NewSubKeyBucket(self.key, subKey, self.logger, self.uniqueNumber)
+	self.LockScope(func() {
+		self.subKeys[subKey] = result
+	})
+	return result, nil
+}
+
+func (self *KeyBucket) Register(subKey string, receiver ISubKeyBucketReceiver) (IInterConnector, error) {
 	if receiver == nil {
 		return nil, fmt.Errorf("no receiver")
 	}
 
-	receiverFound := false
-	var receiverInterconnect IInterConnector
-	self.ReadLockScope(func() {
-		for _, value := range self.routes {
-			if value.receiver() == receiver {
-				receiverFound = true
-				receiverInterconnect = value
-			}
-		}
-	})
-
-	if receiverFound {
-		return receiverInterconnect, nil
-	}
-
-	key := self.uniqueNumber.Next()
-	ic, err := self.newInterConnector(key, receiver, self.logger)
+	subKeyBucket, err := self.FindCreateAndAddSubKeyBucket(subKey)
 	if err != nil {
 		return nil, err
 	}
-	self.LockScope(func() {
-		self.routes[key] = ic
-	})
-	return ic, nil
+	return subKeyBucket.Register(receiver)
 }
 
 func (self *KeyBucket) Close() error {
-	for _, value := range self.routes {
+	for _, value := range self.subKeys {
 		err := value.Close()
 		if err != nil {
 
@@ -82,42 +134,14 @@ func (self *KeyBucket) Close() error {
 	}
 
 	self.LockScope(func() {
-		self.routes = make(map[string]IInterConnector)
+		self.subKeys = make(map[string]ISubKeyBucket)
 	})
 	return nil
 }
 
-func (self *KeyBucket) Publish(data interface{}) error {
-	var connectorList []IInterConnector = nil
-	self.ReadLockScope(func() {
-		n := len(self.routes)
-		connectorList = make([]IInterConnector, n, n)
-		i := 0
-		for _, value := range self.routes {
-			connectorList[i] = value
-			i++
-		}
-	})
-
-	if len(connectorList) > 0 {
-		errKeys := make([]string, 0, 4)
-		for _, connector := range connectorList {
-			err := connector.receiver().Handle(data)
-			if err != nil {
-				self.logger.Println(err)
-				errKeys = append(errKeys, connector.key())
-			}
-		}
-		if len(errKeys) > 0 {
-			for _, key := range errKeys {
-				err := self.UnRegister(key)
-				if err != nil {
-					self.logger.Printf("Could not Unregister. Error: %v", err)
-				}
-			}
-		}
-	}
-	return nil
+func (self *KeyBucket) Publish(subKey string, waitGroup Messages.IWaitGroup, data interface{}) error {
+	subKeyBucket := self.FindSubKeyBucket(subKey, true)
+	return subKeyBucket.Publish(waitGroup, data)
 }
 
 func (self *KeyBucket) LockScope(cb func()) {

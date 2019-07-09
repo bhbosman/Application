@@ -1,49 +1,31 @@
 package Managers
 
-import "io"
+import (
+	"github.com/bhbosman/Application/Messages"
+	"io"
+)
 
-type IMessageFactory interface {
-	Message() (interface{}, error)
-	MessageType() int
-	Length() uint16
-}
+const MitchFeed = "MitchFeed"
 
 type IMessageCount interface {
 	MessageType() int
 	MessageCount() int
 }
 
-type IMitchMessageHandlerRegistrar interface {
-	ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, messageSource IMessageSource) error
-	RegisterFeed(manager IMitchDataProcessor) error
-	GetMessageCounts() []IMessageCount
-}
-
-type IMessageSource interface {
-	Sequence() uint64
-	Source() string
-	FeedName() string
-}
-
-type IWaitGroup interface {
-	AddOne() error
-	Done() error
-}
-
-type IMessageServiceItem interface {
-	IWaitGroup
-	IMessageFactory
-	MessageSource() IMessageSource
-}
+//type IMitchMessageHandlerRegistrar interface {
+//	ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, messageSource IMessageSource) error
+//	RegisterFeed(manager IMitchDataProcessor) error
+//	GetMessageCounts() []IMessageCount
+//}
 
 type IMessageService interface {
-	Push(message IMessageServiceItem) error
+	Push(message Messages.IMessageServiceItem) error
 }
 
 type IMitchDataProcessor interface {
 	IMessageService
 	io.Closer
-	DeclareInterestInMessages() ([]int, error)
+	DeclareInterestInMessages() []int
 	Process() error
 }
 

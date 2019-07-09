@@ -1,6 +1,9 @@
 package UniqueNumber
 
+import "io"
+
 type IGenerator interface {
-	Next() string
-	NextNumber() uint64
+	io.Closer
+	Next() (string, error)
+	NextNumber() (uint64, error)
 }

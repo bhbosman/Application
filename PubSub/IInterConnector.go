@@ -1,14 +1,18 @@
 package PubSub
 
-import "io"
+import (
+	"github.com/bhbosman/Application/Messages"
+	"io"
+)
 
 type IInterConnector interface {
 	io.Closer
-	key() string
-	receiver() IKeyBucketReceiver
+	Key() string
+	receiver() ISubKeyBucketReceiver
+	receiverDescription() string
 }
 
-type IKeyBucketReceiver interface {
+type ISubKeyBucketReceiver interface {
 	io.Closer
-	Handle(data interface{}) error
+	Handle(waitGroup Messages.IWaitGroup, data interface{}) error
 }

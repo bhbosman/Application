@@ -69,20 +69,20 @@ func (self *publishGolang) Export(params Publish.ExportParams) error {
 	}
 
 	_, _ = sb.WriteString(fmt.Sprintf("type CreateAndReadDataNotFound struct {\n"))
-	_, _ = sb.WriteString(fmt.Sprintf("\tMessageType byte\n"))
+	_, _ = sb.WriteString(fmt.Sprintf("\tMessageType int\n"))
 	_, _ = sb.WriteString(fmt.Sprintf("}\n"))
 
 	_, _ = sb.WriteString(fmt.Sprintf("func (self *CreateAndReadDataNotFound) Error() string {\n"))
 	_, _ = sb.WriteString(fmt.Sprintf("\treturn fmt.Sprintf(\"Could not find message type %%v\", self.MessageType)\n"))
 	_, _ = sb.WriteString(fmt.Sprintf("}\n"))
 
-	_, _ = sb.WriteString(fmt.Sprintf("func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchReader) (interface{}, int, error){\n"))
+	_, _ = sb.WriteString(fmt.Sprintf("func CreateAndReadData(messageType int, length uint16, stream Streams.IMitchReader) (interface{}, int, error){\n"))
 
 	_, _ = sb.WriteString(fmt.Sprintf("\tswitch messageType {\n"))
 	for _, declaredType := range params.DeclaredTypes {
 		if definition, ok := declaredType.(*yacc.MitchMessageDefinition); ok {
 			if definition.HasMessageInformation() {
-				_, _ = sb.WriteString(fmt.Sprintf("\tcase %sMessageType:\n", definition.Identifier))
+				_, _ = sb.WriteString(fmt.Sprintf("\tcase %s_MessageType:\n", definition.Identifier))
 				_, _ = sb.WriteString(fmt.Sprintf("\t\tmessage, err := %vFactory.New()\n", definition.Identifier))
 				_, _ = sb.WriteString(fmt.Sprintf("\t\tif err != nil {\n"))
 				_, _ = sb.WriteString(fmt.Sprintf("\t\t\treturn nil, 0, err\n"))
@@ -103,13 +103,13 @@ func (self *publishGolang) Export(params Publish.ExportParams) error {
 	_, _ = sb.WriteString(fmt.Sprintf("}\n"))
 
 	_, _ = sb.WriteString(fmt.Sprintf("// All Message types\n"))
-	_, _ = sb.WriteString(fmt.Sprintf("func AllMessageTypes() []byte{\n"))
-	_, _ = sb.WriteString(fmt.Sprintf("\treturn []byte{\n"))
+	_, _ = sb.WriteString(fmt.Sprintf("func AllMessageTypes() []int{\n"))
+	_, _ = sb.WriteString(fmt.Sprintf("\treturn []int{\n"))
 	for _, declaredType := range params.DeclaredTypes {
 		switch v := declaredType.(type) {
 		case *yacc.MitchMessageDefinition:
 			if v.HasMessageInformation() {
-				_, _ = sb.WriteString(fmt.Sprintf("\t\t%sMessageType,\n", v.Identifier))
+				_, _ = sb.WriteString(fmt.Sprintf("\t\t%s_MessageType,\n", v.Identifier))
 			}
 			break
 		default:

@@ -2,6 +2,7 @@ package TimeService
 
 import (
 	"github.com/bhbosman/Application/Managers"
+	"github.com/bhbosman/Application/Messages"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"log"
 )
@@ -14,17 +15,17 @@ func (self *Manager) Close() error {
 	return nil
 }
 
-func (self *Manager) DeclareInterestInMessages() ([]int, error) {
+func (self *Manager) DeclareInterestInMessages() []int {
 	return []int{
-		int(GeneratedFiles.TimeMessageMessageType),
-	}, nil
+		GeneratedFiles.TimeMessage_MessageType,
+	}
 }
 
-func (self *Manager) Push(message Managers.IMessageServiceItem) error {
+func (self *Manager) Push(message Messages.IMessageServiceItem) error {
 	return self.processMessage(message)
 }
 
-func (self *Manager) processMessage(item Managers.IMessageServiceItem) error {
+func (self *Manager) processMessage(item Messages.IMessageServiceItem) error {
 	msg, err := item.Message()
 	if err != nil {
 		return err

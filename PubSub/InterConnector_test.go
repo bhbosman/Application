@@ -13,7 +13,7 @@ func TestInterConnector_Close(t *testing.T) {
 	type fields struct {
 		logger     *log.Logger
 		icKey      string
-		icReceiver func(ctrl *gomock.Controller) IKeyBucketReceiver
+		icReceiver func(ctrl *gomock.Controller) ISubKeyBucketReceiver
 	}
 	tests := []struct {
 		name    string
@@ -25,7 +25,7 @@ func TestInterConnector_Close(t *testing.T) {
 			fields: fields{
 				logger: log.New(os.Stdout, "", 0),
 				icKey:  "",
-				icReceiver: func(ctrl *gomock.Controller) IKeyBucketReceiver {
+				icReceiver: func(ctrl *gomock.Controller) ISubKeyBucketReceiver {
 					return nil
 				},
 			},
@@ -36,8 +36,8 @@ func TestInterConnector_Close(t *testing.T) {
 			fields: fields{
 				logger: log.New(os.Stdout, "", 0),
 				icKey:  "",
-				icReceiver: func(ctrl *gomock.Controller) IKeyBucketReceiver {
-					receiver := NewMockIKeyBucketReceiver(ctrl)
+				icReceiver: func(ctrl *gomock.Controller) ISubKeyBucketReceiver {
+					receiver := NewMockISubKeyBucketReceiver(ctrl)
 					receiver.EXPECT().Close().Times(1).Return(nil)
 					return receiver
 				},
@@ -50,8 +50,8 @@ func TestInterConnector_Close(t *testing.T) {
 			fields: fields{
 				logger: log.New(os.Stdout, "", 0),
 				icKey:  "",
-				icReceiver: func(ctrl *gomock.Controller) IKeyBucketReceiver {
-					receiver := NewMockIKeyBucketReceiver(ctrl)
+				icReceiver: func(ctrl *gomock.Controller) ISubKeyBucketReceiver {
+					receiver := NewMockISubKeyBucketReceiver(ctrl)
 					receiver.EXPECT().Close().Times(1).Return(fmt.Errorf("some error"))
 					return receiver
 				},
@@ -80,7 +80,7 @@ func TestInterConnector_key(t *testing.T) {
 	type fields struct {
 		logger     *log.Logger
 		icKey      string
-		icReceiver IKeyBucketReceiver
+		icReceiver ISubKeyBucketReceiver
 	}
 	tests := []struct {
 		name   string
@@ -90,7 +90,7 @@ func TestInterConnector_key(t *testing.T) {
 		{
 			name: "",
 			fields: fields{
-				logger:     &log.Logger{},
+				logger:     log.New(os.Stdout, "RestApi: ", log.LstdFlags),
 				icKey:      "testValue",
 				icReceiver: nil,
 			},
@@ -104,7 +104,7 @@ func TestInterConnector_key(t *testing.T) {
 				icKey:      tt.fields.icKey,
 				icReceiver: tt.fields.icReceiver,
 			}
-			if got := self.key(); got != tt.want {
+			if got := self.Key(); got != tt.want {
 				t.Errorf("InterConnector.key() = %v, want %v", got, tt.want)
 			}
 		})
@@ -115,21 +115,21 @@ func TestInterConnector_receiver(t *testing.T) {
 	type fields struct {
 		logger     *log.Logger
 		icKey      string
-		icReceiver IKeyBucketReceiver
+		icReceiver ISubKeyBucketReceiver
 	}
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	receiver := NewMockIKeyBucketReceiver(ctrl)
+	receiver := NewMockISubKeyBucketReceiver(ctrl)
 
 	tests := []struct {
 		name   string
 		fields fields
-		want   IKeyBucketReceiver
+		want   ISubKeyBucketReceiver
 	}{
 		{
 			name: "",
 			fields: fields{
-				logger:     &log.Logger{},
+				logger:     log.New(os.Stdout, "RestApi: ", log.LstdFlags),
 				icKey:      "",
 				icReceiver: receiver,
 			},
@@ -149,4 +149,3 @@ func TestInterConnector_receiver(t *testing.T) {
 		})
 	}
 }
-

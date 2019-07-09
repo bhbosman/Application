@@ -49,8 +49,8 @@ func (self *publishStruct) ExportFactoryDefinition(writer io.StringWriter, typeN
 
 	_, _ = writer.WriteString(fmt.Sprintf("var %sFactory %sFactoryType = %sFactoryType{}\n", self.data.Identifier, self.data.Identifier, self.data.Identifier))
 	if self.data.HasMessageInformation() {
-		_, _ = writer.WriteString(fmt.Sprintf("const %sMessageType byte = 0x%x//%v\n", self.data.Identifier, self.data.MessageType, self.data.MessageType))
-		_, _ = writer.WriteString(fmt.Sprintf("const %sMessageLength uint16 = %v\n", self.data.Identifier, self.data.MessageLength))
+		_, _ = writer.WriteString(fmt.Sprintf("const %s_MessageType int = 0x%x//%v\n", self.data.Identifier, self.data.MessageType, self.data.MessageType))
+		_, _ = writer.WriteString(fmt.Sprintf("const %s_MessageLength uint16 = %v\n", self.data.Identifier, self.data.MessageLength))
 		_, _ = writer.WriteString(fmt.Sprintf("\n"))
 	}
 

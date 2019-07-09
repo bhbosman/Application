@@ -302,8 +302,8 @@ type TimeMessageFactoryType struct {
 
 var TimeMessageFactory TimeMessageFactoryType = TimeMessageFactoryType{}
 
-const TimeMessageMessageType byte = 0x54 //84
-const TimeMessageMessageLength uint16 = 7
+const TimeMessage_MessageType int = 0x54 //84
+const TimeMessage_MessageLength uint16 = 7
 
 func (self TimeMessageFactoryType) New() (*TimeMessage, error) {
 	return &TimeMessage{}, nil
@@ -425,8 +425,8 @@ type SystemEventMessageFactoryType struct {
 
 var SystemEventMessageFactory SystemEventMessageFactoryType = SystemEventMessageFactoryType{}
 
-const SystemEventMessageMessageType byte = 0x53 //83
-const SystemEventMessageMessageLength uint16 = 8
+const SystemEventMessage_MessageType int = 0x53 //83
+const SystemEventMessage_MessageLength uint16 = 8
 
 func (self SystemEventMessageFactoryType) New() (*SystemEventMessage, error) {
 	return &SystemEventMessage{}, nil
@@ -686,8 +686,8 @@ type SymbolDirectoryMessageFactoryType struct {
 
 var SymbolDirectoryMessageFactory SymbolDirectoryMessageFactoryType = SymbolDirectoryMessageFactoryType{}
 
-const SymbolDirectoryMessageMessageType byte = 0x52 //82
-const SymbolDirectoryMessageMessageLength uint16 = 332
+const SymbolDirectoryMessage_MessageType int = 0x52 //82
+const SymbolDirectoryMessage_MessageLength uint16 = 332
 
 func (self SymbolDirectoryMessageFactoryType) New() (*SymbolDirectoryMessage, error) {
 	return &SymbolDirectoryMessage{}, nil
@@ -1244,8 +1244,8 @@ type SymbolStatusMessageFactoryType struct {
 
 var SymbolStatusMessageFactory SymbolStatusMessageFactoryType = SymbolStatusMessageFactoryType{}
 
-const SymbolStatusMessageMessageType byte = 0x48 //72
-const SymbolStatusMessageMessageLength uint16 = 29
+const SymbolStatusMessage_MessageType int = 0x48 //72
+const SymbolStatusMessage_MessageLength uint16 = 29
 
 func (self SymbolStatusMessageFactoryType) New() (*SymbolStatusMessage, error) {
 	return &SymbolStatusMessage{}, nil
@@ -1548,8 +1548,8 @@ type AddOrderMessageFactoryType struct {
 
 var AddOrderMessageFactory AddOrderMessageFactoryType = AddOrderMessageFactoryType{}
 
-const AddOrderMessageMessageType byte = 0x41 //65
-const AddOrderMessageMessageLength uint16 = 35
+const AddOrderMessage_MessageType int = 0x41 //65
+const AddOrderMessage_MessageLength uint16 = 35
 
 func (self AddOrderMessageFactoryType) New() (*AddOrderMessage, error) {
 	return &AddOrderMessage{}, nil
@@ -1804,8 +1804,8 @@ type AddAttributedOrderMessageFactoryType struct {
 
 var AddAttributedOrderMessageFactory AddAttributedOrderMessageFactoryType = AddAttributedOrderMessageFactoryType{}
 
-const AddAttributedOrderMessageMessageType byte = 0x46 //70
-const AddAttributedOrderMessageMessageLength uint16 = 44
+const AddAttributedOrderMessage_MessageType int = 0x46 //70
+const AddAttributedOrderMessage_MessageLength uint16 = 44
 
 func (self AddAttributedOrderMessageFactoryType) New() (*AddAttributedOrderMessage, error) {
 	return &AddAttributedOrderMessage{}, nil
@@ -2016,8 +2016,8 @@ type OrderDeletedMessageFactoryType struct {
 
 var OrderDeletedMessageFactory OrderDeletedMessageFactoryType = OrderDeletedMessageFactoryType{}
 
-const OrderDeletedMessageMessageType byte = 0x44 //68
-const OrderDeletedMessageMessageLength uint16 = 15
+const OrderDeletedMessage_MessageType int = 0x44 //68
+const OrderDeletedMessage_MessageLength uint16 = 15
 
 func (self OrderDeletedMessageFactoryType) New() (*OrderDeletedMessage, error) {
 	return &OrderDeletedMessage{}, nil
@@ -2150,8 +2150,8 @@ type OrderModifiedMessageFactoryType struct {
 
 var OrderModifiedMessageFactory OrderModifiedMessageFactoryType = OrderModifiedMessageFactoryType{}
 
-const OrderModifiedMessageMessageType byte = 0x55 //85
-const OrderModifiedMessageMessageLength uint16 = 28
+const OrderModifiedMessage_MessageType int = 0x55 //85
+const OrderModifiedMessage_MessageLength uint16 = 28
 
 func (self OrderModifiedMessageFactoryType) New() (*OrderModifiedMessage, error) {
 	return &OrderModifiedMessage{}, nil
@@ -2375,8 +2375,8 @@ type OrderBookClearMessageFactoryType struct {
 
 var OrderBookClearMessageFactory OrderBookClearMessageFactoryType = OrderBookClearMessageFactoryType{}
 
-const OrderBookClearMessageMessageType byte = 0x79 //121
-const OrderBookClearMessageMessageLength uint16 = 13
+const OrderBookClearMessage_MessageType int = 0x79 //121
+const OrderBookClearMessage_MessageLength uint16 = 13
 
 func (self OrderBookClearMessageFactoryType) New() (*OrderBookClearMessage, error) {
 	return &OrderBookClearMessage{}, nil
@@ -2524,8 +2524,8 @@ type OrderExecutedMessageFactoryType struct {
 
 var OrderExecutedMessageFactory OrderExecutedMessageFactoryType = OrderExecutedMessageFactoryType{}
 
-const OrderExecutedMessageMessageType byte = 0x45 //69
-const OrderExecutedMessageMessageLength uint16 = 51
+const OrderExecutedMessage_MessageType int = 0x45 //69
+const OrderExecutedMessage_MessageLength uint16 = 51
 
 func (self OrderExecutedMessageFactoryType) New() (*OrderExecutedMessage, error) {
 	return &OrderExecutedMessage{}, nil
@@ -2727,8 +2727,8 @@ type OrderExecutedWithPriceSizeMessageFactoryType struct {
 
 var OrderExecutedWithPriceSizeMessageFactory OrderExecutedWithPriceSizeMessageFactoryType = OrderExecutedWithPriceSizeMessageFactoryType{}
 
-const OrderExecutedWithPriceSizeMessageMessageType byte = 0x43 //67
-const OrderExecutedWithPriceSizeMessageMessageLength uint16 = 64
+const OrderExecutedWithPriceSizeMessage_MessageType int = 0x43 //67
+const OrderExecutedWithPriceSizeMessage_MessageLength uint16 = 64
 
 func (self OrderExecutedWithPriceSizeMessageFactoryType) New() (*OrderExecutedWithPriceSizeMessage, error) {
 	return &OrderExecutedWithPriceSizeMessage{}, nil
@@ -3035,8 +3035,8 @@ type TradeMessageFactoryType struct {
 
 var TradeMessageFactory TradeMessageFactoryType = TradeMessageFactoryType{}
 
-const TradeMessageMessageType byte = 0x50 //80
-const TradeMessageMessageLength uint16 = 63
+const TradeMessage_MessageType int = 0x50 //80
+const TradeMessage_MessageLength uint16 = 63
 
 func (self TradeMessageFactoryType) New() (*TradeMessage, error) {
 	return &TradeMessage{}, nil
@@ -3341,8 +3341,8 @@ type AuctionTradeMessageFactoryType struct {
 
 var AuctionTradeMessageFactory AuctionTradeMessageFactoryType = AuctionTradeMessageFactoryType{}
 
-const AuctionTradeMessageMessageType byte = 0x51 //81
-const AuctionTradeMessageMessageLength uint16 = 58
+const AuctionTradeMessage_MessageType int = 0x51 //81
+const AuctionTradeMessage_MessageLength uint16 = 58
 
 func (self AuctionTradeMessageFactoryType) New() (*AuctionTradeMessage, error) {
 	return &AuctionTradeMessage{}, nil
@@ -3615,8 +3615,8 @@ type OffBookTradeMessageFactoryType struct {
 
 var OffBookTradeMessageFactory OffBookTradeMessageFactoryType = OffBookTradeMessageFactoryType{}
 
-const OffBookTradeMessageMessageType byte = 0x78 //120
-const OffBookTradeMessageMessageLength uint16 = 77
+const OffBookTradeMessage_MessageType int = 0x78 //120
+const OffBookTradeMessage_MessageLength uint16 = 77
 
 func (self OffBookTradeMessageFactoryType) New() (*OffBookTradeMessage, error) {
 	return &OffBookTradeMessage{}, nil
@@ -3913,8 +3913,8 @@ type TradeBreakMessageFactoryType struct {
 
 var TradeBreakMessageFactory TradeBreakMessageFactoryType = TradeBreakMessageFactoryType{}
 
-const TradeBreakMessageMessageType byte = 0x42 //66
-const TradeBreakMessageMessageLength uint16 = 16
+const TradeBreakMessage_MessageType int = 0x42 //66
+const TradeBreakMessage_MessageLength uint16 = 16
 
 func (self TradeBreakMessageFactoryType) New() (*TradeBreakMessage, error) {
 	return &TradeBreakMessage{}, nil
@@ -4106,8 +4106,8 @@ type RecoveryTradeMessageFactoryType struct {
 
 var RecoveryTradeMessageFactory RecoveryTradeMessageFactoryType = RecoveryTradeMessageFactoryType{}
 
-const RecoveryTradeMessageMessageType byte = 0x76 //118
-const RecoveryTradeMessageMessageLength uint16 = 81
+const RecoveryTradeMessage_MessageType int = 0x76 //118
+const RecoveryTradeMessage_MessageLength uint16 = 81
 
 func (self RecoveryTradeMessageFactoryType) New() (*RecoveryTradeMessage, error) {
 	return &RecoveryTradeMessage{}, nil
@@ -4478,8 +4478,8 @@ type AuctionInfoMessageFactoryType struct {
 
 var AuctionInfoMessageFactory AuctionInfoMessageFactoryType = AuctionInfoMessageFactoryType{}
 
-const AuctionInfoMessageMessageType byte = 0x49 //73
-const AuctionInfoMessageMessageLength uint16 = 31
+const AuctionInfoMessage_MessageType int = 0x49 //73
+const AuctionInfoMessage_MessageLength uint16 = 31
 
 func (self AuctionInfoMessageFactoryType) New() (*AuctionInfoMessage, error) {
 	return &AuctionInfoMessage{}, nil
@@ -4784,8 +4784,8 @@ type StatisticsMessageFactoryType struct {
 
 var StatisticsMessageFactory StatisticsMessageFactoryType = StatisticsMessageFactoryType{}
 
-const StatisticsMessageMessageType byte = 0x77 //119
-const StatisticsMessageMessageLength uint16 = 24
+const StatisticsMessage_MessageType int = 0x77 //119
+const StatisticsMessage_MessageLength uint16 = 24
 
 func (self StatisticsMessageFactoryType) New() (*StatisticsMessage, error) {
 	return &StatisticsMessage{}, nil
@@ -5007,8 +5007,8 @@ type ExtendedStatisticsMessageFactoryType struct {
 
 var ExtendedStatisticsMessageFactory ExtendedStatisticsMessageFactoryType = ExtendedStatisticsMessageFactoryType{}
 
-const ExtendedStatisticsMessageMessageType byte = 0x80 //128
-const ExtendedStatisticsMessageMessageLength uint16 = 84
+const ExtendedStatisticsMessage_MessageType int = 0x80 //128
+const ExtendedStatisticsMessage_MessageLength uint16 = 84
 
 func (self ExtendedStatisticsMessageFactoryType) New() (*ExtendedStatisticsMessage, error) {
 	return &ExtendedStatisticsMessage{}, nil
@@ -5309,8 +5309,8 @@ type NewsMessageFactoryType struct {
 
 var NewsMessageFactory NewsMessageFactoryType = NewsMessageFactoryType{}
 
-const NewsMessageMessageType byte = 0x75 //117
-const NewsMessageMessageLength uint16 = 1066
+const NewsMessage_MessageType int = 0x75 //117
+const NewsMessage_MessageLength uint16 = 1066
 
 func (self NewsMessageFactoryType) New() (*NewsMessage, error) {
 	return &NewsMessage{}, nil
@@ -5533,8 +5533,8 @@ type TopOfBookMessageFactoryType struct {
 
 var TopOfBookMessageFactory TopOfBookMessageFactoryType = TopOfBookMessageFactoryType{}
 
-const TopOfBookMessageMessageType byte = 0x71 //113
-const TopOfBookMessageMessageLength uint16 = 34
+const TopOfBookMessage_MessageType int = 0x71 //113
+const TopOfBookMessage_MessageLength uint16 = 34
 
 func (self TopOfBookMessageFactoryType) New() (*TopOfBookMessage, error) {
 	return &TopOfBookMessage{}, nil
@@ -5769,15 +5769,15 @@ func Write_TopOfBookMessage(stream Streams.IMitchWriter, value *TopOfBookMessage
 }
 
 type CreateAndReadDataNotFound struct {
-	MessageType byte
+	MessageType int
 }
 
 func (self *CreateAndReadDataNotFound) Error() string {
 	return fmt.Sprintf("Could not find message type %v", self.MessageType)
 }
-func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchReader) (interface{}, int, error) {
+func CreateAndReadData(messageType int, length uint16, stream Streams.IMitchReader) (interface{}, int, error) {
 	switch messageType {
-	case TimeMessageMessageType:
+	case TimeMessage_MessageType:
 		message, err := TimeMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5789,7 +5789,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case SystemEventMessageMessageType:
+	case SystemEventMessage_MessageType:
 		message, err := SystemEventMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5801,7 +5801,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case SymbolDirectoryMessageMessageType:
+	case SymbolDirectoryMessage_MessageType:
 		message, err := SymbolDirectoryMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5813,7 +5813,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case SymbolStatusMessageMessageType:
+	case SymbolStatusMessage_MessageType:
 		message, err := SymbolStatusMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5825,7 +5825,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case AddOrderMessageMessageType:
+	case AddOrderMessage_MessageType:
 		message, err := AddOrderMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5837,7 +5837,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case AddAttributedOrderMessageMessageType:
+	case AddAttributedOrderMessage_MessageType:
 		message, err := AddAttributedOrderMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5849,7 +5849,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case OrderDeletedMessageMessageType:
+	case OrderDeletedMessage_MessageType:
 		message, err := OrderDeletedMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5861,7 +5861,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case OrderModifiedMessageMessageType:
+	case OrderModifiedMessage_MessageType:
 		message, err := OrderModifiedMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5873,7 +5873,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case OrderBookClearMessageMessageType:
+	case OrderBookClearMessage_MessageType:
 		message, err := OrderBookClearMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5885,7 +5885,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case OrderExecutedMessageMessageType:
+	case OrderExecutedMessage_MessageType:
 		message, err := OrderExecutedMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5897,7 +5897,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case OrderExecutedWithPriceSizeMessageMessageType:
+	case OrderExecutedWithPriceSizeMessage_MessageType:
 		message, err := OrderExecutedWithPriceSizeMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5909,7 +5909,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case TradeMessageMessageType:
+	case TradeMessage_MessageType:
 		message, err := TradeMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5921,7 +5921,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case AuctionTradeMessageMessageType:
+	case AuctionTradeMessage_MessageType:
 		message, err := AuctionTradeMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5933,7 +5933,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case OffBookTradeMessageMessageType:
+	case OffBookTradeMessage_MessageType:
 		message, err := OffBookTradeMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5945,7 +5945,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case TradeBreakMessageMessageType:
+	case TradeBreakMessage_MessageType:
 		message, err := TradeBreakMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5957,7 +5957,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case RecoveryTradeMessageMessageType:
+	case RecoveryTradeMessage_MessageType:
 		message, err := RecoveryTradeMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5969,7 +5969,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case AuctionInfoMessageMessageType:
+	case AuctionInfoMessage_MessageType:
 		message, err := AuctionInfoMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5981,7 +5981,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case StatisticsMessageMessageType:
+	case StatisticsMessage_MessageType:
 		message, err := StatisticsMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -5993,7 +5993,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case ExtendedStatisticsMessageMessageType:
+	case ExtendedStatisticsMessage_MessageType:
 		message, err := ExtendedStatisticsMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -6005,7 +6005,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case NewsMessageMessageType:
+	case NewsMessage_MessageType:
 		message, err := NewsMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -6017,7 +6017,7 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 		return message, n, nil
 		break
 
-	case TopOfBookMessageMessageType:
+	case TopOfBookMessage_MessageType:
 		message, err := TopOfBookMessageFactory.New()
 		if err != nil {
 			return nil, 0, err
@@ -6034,28 +6034,28 @@ func CreateAndReadData(messageType byte, length uint16, stream Streams.IMitchRea
 }
 
 // All Message types
-func AllMessageTypes() []byte {
-	return []byte{
-		TimeMessageMessageType,
-		SystemEventMessageMessageType,
-		SymbolDirectoryMessageMessageType,
-		SymbolStatusMessageMessageType,
-		AddOrderMessageMessageType,
-		AddAttributedOrderMessageMessageType,
-		OrderDeletedMessageMessageType,
-		OrderModifiedMessageMessageType,
-		OrderBookClearMessageMessageType,
-		OrderExecutedMessageMessageType,
-		OrderExecutedWithPriceSizeMessageMessageType,
-		TradeMessageMessageType,
-		AuctionTradeMessageMessageType,
-		OffBookTradeMessageMessageType,
-		TradeBreakMessageMessageType,
-		RecoveryTradeMessageMessageType,
-		AuctionInfoMessageMessageType,
-		StatisticsMessageMessageType,
-		ExtendedStatisticsMessageMessageType,
-		NewsMessageMessageType,
-		TopOfBookMessageMessageType,
+func AllMessageTypes() []int {
+	return []int{
+		TimeMessage_MessageType,
+		SystemEventMessage_MessageType,
+		SymbolDirectoryMessage_MessageType,
+		SymbolStatusMessage_MessageType,
+		AddOrderMessage_MessageType,
+		AddAttributedOrderMessage_MessageType,
+		OrderDeletedMessage_MessageType,
+		OrderModifiedMessage_MessageType,
+		OrderBookClearMessage_MessageType,
+		OrderExecutedMessage_MessageType,
+		OrderExecutedWithPriceSizeMessage_MessageType,
+		TradeMessage_MessageType,
+		AuctionTradeMessage_MessageType,
+		OffBookTradeMessage_MessageType,
+		TradeBreakMessage_MessageType,
+		RecoveryTradeMessage_MessageType,
+		AuctionInfoMessage_MessageType,
+		StatisticsMessage_MessageType,
+		ExtendedStatisticsMessage_MessageType,
+		NewsMessage_MessageType,
+		TopOfBookMessage_MessageType,
 	}
 }

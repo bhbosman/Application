@@ -5,6 +5,7 @@
 package PubSub
 
 import (
+	Messages "github.com/bhbosman/Application/Messages"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -47,15 +48,56 @@ func (mr *MockIPublisherMockRecorder) Close() *gomock.Call {
 }
 
 // Publish mocks base method
-func (m *MockIPublisher) Publish(key string, data interface{}) error {
+func (m *MockIPublisher) Publish(key, subKey string, waitGroup Messages.IWaitGroup, data interface{}) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Publish", key, data)
+	ret := m.ctrl.Call(m, "Publish", key, subKey, waitGroup, data)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Publish indicates an expected call of Publish
-func (mr *MockIPublisherMockRecorder) Publish(key, data interface{}) *gomock.Call {
+func (mr *MockIPublisherMockRecorder) Publish(key, subKey, waitGroup, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Publish", reflect.TypeOf((*MockIPublisher)(nil).Publish), key, data)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Publish", reflect.TypeOf((*MockIPublisher)(nil).Publish), key, subKey, waitGroup, data)
+}
+
+// Register mocks base method
+func (m *MockIPublisher) Register(key, subKey string, receiver ISubKeyBucketReceiver) (IInterConnector, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Register", key, subKey, receiver)
+	ret0, _ := ret[0].(IInterConnector)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Register indicates an expected call of Register
+func (mr *MockIPublisherMockRecorder) Register(key, subKey, receiver interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockIPublisher)(nil).Register), key, subKey, receiver)
+}
+
+// UnRegister mocks base method
+func (m *MockIPublisher) UnRegister(key, subKey, receiverKey string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UnRegister", key, subKey, receiverKey)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UnRegister indicates an expected call of UnRegister
+func (mr *MockIPublisherMockRecorder) UnRegister(key, subKey, receiverKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnRegister", reflect.TypeOf((*MockIPublisher)(nil).UnRegister), key, subKey, receiverKey)
+}
+
+// UnRegisterReceiver mocks base method
+func (m *MockIPublisher) UnRegisterReceiver(receiver ISubKeyBucketReceiver) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "UnRegisterReceiver", receiver)
+}
+
+// UnRegisterReceiver indicates an expected call of UnRegisterReceiver
+func (mr *MockIPublisherMockRecorder) UnRegisterReceiver(receiver interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnRegisterReceiver", reflect.TypeOf((*MockIPublisher)(nil).UnRegisterReceiver), receiver)
 }

@@ -3,6 +3,7 @@ package Managers
 import (
 	"container/list"
 	"fmt"
+	"github.com/bhbosman/Application/Messages"
 	"log"
 )
 
@@ -15,7 +16,7 @@ func (self *MessageTypeRegistrar) Add(processor IMitchDataProcessor) {
 	self.l.PushBack(processor)
 }
 
-func (self *MessageTypeRegistrar) ProcessMessage(group IWaitGroup, factory IMessageFactory, messageSource IMessageSource) error {
+func (self *MessageTypeRegistrar) ProcessMessage(group Messages.IWaitGroup, factory Messages.IMessageFactory, messageSource Messages.IMessageSource) error {
 	self.messageCount++
 	for e := self.l.Front(); e != nil; e = e.Next() {
 		mitchDataProcessor, ok := e.Value.(IMitchDataProcessor)
@@ -76,10 +77,7 @@ func (self *MitchMessageHandlerRegistrar) GetMessageCounts() []IMessageCount {
 }
 
 func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager IMitchDataProcessor) error {
-	messages, err := manager.DeclareInterestInMessages()
-	if err != nil {
-		return err
-	}
+	messages := manager.DeclareInterestInMessages()
 	for _, messageNumber := range messages {
 		messageTypeRegistrar, ok := self.MessageHandlers[messageNumber]
 		if !ok {
@@ -92,7 +90,7 @@ func (self *MitchMessageHandlerRegistrar) RegisterFeed(manager IMitchDataProcess
 	return nil
 }
 
-func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg IWaitGroup, messageFactory IMessageFactory, messageSource IMessageSource) error {
+func (self *MitchMessageHandlerRegistrar) ProcessMessage(wg Messages.IWaitGroup, messageFactory Messages.IMessageFactory, messageSource Messages.IMessageSource) error {
 	handler, ok := self.MessageHandlers[messageFactory.MessageType()]
 	if !ok {
 

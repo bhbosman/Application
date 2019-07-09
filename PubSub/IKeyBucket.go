@@ -1,10 +1,16 @@
 package PubSub
 
-import "io"
+import (
+	"github.com/bhbosman/Application/Messages"
+	"io"
+)
 
 type IKeyBucket interface {
 	io.Closer
-	Publish(data interface{}) error
-	Register(receiver IKeyBucketReceiver) (IInterConnector, error)
-	UnRegister(key string) error
+	Publish(subKey string, waitGroup Messages.IWaitGroup, data interface{}) error
+	Register(subKey string, receiver ISubKeyBucketReceiver) (IInterConnector, error)
+	UnRegister(subKey string, receiverKey string) error
+	UnRegisterReceiver(receiver ISubKeyBucketReceiver)
+	Count() int
+	Key() string
 }

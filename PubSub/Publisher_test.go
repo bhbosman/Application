@@ -1,10 +1,12 @@
 package PubSub
 
 import (
+	"github.com/bhbosman/Application/Messages"
 	"github.com/bhbosman/Application/UniqueNumber"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"log"
+	"os"
 	"sync"
 	"testing"
 )
@@ -40,7 +42,7 @@ func TestPublisher_ReadLockScope(t *testing.T) {
 			name: "invalid cb",
 			fields: fields{
 				mutex:  sync.RWMutex{},
-				logger: &log.Logger{},
+				logger: log.New(os.Stdout, "RestApi: ", log.LstdFlags),
 				keys:   nil,
 			},
 			args: args{
@@ -91,7 +93,7 @@ func TestPublisher_LockScope(t *testing.T) {
 			name: "invalid cb",
 			fields: fields{
 				mutex:  sync.RWMutex{},
-				logger: &log.Logger{},
+				logger: log.New(os.Stdout, "RestApi: ", log.LstdFlags),
 				keys:   nil,
 			},
 			args: args{
@@ -113,7 +115,10 @@ func TestPublisher_LockScope(t *testing.T) {
 
 func TestPublisher_FindBucket(t *testing.T) {
 	createSut := func(controller *gomock.Controller, initCb func(controller *gomock.Controller, publisher *Publisher)) (*Publisher, error) {
-		result, err := NewPublisher(&log.Logger{}, UniqueNumber.NewUniqueNumberGenerator())
+		logger := log.New(os.Stdout, "", log.LstdFlags)
+		uniqueGenerator, _ := UniqueNumber.NewUniqueNumberGenerator(logger)
+
+		result, err := NewPublisher(logger, uniqueGenerator)
 		if err != nil {
 			return nil, err
 		}
@@ -152,11 +157,13 @@ func TestPublisher_FindBucket(t *testing.T) {
 
 func TestPublisher_CreateBucket(t *testing.T) {
 	createSut := func(controller *gomock.Controller, bucket IKeyBucket) (*Publisher, error) {
-		result, err := NewPublisher(&log.Logger{}, UniqueNumber.NewUniqueNumberGenerator())
+		logger := log.New(os.Stdout, "", log.LstdFlags)
+		uniqueGenerator, _ := UniqueNumber.NewUniqueNumberGenerator(logger)
+		result, err := NewPublisher(logger, uniqueGenerator)
 		if err != nil {
 			return nil, err
 		}
-		result.newKeyBucket = func(key string) (IKeyBucket) {
+		result.newKeyBucket = func(key string) IKeyBucket {
 			return bucket
 		}
 		return result, nil
@@ -166,8 +173,9 @@ func TestPublisher_CreateBucket(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		sut, err := createSut(ctrl, nil)
 		assert.NoError(t, err)
-		_, err = sut.CreateBucket("")
+		_, err = sut.CreateAndAddKeyBucket("")
 		assert.Error(t, err)
+		assert.Len(t, sut.keys, 0)
 		ctrl.Finish()
 	})
 
@@ -177,9 +185,10 @@ func TestPublisher_CreateBucket(t *testing.T) {
 		sut, err := createSut(ctrl, bucket)
 		assert.NoError(t, err)
 
-		bucketCreated, err := sut.CreateBucket("key")
+		bucketCreated, err := sut.CreateAndAddKeyBucket("key")
 		assert.NoError(t, err)
 		assert.Equal(t, bucketCreated, bucket)
+		assert.Len(t, sut.keys, 1)
 		ctrl.Finish()
 
 	})
@@ -188,7 +197,10 @@ func TestPublisher_CreateBucket(t *testing.T) {
 
 func TestPublisher_Publish(t *testing.T) {
 	createSut := func(controller *gomock.Controller, initCb func(controller *gomock.Controller, publisher *Publisher)) (*Publisher, error) {
-		result, err := NewPublisher(&log.Logger{}, UniqueNumber.NewUniqueNumberGenerator())
+		logger := log.New(os.Stdout, "", log.LstdFlags)
+		uniqueGenerator, _ := UniqueNumber.NewUniqueNumberGenerator(logger)
+
+		result, err := NewPublisher(logger, uniqueGenerator)
 		if err != nil {
 			return nil, err
 		}
@@ -206,10 +218,7 @@ func TestPublisher_Publish(t *testing.T) {
 			ctrl,
 			func(controller *gomock.Controller, publisher *Publisher) {
 				nullBucket := NewMockIKeyBucket(controller)
-				nullBucket.EXPECT().Publish(gomock.Any()).
-					DoAndReturn(func(data interface{}) error {
-						return nil
-					}).Times(1)
+				nullBucket.EXPECT().Publish(gomock.Any(), gomock.Any(), gomock.Any()).Times(1)
 				publisher.nullBucket = nullBucket
 			})
 		assert.NoError(t, err)
@@ -217,6 +226,8 @@ func TestPublisher_Publish(t *testing.T) {
 
 		err = sut.Publish(
 			"xxx",
+			"xxx",
+			Messages.NewNullWaitGroup(),
 			&struct{}{})
 		assert.NoError(t, err)
 	})
@@ -228,27 +239,22 @@ func TestPublisher_Publish(t *testing.T) {
 		sut, err := createSut(
 			ctrl,
 			func(controller *gomock.Controller, publisher *Publisher) {
-				bucket01Receiver := NewMockIKeyBucketReceiver(controller)
-				bucket01Receiver.EXPECT().Handle(gomock.Any()).
-					DoAndReturn(func(data interface{}) error {
-						return nil
-					}).Times(1)
-				bucket02Receiver := NewMockIKeyBucketReceiver(controller)
-				bucket02Receiver.EXPECT().Handle(gomock.Any()).
-					DoAndReturn(func(data interface{}) error {
-						return nil
-					}).Times(1)
-
-				keyBucket, _ := publisher.CreateBucket(key)
+				bucket01Receiver := NewMockISubKeyBucketReceiver(controller)
+				bucket01Receiver.EXPECT().Handle(gomock.Any(), gomock.Any()).Times(1)
+				bucket02Receiver := NewMockISubKeyBucketReceiver(controller)
+				bucket02Receiver.EXPECT().Handle(gomock.Any(), gomock.Any()).Times(1)
+				keyBucket, _ := publisher.CreateAndAddKeyBucket(key)
 				publisher.keys[key] = keyBucket
-				_, _ = keyBucket.Register(bucket01Receiver)
-				_, _ = keyBucket.Register(bucket02Receiver)
+				_, _ = keyBucket.Register(key, bucket01Receiver)
+				_, _ = keyBucket.Register(key, bucket02Receiver)
 			})
 		assert.NoError(t, err)
 		assert.NotNil(t, sut)
 
 		err = sut.Publish(
 			key,
+			key,
+			Messages.NewNullWaitGroup(),
 			&struct{}{})
 		assert.NoError(t, err)
 
@@ -262,32 +268,31 @@ func TestPublisher_Publish(t *testing.T) {
 		sut, err := createSut(
 			ctrl,
 			func(controller *gomock.Controller, publisher *Publisher) {
-				bucket01Receiver := NewMockIKeyBucketReceiver(controller)
-				bucket01Receiver.EXPECT().Handle(gomock.Any()).
-					DoAndReturn(func(data interface{}) error {
-						return nil
-					}).Times(2)
+				bucket01Receiver := NewMockISubKeyBucketReceiver(controller)
+				bucket01Receiver.EXPECT().Handle(gomock.Any(), gomock.Any()).Times(2)
 
-				keyBucket01, _ := publisher.CreateBucket(key01)
-				publisher.keys[key01] = keyBucket01
-				_, _ = keyBucket01.Register(bucket01Receiver)
+				keyBucket01, _ := publisher.CreateAndAddKeyBucket(key01)
+				_, _ = keyBucket01.Register(key01, bucket01Receiver)
+				assert.Len(t, publisher.keys, 1)
 
-				keyBucket02, _ := publisher.CreateBucket(key01)
-				publisher.keys[key02] = keyBucket02
-				_, _ = keyBucket02.Register(bucket01Receiver)
+				keyBucket02, _ := publisher.CreateAndAddKeyBucket(key02)
+				_, _ = keyBucket02.Register(key02, bucket01Receiver)
+				assert.Len(t, publisher.keys, 2)
 			})
 		assert.NoError(t, err)
 		assert.NotNil(t, sut)
 
 		err = sut.Publish(
 			key01,
+			key01,
+			Messages.NewNullWaitGroup(),
 			&struct{}{})
 		assert.NoError(t, err)
 		err = sut.Publish(
 			key02,
+			key02,
+			Messages.NewNullWaitGroup(),
 			&struct{}{})
 		assert.NoError(t, err)
-
 	})
-
 }
