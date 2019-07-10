@@ -1,8 +1,14 @@
 package PubSub
 
-import "github.com/bhbosman/Application/Messages"
+import (
+	"fmt"
+	"github.com/bhbosman/Application/Messages"
+	"math"
+	"sync/atomic"
+)
 
 type nullSubBucket struct {
+	count int32
 }
 
 func (self *nullSubBucket) UnRegisterReceiver(receiver ISubKeyBucketReceiver) {
@@ -10,7 +16,7 @@ func (self *nullSubBucket) UnRegisterReceiver(receiver ISubKeyBucketReceiver) {
 }
 
 func (self *nullSubBucket) Count() int {
-	return 1
+	return math.MaxInt32
 }
 
 func (self *nullSubBucket) Routes() []IRoute {
@@ -18,11 +24,11 @@ func (self *nullSubBucket) Routes() []IRoute {
 }
 
 func (self *nullSubBucket) UnRegister(key string) error {
-	return nil
+	return fmt.Errorf("can not unregister against nullSubBucket")
 }
 
 func (self *nullSubBucket) Register(receiver ISubKeyBucketReceiver) (IInterConnector, error) {
-	return nil, nil
+	return nil, fmt.Errorf("can not register against nullSubBucket")
 }
 
 func (self *nullSubBucket) Close() error {
@@ -30,6 +36,7 @@ func (self *nullSubBucket) Close() error {
 }
 
 func (self *nullSubBucket) Publish(waitGroup Messages.IWaitGroup,data interface{}) error {
+	atomic.AddInt32(&self.count, 1)
 	return nil
 }
 

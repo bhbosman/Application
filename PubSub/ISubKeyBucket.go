@@ -5,10 +5,6 @@ import (
 	"io"
 )
 
-type IRoute interface {
-	Key() string
-	ReceiverDescription() string
-}
 
 type ISubKeyBucket interface {
 	io.Closer
