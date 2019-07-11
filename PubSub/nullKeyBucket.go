@@ -5,6 +5,10 @@ import "github.com/bhbosman/Application/Messages"
 type nullKeyBucket struct {
 }
 
+func (self *nullKeyBucket) ExistSubKey(subKey string) bool {
+	return false
+}
+
 func (self *nullKeyBucket) Key() string {
 	return "nullKeyBucket"
 }
@@ -34,6 +38,6 @@ func (self *nullKeyBucket) Close() error {
 	return nil
 }
 
-func (self *nullKeyBucket) Publish(subKey string, waitGroup Messages.IWaitGroup, data interface{}) error {
+func (self *nullKeyBucket) Publish(subKey string, waitGroup Messages.IWaitGroup, messageSource Messages.IMessageSource, data interface{}) error {
 	return nil
 }

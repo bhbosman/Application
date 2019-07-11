@@ -5,4 +5,3 @@ type IMessageSource interface {
 	Source() string
 	FeedName() string
 }
-

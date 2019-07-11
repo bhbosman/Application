@@ -14,7 +14,7 @@ func FxAppProvide() fx.Option {
 	}
 	return fx.Provide(
 		func(logger *log.Logger, publisher PubSub.IPublisher) (ReturnType, error) {
-			nextHandler, err := NewTimeServiceManager(logger)
+			nextHandler, err := NewTimeServiceManager(logger, publisher)
 			if err != nil {
 				return ReturnType{}, err
 			}

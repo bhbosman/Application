@@ -7,44 +7,43 @@ import (
 )
 
 type InterConnector struct {
-	logger         *log.Logger
-	icKey          string                `json:"key"`
-	icReceiver     ISubKeyBucketReceiver `json:"receiver"`
-	icReceiverType string                `json:"receiver_type"`
+	logger       *log.Logger
+	IcKey        string                `json:"key"`
+	Receiver     ISubKeyBucketReceiver `json:"receiver"`
+	ReceiverType string                `json:"receiver_type"`
 }
 
 func (self *InterConnector) receiverDescription() string {
-	return self.icReceiverType
+	return self.ReceiverType
 }
 
 func (self *InterConnector) String() string {
-	return fmt.Sprintf("InterConnector: (key: %v, receiver type %v)", self.icKey, self.icReceiverType)
+	return fmt.Sprintf("InterConnector: (key: %v, receiver type %v)", self.IcKey, self.ReceiverType)
 }
 
 func (self *InterConnector) receiver() ISubKeyBucketReceiver {
-	return self.icReceiver
+	return self.Receiver
 }
 
 func (self *InterConnector) Key() string {
-	return self.icKey
+	return self.IcKey
 }
 
 func (self *InterConnector) Close() error {
-	if self.icReceiver != nil {
-		err := self.icReceiver.Close()
+	if self.Receiver != nil {
+		err := self.Receiver.FeedStopped()
 		if err != nil {
 			self.logger.Printf("error closing receiver. Error: %v", err)
 		}
 	}
-
 	return nil
 }
 
-func NewInterConnector(key string, receiver ISubKeyBucketReceiver, logger *log.Logger) (*InterConnector, error) {
+func NewInterConnector(key, subKey, ickey string, receiver ISubKeyBucketReceiver, logger *log.Logger) (*InterConnector, error) {
 	return &InterConnector{
-		logger:         logger,
-		icKey:          key,
-		icReceiver:     receiver,
-		icReceiverType: reflect.TypeOf(receiver).String(),
+		logger:       logger,
+		IcKey:        ickey,
+		Receiver:     receiver,
+		ReceiverType: reflect.TypeOf(receiver).String(),
 	}, nil
 }

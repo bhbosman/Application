@@ -35,7 +35,7 @@ func (self *nullSubBucket) Close() error {
 	return nil
 }
 
-func (self *nullSubBucket) Publish(waitGroup Messages.IWaitGroup,data interface{}) error {
+func (self *nullSubBucket) Publish(waitGroup Messages.IWaitGroup, messageSource Messages.IMessageSource, data interface{}) error {
 	atomic.AddInt32(&self.count, 1)
 	return nil
 }

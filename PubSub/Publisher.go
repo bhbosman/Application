@@ -18,6 +18,26 @@ type Publisher struct {
 	uniqueNumberGenerator UniqueNumber.IGenerator
 }
 
+func (self *Publisher) ExistKeySubKey(key string, subkey string) bool {
+	var keyValue IKeyBucket
+	ok1 := false
+	self.ReadLockScope(func() {
+		keyValue, ok1 = self.keys[key]
+	})
+	if !ok1 {
+		return false
+	}
+	return keyValue.ExistSubKey(subkey)
+}
+
+func (self *Publisher) ExistKey(key string) bool {
+	ok := false
+	self.ReadLockScope(func() {
+		_, ok = self.keys[key]
+	})
+	return ok
+}
+
 func (self *Publisher) UnRegisterReceiver(receiver ISubKeyBucketReceiver) {
 	keys := make([]string, 0, 8)
 	for key, value := range self.keys {
@@ -128,9 +148,9 @@ func (self *Publisher) LockScope(cb func()) {
 	}
 }
 
-func (self *Publisher) Publish(key string, subKey string, waitGroup Messages.IWaitGroup, data interface{}) error {
+func (self *Publisher) Publish(key string, subKey string, waitGroup Messages.IWaitGroup, messageSource Messages.IMessageSource, data interface{}) error {
 	bucket := self.FindBucket(key, true)
-	return bucket.Publish(subKey,waitGroup,  data)
+	return bucket.Publish(subKey, waitGroup, messageSource, data)
 }
 
 func (self *Publisher) Close() error {

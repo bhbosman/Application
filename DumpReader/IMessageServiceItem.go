@@ -4,10 +4,10 @@ import (
 	"sync"
 )
 
-type IWaitGroup interface {
-	AddOne() error
-	Done() error
-}
+//type IWaitGroup interface {
+//	AddOne() error
+//	Done() error
+//}
 
 type WaitGroupDefaultImpl struct {
 	wg *sync.WaitGroup

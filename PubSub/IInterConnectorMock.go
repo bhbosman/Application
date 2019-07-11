@@ -5,7 +5,6 @@
 package PubSub
 
 import (
-	Messages "github.com/bhbosman/Application/Messages"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -87,55 +86,4 @@ func (m *MockIInterConnector) receiverDescription() string {
 func (mr *MockIInterConnectorMockRecorder) receiverDescription() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "receiverDescription", reflect.TypeOf((*MockIInterConnector)(nil).receiverDescription))
-}
-
-// MockISubKeyBucketReceiver is a mock of ISubKeyBucketReceiver interface
-type MockISubKeyBucketReceiver struct {
-	ctrl     *gomock.Controller
-	recorder *MockISubKeyBucketReceiverMockRecorder
-}
-
-// MockISubKeyBucketReceiverMockRecorder is the mock recorder for MockISubKeyBucketReceiver
-type MockISubKeyBucketReceiverMockRecorder struct {
-	mock *MockISubKeyBucketReceiver
-}
-
-// NewMockISubKeyBucketReceiver creates a new mock instance
-func NewMockISubKeyBucketReceiver(ctrl *gomock.Controller) *MockISubKeyBucketReceiver {
-	mock := &MockISubKeyBucketReceiver{ctrl: ctrl}
-	mock.recorder = &MockISubKeyBucketReceiverMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockISubKeyBucketReceiver) EXPECT() *MockISubKeyBucketReceiverMockRecorder {
-	return m.recorder
-}
-
-// Close mocks base method
-func (m *MockISubKeyBucketReceiver) Close() error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Close")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Close indicates an expected call of Close
-func (mr *MockISubKeyBucketReceiverMockRecorder) Close() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockISubKeyBucketReceiver)(nil).Close))
-}
-
-// Handle mocks base method
-func (m *MockISubKeyBucketReceiver) Handle(waitGroup Messages.IWaitGroup, data interface{}) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Handle", waitGroup, data)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Handle indicates an expected call of Handle
-func (mr *MockISubKeyBucketReceiverMockRecorder) Handle(waitGroup, data interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Handle", reflect.TypeOf((*MockISubKeyBucketReceiver)(nil).Handle), waitGroup, data)
 }

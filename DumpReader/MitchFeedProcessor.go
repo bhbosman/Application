@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/bhbosman/Application/Managers"
+	"github.com/bhbosman/Application/Messages"
 	"github.com/bhbosman/Application/MissingSequences"
 	"github.com/bhbosman/Application/MitchFiles/GeneratedFiles"
 	"github.com/bhbosman/Application/PubSub"
@@ -43,7 +44,7 @@ func NewMitchFeedProcessor(
 	}, nil
 }
 
-func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, source string, feedName string) error {
+func (self MitchFeedProcessor) Process(wg Messages.IWaitGroup, ctx context.Context, source string, feedName string) error {
 	_ = wg.AddOne()
 	go func() {
 		msgCount := 0
@@ -116,34 +117,40 @@ func (self MitchFeedProcessor) Process(wg IWaitGroup, ctx context.Context, sourc
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 							}
 
-							messageFactory, err := self.dataHandler.CreateMessageFactory(int(messageHeader.MessageType), messageHeader.Length, NewStreamData(nil, streamBytes))
+							messageFactory, err := self.dataHandler.CreateMessageFactory(
+								int(messageHeader.MessageType),
+								messageHeader.Length, NewStreamData(nil, streamBytes))
 							if err != nil {
 								if _, ok := err.(*DataHandlerErrorDidNothing); ok {
 									_, n, err = mitchStreamReader.Read_ReadBytes(nil, int(bytesLeft))
 									bytesLeft -= int16(n)
-
 									continue
 								}
 								self.logger.Println(fmt.Sprintf("error: %v", err))
 								return
 							}
 
-							err = self.publisher.Publish(Managers.MitchFeed, strconv.Itoa(int(messageHeader.MessageType)), messageFactory)
-							if err != nil {
-
-							}
-
-							markMessageAsSeen := true
-							if err != nil {
-								self.logger.Printf("Error calling registrar.ProcessMessage(). Error : %v", err)
-								markMessageAsSeen = false
-							}
-							if markMessageAsSeen {
-								err = self.missingSequencesManager.Seen(source, feedName, uint64(unitHeader.SequenceNumber))
+							subKey := strconv.Itoa(int(messageHeader.MessageType))
+							if self.publisher.ExistKeySubKey(Managers.MitchFeed, subKey) {
+								err = self.publisher.Publish(
+									Managers.MitchFeed,
+									subKey,
+									wg,
+									Managers.NewMessageSource(
+										uint64(unitHeader.SequenceNumber),
+										Managers.MitchFeed,
+										subKey),
+									messageFactory)
 								if err != nil {
-									self.logger.Printf("Error marking message as seen. Error : %v", err)
+
 								}
 							}
+
+							err = self.missingSequencesManager.Seen(source, feedName, uint64(unitHeader.SequenceNumber))
+							if err != nil {
+								self.logger.Printf("Error marking message as seen. Error : %v", err)
+							}
+
 						}
 					}
 				}

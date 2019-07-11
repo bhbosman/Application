@@ -38,7 +38,7 @@ func TestInterConnector_Close(t *testing.T) {
 				icKey:  "",
 				icReceiver: func(ctrl *gomock.Controller) ISubKeyBucketReceiver {
 					receiver := NewMockISubKeyBucketReceiver(ctrl)
-					receiver.EXPECT().Close().Times(1).Return(nil)
+					receiver.EXPECT().FeedStopped().Times(1).Return(nil)
 					return receiver
 				},
 			},
@@ -52,7 +52,7 @@ func TestInterConnector_Close(t *testing.T) {
 				icKey:  "",
 				icReceiver: func(ctrl *gomock.Controller) ISubKeyBucketReceiver {
 					receiver := NewMockISubKeyBucketReceiver(ctrl)
-					receiver.EXPECT().Close().Times(1).Return(fmt.Errorf("some error"))
+					receiver.EXPECT().FeedStopped().Times(1).Return(fmt.Errorf("some error"))
 					return receiver
 				},
 			},
@@ -64,9 +64,9 @@ func TestInterConnector_Close(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			self := &InterConnector{
-				logger:     tt.fields.logger,
-				icKey:      tt.fields.icKey,
-				icReceiver: tt.fields.icReceiver(ctrl),
+				logger:   tt.fields.logger,
+				IcKey:    tt.fields.icKey,
+				Receiver: tt.fields.icReceiver(ctrl),
 			}
 			if err := self.Close(); (err != nil) != tt.wantErr {
 				t.Errorf("InterConnector.Close() error = %v, wantErr %v", err, tt.wantErr)
@@ -100,9 +100,9 @@ func TestInterConnector_key(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			self := &InterConnector{
-				logger:     tt.fields.logger,
-				icKey:      tt.fields.icKey,
-				icReceiver: tt.fields.icReceiver,
+				logger:   tt.fields.logger,
+				IcKey:    tt.fields.icKey,
+				Receiver: tt.fields.icReceiver,
 			}
 			if got := self.Key(); got != tt.want {
 				t.Errorf("InterConnector.key() = %v, want %v", got, tt.want)
@@ -139,9 +139,9 @@ func TestInterConnector_receiver(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			self := &InterConnector{
-				logger:     tt.fields.logger,
-				icKey:      tt.fields.icKey,
-				icReceiver: tt.fields.icReceiver,
+				logger:   tt.fields.logger,
+				IcKey:    tt.fields.icKey,
+				Receiver: tt.fields.icReceiver,
 			}
 			if got := self.receiver(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("InterConnector.receiver() = %v, want %v", got, tt.want)

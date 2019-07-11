@@ -10,4 +10,3 @@ type IInterConnector interface {
 	receiver() ISubKeyBucketReceiver
 	receiverDescription() string
 }
-

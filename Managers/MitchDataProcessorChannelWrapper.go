@@ -12,7 +12,14 @@ type MitchDataProcessorChannelWrapper struct {
 	ch        chan Messages.IMessageServiceItem
 }
 
-func (self *MitchDataProcessorChannelWrapper) Handle(data interface{}) error {
+func (self *MitchDataProcessorChannelWrapper) FeedStopped() error {
+	return nil
+}
+
+func (self *MitchDataProcessorChannelWrapper) Handle(waitGroup Messages.IWaitGroup, messageSource Messages.IMessageSource, data interface{}) error {
+	waitGroup.AddOne()
+	self.ch <- NewMitchProcessingItem(waitGroup, messageSource, data)
+
 	return nil
 }
 

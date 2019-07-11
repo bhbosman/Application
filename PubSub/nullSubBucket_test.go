@@ -13,7 +13,7 @@ type dummyData struct {
 func Test_nullBucket_Publish(t *testing.T) {
 	type args struct {
 		waitGroup Messages.IWaitGroup
-		data interface{}
+		data      interface{}
 	}
 	tests := []struct {
 		name    string
@@ -97,7 +97,7 @@ func Test_nullBucket_UnRegister(t *testing.T) {
 			args: args{
 				key: "",
 			},
-			wantErr: false,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
@@ -128,7 +128,7 @@ func Test_nullBucket_Register(t *testing.T) {
 				receiver: nil,
 			},
 			want:    nil,
-			wantErr: false,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {

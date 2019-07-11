@@ -165,7 +165,7 @@ func TestKeyBucket_Close(t *testing.T) {
 		sut, err := createSut(ctrl, func(controller *gomock.Controller, bucket *SubKeyBucket) {
 			receiver := NewMockISubKeyBucketReceiver(ctrl)
 
-			receiver.EXPECT().Close().Return(nil).Times(1)
+			receiver.EXPECT().FeedStopped().Return(nil).Times(1)
 			_, _ = bucket.Register(receiver)
 
 		})
@@ -182,11 +182,7 @@ func TestKeyBucket_Close(t *testing.T) {
 		sut, err := createSut(ctrl, func(controller *gomock.Controller, bucket *SubKeyBucket) {
 			receiver := NewMockISubKeyBucketReceiver(ctrl)
 
-			receiver.EXPECT().Close().
-				DoAndReturn(func() error {
-					return fmt.Errorf("some error\n")
-				}).
-				Times(1)
+			receiver.EXPECT().FeedStopped().Times(1)
 			_, _ = bucket.Register(receiver)
 
 		})
@@ -200,7 +196,7 @@ func TestKeyBucket_Close(t *testing.T) {
 }
 
 func TestKeyBucket_Register(t *testing.T) {
-	createSut := func(controller *gomock.Controller, newInterConnector func(key string, receiver ISubKeyBucketReceiver, logger *log.Logger) (IInterConnector, error)) (*SubKeyBucket, error) {
+	createSut := func(controller *gomock.Controller, newInterConnector func(key, subKey, ickey string, receiver ISubKeyBucketReceiver, logger *log.Logger) (IInterConnector, error)) (*SubKeyBucket, error) {
 		logger := log.New(os.Stdout, "", log.LstdFlags)
 		uniqueGenerator, _ := UniqueNumber.NewUniqueNumberGenerator(logger)
 
@@ -218,7 +214,7 @@ func TestKeyBucket_Register(t *testing.T) {
 	t.Run("Register with invalid create connector", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
-		sut, err := createSut(ctrl, func(key string, receiver ISubKeyBucketReceiver, logger *log.Logger) (connector IInterConnector, e error) {
+		sut, err := createSut(ctrl, func(key, subKey, ickey string, receiver ISubKeyBucketReceiver, logger *log.Logger) (connector IInterConnector, e error) {
 			return nil, fmt.Errorf("failure")
 		})
 		assert.NoError(t, err)
@@ -232,7 +228,7 @@ func TestKeyBucket_Register(t *testing.T) {
 	t.Run("Register with invalid receiver", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
-		sut, err := createSut(ctrl, func(key string, receiver ISubKeyBucketReceiver, logger *log.Logger) (connector IInterConnector, e error) {
+		sut, err := createSut(ctrl, func(key, subKey, ickey string, receiver ISubKeyBucketReceiver, logger *log.Logger) (connector IInterConnector, e error) {
 			return nil, fmt.Errorf("failure")
 		})
 		assert.NoError(t, err)
@@ -344,7 +340,7 @@ func TestKeyBucket_Publish(t *testing.T) {
 		sut, err := createSut(ctrl, nil)
 		assert.NoError(t, err)
 		assert.NotNil(t, sut)
-		err = sut.Publish(Messages.NewNullWaitGroup(),&struct{}{})
+		err = sut.Publish(Messages.NewNullWaitGroup(), &struct{}{})
 		assert.NoError(t, err)
 	})
 
@@ -378,7 +374,7 @@ func TestKeyBucket_Publish(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, sut)
-		err = sut.Publish(Messages.NewNullWaitGroup(),&struct{}{})
+		err = sut.Publish(Messages.NewNullWaitGroup(), &struct{}{})
 		assert.NoError(t, err)
 		assert.Len(t, sut.routes, 0)
 	})

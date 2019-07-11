@@ -5,13 +5,16 @@ import (
 	"log"
 )
 
-type MissingSequencesKey struct {
+type Key struct {
 	Source   string
 	FeedName string
 }
 
-func NewMissingSequencesKey(source string, feedName string) MissingSequencesKey {
-	return MissingSequencesKey{Source: source, FeedName: feedName}
+func NewKey(source string, feedName string) Key {
+	return Key{
+		Source:   source,
+		FeedName: feedName,
+	}
 }
 
 type IMissingSequencesManager interface {
@@ -20,12 +23,12 @@ type IMissingSequencesManager interface {
 	Seen(source string, feedName string, sequence uint64) error
 }
 
-type MissingSequencesManager struct {
+type Manager struct {
 	logger           *log.Logger
-	missingSequences map[MissingSequencesKey]IMissingSequences
+	missingSequences map[Key]IMissingSequences
 }
 
-func (self *MissingSequencesManager) AllMissing(ctx interface{}, cb func(ctx interface{}, source string, feedName string, missing []MissingSequenceItem) error) error {
+func (self *Manager) AllMissing(ctx interface{}, cb func(ctx interface{}, source string, feedName string, missing []MissingSequenceItem) error) error {
 	if cb != nil {
 		for key, value := range self.missingSequences {
 			missing, err := value.Missing()
@@ -41,15 +44,15 @@ func (self *MissingSequencesManager) AllMissing(ctx interface{}, cb func(ctx int
 	return nil
 }
 
-func NewMissingSequencesManager(logger *log.Logger) *MissingSequencesManager {
-	return &MissingSequencesManager{
+func NewMissingSequencesManager(logger *log.Logger) *Manager {
+	return &Manager{
 		logger:           logger,
-		missingSequences: make(map[MissingSequencesKey]IMissingSequences),
+		missingSequences: make(map[Key]IMissingSequences),
 	}
 }
 
-func (self *MissingSequencesManager) Missing(source string, feedName string) ([]MissingSequenceItem, error) {
-	key := NewMissingSequencesKey(source, feedName)
+func (self *Manager) Missing(source string, feedName string) ([]MissingSequenceItem, error) {
+	key := NewKey(source, feedName)
 	value, ok := self.missingSequences[key]
 	if !ok {
 		return nil, fmt.Errorf("could not find feed (%v, %v)", source, feedName)
@@ -57,8 +60,8 @@ func (self *MissingSequencesManager) Missing(source string, feedName string) ([]
 	return value.Missing()
 }
 
-func (self *MissingSequencesManager) Seen(source string, feedName string, sequence uint64) error {
-	key := NewMissingSequencesKey(source, feedName)
+func (self *Manager) Seen(source string, feedName string, sequence uint64) error {
+	key := NewKey(source, feedName)
 	value, ok := self.missingSequences[key]
 	if !ok {
 		value = NewMissingSequences(self.logger)

@@ -24,7 +24,7 @@ func (self *MessageTypeRegistrar) ProcessMessage(group Messages.IWaitGroup, fact
 			return fmt.Errorf("Count not get interface IMitchDataProcessor\n")
 		}
 		func(mitchDataProcessor IMitchDataProcessor) {
-			item := NewMitchProcessingItem(group, factory, messageSource)
+			item := NewMitchProcessingItem(group, messageSource, factory)
 			err := item.AddOne()
 			if err != nil {
 

@@ -17,6 +17,14 @@ type KeyBucket struct {
 	mutex         sync.RWMutex
 }
 
+func (self *KeyBucket) ExistSubKey(subKey string) bool {
+	ok := false
+	self.ReadLockScope(func() {
+		_, ok = self.subKeys[subKey]
+	})
+	return ok
+}
+
 func NewKeyBucket(key string, logger *log.Logger, uniqueNumber UniqueNumber.IGenerator) *KeyBucket {
 	return &KeyBucket{
 		key:           key,
@@ -139,9 +147,9 @@ func (self *KeyBucket) Close() error {
 	return nil
 }
 
-func (self *KeyBucket) Publish(subKey string, waitGroup Messages.IWaitGroup, data interface{}) error {
+func (self *KeyBucket) Publish(subKey string, waitGroup Messages.IWaitGroup, messageSource Messages.IMessageSource, data interface{}) error {
 	subKeyBucket := self.FindSubKeyBucket(subKey, true)
-	return subKeyBucket.Publish(waitGroup, data)
+	return subKeyBucket.Publish(waitGroup, messageSource, data)
 }
 
 func (self *KeyBucket) LockScope(cb func()) {

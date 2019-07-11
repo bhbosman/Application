@@ -3,33 +3,29 @@ package Managers
 import "github.com/bhbosman/Application/Messages"
 
 type MitchProcessingItem struct {
-	wg             Messages.IWaitGroup
-	messageFactory Messages.IMessageFactory
-	messageSource  Messages.IMessageSource
+	wg            Messages.IWaitGroup
+	data          interface{}
+	messageSource Messages.IMessageSource
 }
 
-func (self *MitchProcessingItem) Message() (interface{}, error) {
-	return self.messageFactory.Message()
+func NewMitchProcessingItem(wg Messages.IWaitGroup, messageSource Messages.IMessageSource, data interface{}) *MitchProcessingItem {
+	return &MitchProcessingItem{
+		wg:            wg,
+		data:          data,
+		messageSource: messageSource,
+	}
 }
 
-func (self *MitchProcessingItem) MessageType() int {
-	return self.messageFactory.MessageType()
+func (self *MitchProcessingItem) GetWaitGroup() Messages.IWaitGroup {
+	return self.wg
 }
 
-func (self *MitchProcessingItem) Length() uint16 {
-	return self.messageFactory.Length()
+func (self *MitchProcessingItem) Message() interface{} {
+	return self.data
 }
 
 func (self *MitchProcessingItem) MessageSource() Messages.IMessageSource {
 	return self.messageSource
-}
-
-func NewMitchProcessingItem(wg Messages.IWaitGroup, messageFactory Messages.IMessageFactory, messageSource Messages.IMessageSource) *MitchProcessingItem {
-	return &MitchProcessingItem{
-		wg:             wg,
-		messageFactory: messageFactory,
-		messageSource:  messageSource,
-	}
 }
 
 func (self *MitchProcessingItem) AddOne() error {

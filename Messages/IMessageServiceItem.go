@@ -2,6 +2,7 @@ package Messages
 
 type IMessageServiceItem interface {
 	IWaitGroup
-	IMessageFactory
+	IGetWaitGroup
+	Message() interface{}
 	MessageSource() IMessageSource
 }
