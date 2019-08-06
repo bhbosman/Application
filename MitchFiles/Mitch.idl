@@ -462,7 +462,8 @@ struct<31, 0x49> AuctionInfoMessage
     MitchByte       AuctionType;
 };
 
-enum TStatisticsMessageOpenCloseIndicator{
+enum TStatisticsMessageOpenCloseIndicator
+{
     UT = 'A',
     AT = 'B',
     MidOfBBO = 'C',
